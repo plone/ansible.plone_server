@@ -74,6 +74,9 @@ need-sudo = yes
 eggs =
     Plone
     Pillow
+{% for egg in additional_eggs %}
+    {{ egg }}
+{% endfor %}
 
 
 ############################################
@@ -221,3 +224,8 @@ collective.recipe.backup = 2.17
 plone.recipe.unifiedinstaller = 4.3.1
 zopeskel.dexterity = 1.5.4.1
 zopeskel.diazotheme = 1.1
+plone.recipe.command = 1.1
+plone.recipe.precompiler = 0.6
+{% for eversion in additional_versions %}
+{{ eversion}}
+{% endfor %}
