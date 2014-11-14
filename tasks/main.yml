@@ -1,2 +1,110 @@
 ---
-# tasks file for plone
+
+###################################
+# Users and groups
+
+- name: Ensure plone_group
+  group: name=plone_group
+
+- name: Ensure plone_buildout
+  user:
+    name=plone_buildout
+    group=plone_group
+    generate_ssh_key=yes
+
+- name: Ensure plone_daemon
+  user:
+    name=plone_daemon
+    group=plone_group
+
+
+####################################
+# Directory structure and virtualenv
+
+- name: Ensure base directory
+  file:
+    path={{ target_path }}
+    state=directory
+
+- name: Python virtualenv
+  command: /usr/local/bin/virtualenv --python=python{{ python_version }} {{ target_path }}/Python-{{ python_version }}
+    creates={{ target_path }}/Python-{{ python_version }}
+
+- name: Buildout cache directory
+  file:
+    path={{ target_path }}/buildout-cache
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+
+- name: Buildout cache eggs directory
+  file:
+    path={{ target_path }}/buildout-cache/eggs
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+
+- name: Buildout cache downloads directory
+  file:
+    path={{ target_path }}/buildout-cache/downloads
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+
+- name: Instance directory
+  file:
+    path={{ target_path }}/{{ instance_name }}
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+
+- name: Copy buildout skeleton
+  when: not buildout_git_repo
+  copy:
+    src=zeocluster/
+    dest={{ target_path }}/{{ instance_name }}
+    owner=plone_buildout
+    group=plone_group
+
+- name: Instance var directory
+  file:
+    path={{ target_path }}/{{ instance_name }}/var
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+    mode=02775
+
+- name: Python eggs directory
+  file:
+    path={{ target_path }}/{{ instance_name }}/var/.python-eggs
+    state=directory
+    owner=plone_daemon
+    group=plone_group
+
+- name: Copy buildout template
+  when: not buildout_git_repo
+  template:
+    src=buildout.cfg.j2
+    dest={{ target_path }}/{{ instance_name }}/buildout.cfg
+    owner=plone_buildout
+    group=plone_group
+    backup=yes
+
+
+###################################
+# Bootstrap and run buildout
+
+- name: bootstrap buildout
+  command: ../Python-{{ python_version }}/bin/python bootstrap.py
+    creates={{ target_path }}/{{ instance_name }}/bin/buildout
+    chdir={{ target_path }}/{{ instance_name }}
+  sudo_user: plone_buildout
+
+- name: run buildout
+  command: bin/buildout
+    chdir={{ target_path }}/{{ instance_name }}
+  when: autorun_buildout
+  sudo_user: plone_buildout
+
+
+

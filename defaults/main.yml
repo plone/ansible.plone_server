@@ -1,2 +1,33 @@
 ---
-# defaults file for plone
+
+target_path: /usr/local/plone
+
+python_version: 2.7
+
+instance_name: zeoserver
+
+buildout_git_repo:
+
+plone_version: 4.3.3
+
+initial_password: admin
+
+client_count: 2
+
+zodb_cache_size: 30000
+
+z_server_threads: 1
+
+client_max_memory: 0
+
+additional_eggs:
+
+additional_versions:
+
+zeo_port: 8100
+
+client_base_port: 8080
+
+autorun_buildout: yes
+
+buildout_cache: http://dist.plone.org/{{ plone_version }}/buildout-cache.tar.bz2
