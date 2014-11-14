@@ -40,12 +40,12 @@
 extends =
     base.cfg
     versions.cfg
-#    http://dist.plone.org/release/4.3.3/versions.cfg
+#    http://dist.plone.org/release/{{ plone_version }}/versions.cfg
 
 # If you change your Plone version, you'll also need to update
 # the repository link below.
 find-links +=
-    http://dist.plone.org/release/4.3.3
+    http://dist.plone.org/release/{{ plone_version }}
 
 # If you try to start Zope as root, it will change user id to run as
 # the effective user specified here. This user id must own the var directory
@@ -129,7 +129,7 @@ backups-dir=${buildout:var-dir}
 # the one below will no longer be valid.
 # If you find yourself locked out of your Zope/Python installation, you may
 # add an emergency user via "bin/plonectl adduser".
-user=admin:__PASSWORD__
+user=admin:{{ initial_password }}
 
 
 ############################################
@@ -155,6 +155,7 @@ parts =
 {% for client in range(1, client_count+1) %}
     client{{ client }}
 {% endfor %}
+    client_reserved
     repozo
     backup
     zopepy
@@ -173,14 +174,29 @@ parts =
 [zeoserver]
 <= zeoserver_base
 recipe = plone.recipe.zeoserver
-zeo-address = 127.0.0.1:8100
+zeo-address = 127.0.0.1:{{ zeo_port }}
 
-{% for client in range(1, client_count+1) %}
-[client{{ client }}]
+[client1]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 808{{ client }}
+http-address = 127.0.0.1:{{ client_base_port }}
+zodb-cache-size = {{ zodb_cache_size }}
+zserver-threads = {{ zserver_threads }}
+environment-vars =
+{% for evar in environment_vars %}
+    {{ evar }}
 {% endfor %}
+
+{% for client in range(2, client_count + 1) %}
+[client{{ client }}]
+<= client1
+http-address = 127.0.0.1:{{ client_base_port + client }}
+{% endfor %}
+
+[client_reserved]
+<= client_base
+recipe = plone.recipe.zope2instance
+http-address = 127.0.0.1:{{ client_base_port + client_count + 1 }}
 
 
 ############################################

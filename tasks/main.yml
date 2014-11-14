@@ -1,5 +1,27 @@
 ---
 
+
+###################################
+# Prerequisites
+
+- name: Ensure required packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - build-essential
+    - python-dev
+    - python-pip
+    - libz-dev
+    - libssl-dev
+    - libjpeg-dev
+    - libxslt1-dev
+    - poppler-utils
+    - lynx-cur
+    - unzip
+    - supervisor
+    - git
+    - wv
+
+
 ###################################
 # Users and groups
 
