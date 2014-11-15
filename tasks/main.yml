@@ -88,13 +88,33 @@
     owner=plone_buildout
     group=plone_group
 
+- name: Instance directory via git
+  when: buildout_git_repo
+  git:
+    repo={{ buildout_git_repo }}
+    force=no
+    dest={{ target_path }}/{{ instance_name }}
+    version={{ buildout_git_version | default('HEAD') }}
+    depth=1
+    accept_hostkey=yes
+  sudo_user: plone_buildout
+
 - name: Instance var directory
   file:
     path={{ target_path }}/{{ instance_name }}/var
     state=directory
     owner=plone_buildout
     group=plone_group
-    mode=02775
+    mode=02770
+
+- name: Separate backup directory
+  when: backup_path
+  file:
+    path={{ backup_path }}
+    state=directory
+    owner=plone_daemon
+    group=plone_group
+    mode=0750
 
 - name: Python eggs directory
   file:
@@ -129,4 +149,25 @@
   sudo_user: plone_buildout
 
 
+###################################
+# cron jobs
 
+- name: Pack cron job
+  when: pack_at
+  cron:
+    name="Plone packing"
+    job="cd {{ target_path }}/{{ instance_name }} && bin/zeopack"
+    user=plone_daemon
+    minute={{ pack_at["minute"] }}
+    hour={{ pack_at.hour }}
+    weekday={{ pack_at.weekday }}
+
+- name: Backup cron job
+  when: backup_at
+  cron:
+    name="Plone backup"
+    job="cd /usr/local/plone/zeocluster && bin/backup"
+    user=plone_daemon
+    minute={{ backup_at["minute"] }}
+    hour={{ backup_at.hour }}
+    weekday={{ backup_at.weekday }}

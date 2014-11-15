@@ -74,9 +74,11 @@ need-sudo = yes
 eggs =
     Plone
     Pillow
+{% if additional_eggs %}
 {% for egg in additional_eggs %}
     {{ egg }}
 {% endfor %}
+{% endif %}
 
 
 ############################################
@@ -119,8 +121,11 @@ var-dir=${buildout:directory}/var
 # commands. Default is inside this project's var directory, but ideally
 # this should be on a separate volume or backup server.
 #
+{% if backup_path %}
+backups-dir={{ backup_path }}
+{% else %}
 backups-dir=${buildout:var-dir}
-
+{% endif %}
 
 ############################################
 # Initial User
@@ -185,10 +190,12 @@ recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ client_base_port }}
 zodb-cache-size = {{ zodb_cache_size }}
 zserver-threads = {{ zserver_threads }}
+{% if environment_vars %}
 environment-vars =
 {% for evar in environment_vars %}
     {{ evar }}
 {% endfor %}
+{% endif %}
 
 {% for client in range(2, client_count + 1) %}
 [client{{ client }}]
@@ -200,6 +207,19 @@ http-address = 127.0.0.1:{{ client_base_port + client }}
 <= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ client_base_port + client_count + 1 }}
+
+[backup]
+# This recipe builds the backup, restore and snapshotbackup commands.
+# For options see http://pypi.python.org/pypi/collective.recipe.backup
+recipe = collective.recipe.backup
+location = ${buildout:backups-dir}/backups
+blobbackuplocation = ${buildout:backups-dir}/blobstoragebackups
+snapshotlocation = ${buildout:backups-dir}/snapshotbackups
+blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
+datafs = ${buildout:var-dir}/filestorage/Data.fs
+blob-storage = ${buildout:var-dir}/blobstorage
+keep = {{ keep_backups }}
+keep_blob_days = {{ keep_blob_days  }}
 
 
 ############################################
@@ -226,6 +246,8 @@ zopeskel.dexterity = 1.5.4.1
 zopeskel.diazotheme = 1.1
 plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
+{% if additional_versions %}
 {% for eversion in additional_versions %}
 {{ eversion}}
 {% endfor %}
+{% endif %}
