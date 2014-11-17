@@ -48,3 +48,14 @@ keep_backups: 3
 keep_blob_days: 21
 
 backup_path: no
+
+#########################
+# Supervisor options
+#
+supervisor_config_dir: "/etc/supervisor/conf.d/"
+redirect_stderr: "false"
+autorestart: "unexpected"
+startsecs: 1
+stopwaitsecs: 10
+autostart: "true"
+task_env_vars: {}

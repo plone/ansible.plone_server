@@ -20,6 +20,12 @@
     - supervisor
     - git
     - wv
+    - supervisor
+
+
+- name: Superlance installed
+  when: client_max_memory != "0"
+  pip: name=superlance version=0.11
 
 
 ###################################
@@ -147,6 +153,35 @@
     chdir={{ target_path }}/{{ instance_name }}
   when: autorun_buildout
   sudo_user: plone_buildout
+
+
+###################################
+# Supervisor setup
+
+- name: Supervisor process control setup
+  template:
+    src=supervisor_task.j2
+    dest={{ supervisor_config_dir }}/zeo.conf
+    owner=root
+    group=root
+    mode=644
+  register: supervisor_task_conf
+
+- name: Supervisor task list is updated
+  when: supervisor_task_conf|changed
+  shell: "supervisorctl update"
+
+- name: Supervisor zeoserver task is present
+  supervisorctl:
+    name=zeoserver
+    state=present
+
+- name: Supervisor zeoclient tasks are present
+  supervisorctl:
+    name=zeoclient{{ item }}
+    state=present
+  with_sequence: count={{ client_count }}
+
 
 
 ###################################

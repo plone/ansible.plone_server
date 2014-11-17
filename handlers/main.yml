@@ -1,2 +1,4 @@
 ---
-# handlers file for plone
+
+- name: Supervisor task list is updated
+  shell: "supervisorctl update"

@@ -187,7 +187,7 @@ zeo-address = 127.0.0.1:{{ zeo_port }}
 [client1]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ client_base_port }}
+http-address = 127.0.0.1:{{ client_base_port + 1 }}
 zodb-cache-size = {{ zodb_cache_size }}
 zserver-threads = {{ zserver_threads }}
 {% if environment_vars %}
