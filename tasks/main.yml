@@ -58,6 +58,23 @@
   command: /usr/local/bin/virtualenv --python=python{{ python_version }} {{ target_path }}/Python-{{ python_version }}
     creates={{ target_path }}/Python-{{ python_version }}
 
+- name: Load buildout cache from host file
+  when: buildout_cache_file
+  unarchive:
+    creates={{ target_path }}/buildout-cache
+    src={{ buildout_cache_file }}
+    dest={{ target_path }}
+    owner=plone_buildout
+    group=plone_group
+
+- name: Fix file ownership in cache
+  when: buildout_cache_file
+  file:
+    path={{ target_path }}/buildout-cache
+    owner=plone_buildout
+    group=plone_group
+    recurse=yes
+
 - name: Buildout cache directory
   file:
     path={{ target_path }}/buildout-cache
