@@ -1,0 +1,34 @@
+[program:zeoserver]
+command={{ target_path }}/{{ instance_name }}/bin/zeoserver fg
+directory={{ target_path }}/{{ instance_name }}
+redirect_stderr={{ redirect_stderr }}
+autostart={{ autostart }}
+autorestart={{ autorestart }}
+user=plone_daemon
+startsecs={{ startsecs }}
+stopwaitsecs={{ stopwaitsecs }}
+{% if task_env_vars|length > 0 %}
+environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+{% endif %}
+
+{% for client in range(1, client_count+1) %}
+[program:zeoclient{{ client }}]
+command={{ target_path }}/{{ instance_name }}/bin/client{{ client }} console
+directory={{ target_path }}/{{ instance_name }}
+redirect_stderr={{ redirect_stderr }}
+autostart={{ autostart }}
+autorestart={{ autorestart }}
+user=plone_daemon
+startsecs={{ startsecs }}
+stopwaitsecs={{ stopwaitsecs }}
+{% if task_env_vars|length > 0 %}
+environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+{% endif %}
+
+{% endfor %}
+
+{% if client_max_memory != 0 %}
+[eventlistener:memmon]
+command=memmon -a {{ client_max_memory }} -c -m {{ admin_email}}
+events=TICK_60
+{% endif %}
