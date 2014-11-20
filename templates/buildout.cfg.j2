@@ -111,7 +111,7 @@ develop =
 # Sets the target directory for the "var" components of the install such as
 # database and log files.
 #
-var-dir=${buildout:directory}/var
+var-dir={{ var_path }}/{{ instance_name }}
 
 
 ############################################
@@ -122,10 +122,11 @@ var-dir=${buildout:directory}/var
 # this should be on a separate volume or backup server.
 #
 {% if backup_path %}
-backups-dir={{ backup_path }}
+backups-dir={{ backup_path }}/{{ instance_name }}
 {% else %}
 backups-dir=${buildout:var-dir}
 {% endif %}
+
 
 ############################################
 # Initial User

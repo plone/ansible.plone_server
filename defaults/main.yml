@@ -1,16 +1,20 @@
 ---
 
-target_path: /usr/local/plone
+plone_major_version: 4.3
+
+plone_version: 4.3.3
 
 python_version: 2.7
+
+target_path: /usr/local/plone-{{ plone_major_version }}
+
+var_path: /var/local/plone-{{ plone_major_version }}
 
 instance_name: zeoserver
 
 buildout_git_repo: no
 
 buildout_git_version: master
-
-plone_version: 4.3.3
 
 initial_password: admin
 
@@ -22,16 +26,16 @@ zserver_threads: 1
 
 client_max_memory: 0
 
-additional_eggs: no
+additional_eggs:
 
-additional_versions: no
+additional_versions:
 
 zeo_port: 8100
 
 client_base_port: 8080
 
 environment_vars:
-  - "PYTHON_EGG_CACHE ${buildout:directory}/var/.python-eggs"
+  - "PYTHON_EGG_CACHE {{ var_path }}/.python-eggs"
 
 autorun_buildout: yes
 
@@ -50,7 +54,6 @@ backup_at:
   minute: 30
   hour: 2
   weekday: "*"
-
 
 keep_backups: 3
 

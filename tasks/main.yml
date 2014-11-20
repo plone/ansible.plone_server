@@ -1,6 +1,5 @@
 ---
 
-
 ###################################
 # Prerequisites
 
@@ -20,8 +19,11 @@
     - supervisor
     - git
     - wv
-    - supervisor
 
+- name: Ensure recent python-virtualenv
+  pip: name=virtualenv
+  # note that this installs to /usr/local/bin
+  # which is not automatically on the path
 
 - name: Superlance installed
   when: client_max_memory != "0"
@@ -54,21 +56,57 @@
     path={{ target_path }}
     state=directory
 
+- name: Instance var base directory
+  file:
+    path={{ var_path }}
+    state=directory
+    mode=0755
+
+- name: Instance backup base directory
+  when: backup_path
+  file:
+    path={{ backup_path }}
+    state=directory
+    mode=0755
+
 - name: Python virtualenv
   command: /usr/local/bin/virtualenv --python=python{{ python_version }} {{ target_path }}/Python-{{ python_version }}
     creates={{ target_path }}/Python-{{ python_version }}
 
+- name: Check for existence of buildout cache
+  stat: path="{{ target_path }}/buildout-cache"
+  register: cache_stat
+
 - name: Load buildout cache from host file
-  when: buildout_cache_file
+  when: buildout_cache_file and not cache_stat.stat.exists
   unarchive:
-    creates={{ target_path }}/buildout-cache
-    src={{ buildout_cache_file }}
-    dest={{ target_path }}
+    creates="{{ target_path }}/buildout-cache"
+    src="{{ buildout_cache_file }}"
+    dest="{{ target_path }}"
     owner=plone_buildout
     group=plone_group
 
+- name: Download buildout cache if needed
+  when: buildout_cache_url and not (buildout_cache_file or cache_stat.stat.exists)
+  get_url:
+    url: "{{ buildout_cache_url }}"
+    dest: "{{ target_path }}/buildout-cache.tar.bz2"
+    force: no
+
+- name: Unpack downloaded buildout cache
+  when: buildout_cache_url
+  command: tar xf buildout-cache.tar.bz2
+  args:
+    chdir: "{{ target_path }}"
+    creates: "{{ target_path }}/buildout-cache"
+
+- name: Delete old buildout cache tarball
+  file:
+    path={{ target_path }}/buildout-cache.tar.bz2
+    state=absent
+
 - name: Fix file ownership in cache
-  when: buildout_cache_file
+  when: buildout_cache_file or buildout_cache_url
   file:
     path={{ target_path }}/buildout-cache
     owner=plone_buildout
@@ -124,16 +162,16 @@
 
 - name: Instance var directory
   file:
-    path={{ target_path }}/{{ instance_name }}/var
+    path={{ var_path }}/{{ instance_name }}
     state=directory
-    owner=plone_buildout
+    owner=plone_daemon
     group=plone_group
     mode=02770
 
-- name: Separate backup directory
+- name: Instance backup directory
   when: backup_path
   file:
-    path={{ backup_path }}
+    path={{ backup_path }}/{{ instance_name }}
     state=directory
     owner=plone_daemon
     group=plone_group
@@ -141,7 +179,7 @@
 
 - name: Python eggs directory
   file:
-    path={{ target_path }}/{{ instance_name }}/var/.python-eggs
+    path={{ var_path }}/.python-eggs
     state=directory
     owner=plone_daemon
     group=plone_group
@@ -154,21 +192,22 @@
     owner=plone_buildout
     group=plone_group
     backup=yes
+  register: instance_status
 
 
 ###################################
 # Bootstrap and run buildout
 
-- name: bootstrap buildout
+- name: Bootstrap buildout
   command: ../Python-{{ python_version }}/bin/python bootstrap.py
     creates={{ target_path }}/{{ instance_name }}/bin/buildout
     chdir={{ target_path }}/{{ instance_name }}
   sudo_user: plone_buildout
 
-- name: run buildout
+- name: Run buildout
+  when: autorun_buildout and instance_status.changed
   command: bin/buildout
     chdir={{ target_path }}/{{ instance_name }}
-  when: autorun_buildout
   sudo_user: plone_buildout
 
 
@@ -198,7 +237,6 @@
     name=zeoclient{{ item }}
     state=present
   with_sequence: count={{ client_count }}
-
 
 
 ###################################
