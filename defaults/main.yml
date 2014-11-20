@@ -39,7 +39,7 @@ plone_environment_vars:
 
 plone_autorun_buildout: yes
 
-plone_buildout_cache_url: http://dist.plone.org/{{ plone_version }}/buildout-cache.tar.bz2
+plone_buildout_cache_url: http://dist.plone.org/release/{{ plone_version }}/buildout-cache.tar.bz2
 
 plone_buildout_cache_file:
 

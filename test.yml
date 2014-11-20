@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  sudo: yes
+  gather_facts: no
+
+  pre_tasks:
+
+    - name: Update host
+      apt: upgrade=dist update_cache=yes
+
+  roles:
+
+    - plone_server
