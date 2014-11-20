@@ -74,8 +74,8 @@ need-sudo = yes
 eggs =
     Plone
     Pillow
-{% if additional_eggs %}
-{% for egg in additional_eggs %}
+{% if plone_additional_eggs %}
+{% for egg in plone_additional_eggs %}
     {{ egg }}
 {% endfor %}
 {% endif %}
@@ -111,7 +111,7 @@ develop =
 # Sets the target directory for the "var" components of the install such as
 # database and log files.
 #
-var-dir={{ var_path }}/{{ instance_name }}
+var-dir={{ plone_var_path }}/{{ plone_instance_name }}
 
 
 ############################################
@@ -121,8 +121,8 @@ var-dir={{ var_path }}/{{ instance_name }}
 # commands. Default is inside this project's var directory, but ideally
 # this should be on a separate volume or backup server.
 #
-{% if backup_path %}
-backups-dir={{ backup_path }}/{{ instance_name }}
+{% if plone_backup_path %}
+backups-dir={{ plone_backup_path }}/{{ plone_instance_name }}
 {% else %}
 backups-dir=${buildout:var-dir}
 {% endif %}
@@ -138,7 +138,7 @@ backups-dir=${buildout:var-dir}
 # the one below will no longer be valid.
 # If you find yourself locked out of your Zope/Python installation, you may
 # add an emergency user via "bin/plonectl adduser".
-user=admin:{{ initial_password }}
+user=admin:{{ plone_initial_password }}
 
 
 ############################################
@@ -161,7 +161,7 @@ verbose-security = off
 # own if you need them at the end of this file.
 parts =
     zeoserver
-{% for client in range(1, client_count+1) %}
+{% for client in range(1, plone_client_count+1) %}
     client{{ client }}
 {% endfor %}
     client_reserved
@@ -183,31 +183,31 @@ parts =
 [zeoserver]
 <= zeoserver_base
 recipe = plone.recipe.zeoserver
-zeo-address = 127.0.0.1:{{ zeo_port }}
+zeo-address = 127.0.0.1:{{ plone_zeo_port }}
 
 [client1]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ client_base_port + 1 }}
-zodb-cache-size = {{ zodb_cache_size }}
-zserver-threads = {{ zserver_threads }}
-{% if environment_vars %}
+http-address = 127.0.0.1:{{ plone_client_base_port + 1 }}
+zodb-cache-size = {{ plone_zodb_cache_size }}
+zserver-threads = {{ plone_zserver_threads }}
+{% if plone_environment_vars %}
 environment-vars =
-{% for evar in environment_vars %}
+{% for evar in plone_environment_vars %}
     {{ evar }}
 {% endfor %}
 {% endif %}
 
-{% for client in range(2, client_count + 1) %}
+{% for client in range(2, plone_client_count + 1) %}
 [client{{ client }}]
 <= client1
-http-address = 127.0.0.1:{{ client_base_port + client }}
+http-address = 127.0.0.1:{{ plone_client_base_port + client }}
 {% endfor %}
 
 [client_reserved]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ client_base_port + client_count + 1 }}
+http-address = 127.0.0.1:{{ plone_client_base_port + plone_client_count + 1 }}
 
 [backup]
 # This recipe builds the backup, restore and snapshotbackup commands.
@@ -219,8 +219,8 @@ snapshotlocation = ${buildout:backups-dir}/snapshotbackups
 blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
 datafs = ${buildout:var-dir}/filestorage/Data.fs
 blob-storage = ${buildout:var-dir}/blobstorage
-keep = {{ keep_backups }}
-keep_blob_days = {{ keep_blob_days  }}
+keep = {{ plone_keep_backups }}
+keep_blob_days = {{ plone_keep_blob_days  }}
 
 
 ############################################
@@ -247,8 +247,8 @@ zopeskel.dexterity = 1.5.4.1
 zopeskel.diazotheme = 1.1
 plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
-{% if additional_versions %}
-{% for eversion in additional_versions %}
+{% if plone_additional_versions %}
+{% for eversion in plone_additional_versions %}
 {{ eversion}}
 {% endfor %}
 {% endif %}
