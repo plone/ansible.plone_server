@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Steve McMahon
-  description:
+  description: Provisions Plone server
   company: Plone Installer Team
   # Some suggested licenses:
   # - BSD (default)
@@ -66,17 +66,17 @@ galaxy_info:
   #  - 9.1
   #  - 9.2
   - name: Ubuntu
-   versions:
+    versions:
   #  - all
   #  - lucid
   #  - maverick
   #  - natty
   #  - oneiric
-   - precise
-   - quantal
-   - raring
-   - saucy
-   - trusty
+      - precise
+      - quantal
+      - raring
+      - saucy
+      - trusty
   #- name: SLES
   #  versions:
   #  - all
@@ -91,12 +91,12 @@ galaxy_info:
   #  - all
   #  - any
   - name: Debian
-   versions:
+    versions:
   #  - all
   #  - etch
   #  - lenny
-   - squeeze
-   - wheezy
+      - squeeze
+      - wheezy
   #
   # Below are all categories currently available. Just as with
   # the platforms above, uncomment those that apply to your role.
