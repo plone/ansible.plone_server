@@ -14,8 +14,6 @@ Role Variables
 plone_target_path
 ~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_target_path: /opt/plone
 
 Sets the Plone installation directory.
@@ -26,8 +24,6 @@ Defaults to ``/usr/local/plone-{{ plone_major_version }}``
 plone_var_path
 ~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_var_path: /var/plone_var
 
 Sets the Plone installation directory.
@@ -37,8 +33,6 @@ Defaults to ``/var/local/plone-{{ plone_major_version }}``
 
 plone_buildout_git_repo
 ~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     buildout_git_repo: https://github.com/plone/plone.com.ansible.git
     buildout_git_version: master
@@ -58,14 +52,10 @@ plone_buildout_git_repo
 plone_major_version
 ~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_version: 4.3
 
 plone_version
 ~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_version: 4.3.3
 
@@ -73,8 +63,6 @@ Which Plone version do you wish to install? This defaults to the current stable 
 
 plone_initial_password
 ~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_initial_password: alnv%r(ybs83nt
 
@@ -85,8 +73,6 @@ Defaults to ``admin``
 
 plone_client_count
 ~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_client_count: 5
 
@@ -102,8 +88,6 @@ Defaults to ``2``
 plone_zodb_cache_size
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_zodb_cache_size: 30000
 
 How many objects do you wish to keep in the ZODB cache.
@@ -118,8 +102,6 @@ Defaults to ``30000``
 plone_zserver_threads
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_zserver_threads: 2
 
 How many threads should run per server?
@@ -129,8 +111,6 @@ Defaults to ``1``
 
 plone_client_max_memory
 ~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_client_max_memory: 800MB
 
@@ -145,8 +125,6 @@ Defaults to ``0`` (turned off)
 
 plone_additional_eggs
 ~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_additional_eggs:
         - Products.PloneFormGen
@@ -165,8 +143,6 @@ The default list is empty.
 plone_additional_versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_additional_versions:
       - "Products.PloneFormGen = 1.7.16"
       - "Products.PythonField = 1.1.3"
@@ -178,8 +154,6 @@ The version pins you specify here will be added to the ``[versions]`` section of
 plone_zeo_port
 ~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_zeo_port: 6100
 
 The port number for the Zope database server. Defaults to ``8100``.
@@ -188,16 +162,12 @@ The port number for the Zope database server. Defaults to ``8100``.
 plone_client_base_port
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_client_base_port: 6080
 
 The port number for your first Zope client. Subsequent client ports will be added in increments of 1. Defaults to ``8081``.
 
 plone_environment_vars
 ~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_environment_vars:
         - "TZ US/Eastern"
@@ -207,15 +177,11 @@ A list of environment variables you wish to set for running Plone instances.
 
 Defaults to:
 
-.. code-block:: yaml
-
     - "PYTHON_EGG_CACHE ${buildout:directory}/var/.python-eggs"
 
 
 plone_autorun_buildout
 ~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_autorun_buildout: (yes|no)
 
@@ -225,8 +191,6 @@ Do you wish to automatically run buildout if any of the Plone settings change? D
 plone_buildout_cache_url
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_buildout_cache_url: http://dist.plone.org/4.3.4/buildout-cache.tar.bz2
 
 The URL of a buildout egg cache. Defaults to the one for the current stable version of Plone.
@@ -234,8 +198,6 @@ The URL of a buildout egg cache. Defaults to the one for the current stable vers
 
 plone_buildout_cache_file
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_buildout_cache_file: /home/steve/buildout-cache.tar.bz2
 
@@ -248,8 +210,6 @@ Cron jobs
 plone_pack_at
 ~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_pack_at:
       minute: 30
       hour: 1
@@ -261,8 +221,6 @@ When do you wish to run the ZEO pack operation? Specify minute, hour and weekday
 plone_keep_days
 ~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_keep_days: 3
 
 How many days of undo information do you wish to keep when you pack the database. Defaults to ``3``.
@@ -270,8 +228,6 @@ How many days of undo information do you wish to keep when you pack the database
 
 plone_backup_at
 ~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_backup_at:
       minute: 30
@@ -283,8 +239,6 @@ When do you wish to run the backup operation?  Specify minute, hour and weekday 
 
 plone_keep_backups
 ~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_keep_backups: 3
 
@@ -298,16 +252,12 @@ How many generations of full backups do you wish to keep? Defaults to ``2``.
 plone_keep_blob_days
 ~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
-
     plone_keep_blob_days: 21
 
 How many days of blob backups do you wish to keep? This is typically set to `keep_backups * days_between_packs`` days. Default is ``14``.
 
 plone_backup_path
 ~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
 
     plone_backup_path: /mnt/backup/plone
 
@@ -317,8 +267,6 @@ Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-.. code-block:: yaml
 
     - hosts: all
       sudo: yes
