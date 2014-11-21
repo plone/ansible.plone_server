@@ -1,7 +1,7 @@
 plone_server
 ============
 
-Provisions a Plone server with options to control client count. Uses either a built-in buildout.cfg or one picked up via git.
+Provisions a [Plone](https://plone.org) server with options to control client count. Uses either a built-in buildout.cfg or one picked up via git.
 
 Requirements
 ------------
@@ -178,7 +178,7 @@ The full local (host) filepath of a buildout egg cache. Defaults to none. Should
 
 ### Cron jobs
 
-### plone_pack_at
+#### plone_pack_at
 
     plone_pack_at:
       minute: 30
@@ -188,14 +188,14 @@ The full local (host) filepath of a buildout egg cache. Defaults to none. Should
 When do you wish to run the ZEO pack operation? Specify minute, hour and weekday specifications for a valid *cron* time. See `CRONTAB(5)`. Defaults to 1:30 Sunday morning. Set to `no` to avoid creation of a cron job.
 
 
-### plone_keep_days
+#### plone_keep_days
 
     plone_keep_days: 3
 
 How many days of undo information do you wish to keep when you pack the database. Defaults to `3`.
 
 
-### plone_backup_at
+#### plone_backup_at
 
     plone_backup_at:
       minute: 30
@@ -205,7 +205,7 @@ How many days of undo information do you wish to keep when you pack the database
 When do you wish to run the backup operation?  Specify minute, hour and weekday specifications for a valid *cron* time. See `CRONTAB(5)`. Defaults to 2:30 every morning.  Set to `no` to avoid creation of a cron job.
 
 
-### plone_keep_backups
+#### plone_keep_backups
 
     plone_keep_backups: 3
 
@@ -214,17 +214,27 @@ How many generations of full backups do you wish to keep? Defaults to `2`.
 > Daily backups are typically partial: they cover the differences between the current state and the state at the last full backup. However backups after a pack operation are complete (full) backups -- not difference operations. Thus, keeping two full backups means that you have backups for `plone_keep_backups * days_between_packs` days. See the `collective.recipe.backup documentation <https://pypi.python.org/pypi/collective.recipe.backup>`_.
 
 
-### plone_keep_blob_days
+#### plone_keep_blob_days
 
     plone_keep_blob_days: 21
 
 How many days of blob backups do you wish to keep? This is typically set to `keep_backups * days_between_packs` days. Default is `14`.
 
-### plone_backup_path
+#### plone_backup_path
 
     plone_backup_path: /mnt/backup/plone
 
 Where do you want to put your backups? The destination must be writable by the `plone_daemon` user. Defaults to `./var` inside your buildout directory. Subdirectories are created for blob and filestorage backups.
+
+
+### Supervisor Control
+
+#### plone_use_supervisor
+
+    plone_use_supervisor: no
+
+When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
+
 
 Example Playbook
 ----------------
@@ -252,4 +262,4 @@ GPLv2
 Author Information
 ------------------
 
-Created by Steve McMahon. Maintained by the Plone Installer Team as part of the Plone project, http://plone.org.
+Created by Steve McMahon. Maintained by the Plone Installer Team as part of the [Plone](https://plone.org) project.

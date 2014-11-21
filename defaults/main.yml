@@ -64,6 +64,8 @@ plone_backup_path: no
 #########################
 # Supervisor options
 #
+plone_use_supervisor: yes
+
 supervisor_config_dir: "/etc/supervisor/conf.d/"
 plone_redirect_stderr: "false"
 plone_autorestart: "unexpected"

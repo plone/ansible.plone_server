@@ -215,6 +215,7 @@
 # Supervisor setup
 
 - name: Supervisor process control setup
+  when: plone_use_supervisor
   template:
     src=supervisor_task.j2
     dest={{ supervisor_config_dir }}/zeo.conf
@@ -224,15 +225,17 @@
   register: supervisor_task_conf
 
 - name: Supervisor task list is updated
-  when: supervisor_task_conf|changed
+  when: plone_use_supervisor and supervisor_task_conf|changed
   shell: "supervisorctl update"
 
 - name: Supervisor zeoserver task is present
+  when: plone_use_supervisor
   supervisorctl:
     name=zeoserver
     state=present
 
 - name: Supervisor zeoclient tasks are present
+  when: plone_use_supervisor
   supervisorctl:
     name=zeoclient{{ item }}
     state=present
