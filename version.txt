@@ -1,0 +1,1 @@
+1.0b1, Plone version 4.3.3.
