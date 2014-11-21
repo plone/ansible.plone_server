@@ -102,7 +102,7 @@ A size (suffix-multiplied using “KB”, “MB” or “GB”) that should be c
 
 Defaults to `0` (turned off)
 
-> This setting is used in configuration of the `memmon` monitor in supervisor: `superlance <http://superlance.readthedocs.org/en/latest>`_ plugin.
+> This setting is used in configuration of the `memmon` monitor in supervisor: [superlance](http://superlance.readthedocs.org/en/latest) plugin.
 
 
 ### plone_additional_eggs
@@ -211,7 +211,7 @@ When do you wish to run the backup operation?  Specify minute, hour and weekday 
 
 How many generations of full backups do you wish to keep? Defaults to `2`.
 
-> Daily backups are typically partial: they cover the differences between the current state and the state at the last full backup. However backups after a pack operation are complete (full) backups -- not difference operations. Thus, keeping two full backups means that you have backups for `plone_keep_backups * days_between_packs` days. See the `collective.recipe.backup documentation <https://pypi.python.org/pypi/collective.recipe.backup>`_.
+> Daily backups are typically partial: they cover the differences between the current state and the state at the last full backup. However backups after a pack operation are complete (full) backups -- not difference operations. Thus, keeping two full backups means that you have backups for `plone_keep_backups * days_between_packs` days. See the [collective.recipe.backup documentation](https://pypi.python.org/pypi/collective.recipe.backup).
 
 
 #### plone_keep_blob_days
