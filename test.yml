@@ -9,6 +9,8 @@
     - name: Update host
       apt: upgrade=dist update_cache=yes
 
-  roles:
+  tasks:
 
-    - plone_server
+    - include_vars: defaults/main.yml
+
+    - include: tasks/main.yml
