@@ -17,12 +17,12 @@ for client in {% for client in range(1, plone_client_count+1) %}{{ client }} {% 
     sleep 10
 
 {% if webserver_virtualhosts is defined %}
-    echo Fetching Plone site-home pages
-    {% for vh in webserver_virtualhosts %}
-        {% if vh.get('zodb_path') %}
-            curl http://localhost:808${client}/{{ vh.zodb_path }} -s -o - > /dev/null
-        {% endif %}
-    {% endfor %}
+    echo Fetching Plone site-home page(s)
+{% for vh in webserver_virtualhosts %}
+{% if vh.get('zodb_path') %}
+    curl http://localhost:808${client}{{ vh.zodb_path }} -s -o - > /dev/null
+{% endif %}
+{% endfor %}
 {% endif %}
 
 done
