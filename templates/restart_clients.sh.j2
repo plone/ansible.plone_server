@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# This performs a more-or-less graceful restart of zope clients.
+# Strategy:
+#   1) stop client; wait long enough that haproxy will have marked it down
+#   2) start client; wait long enough for it to start listening
+#   3) Fetch the homepage directly from the client to load the cache.
+#      This will hopefully be the first request the client receives,
+#      since haproxy shouldn't have marked it live yet.
+#      So, when haproxy marks it live, the cache will be warm.
+
+for client in {% for client in range(1, plone_client_count+1) %}{{ client }} {% endfor %}; do
+    echo Restarting client $client
+    supervisorctl stop zeoclient${client}
+    sleep 40
+    supervisorctl start zeoclient${client}
+    sleep 10
+
+{% if webserver_virtualhosts is defined %}
+    echo Fetching Plone site-home pages
+    {% for vh in webserver_virtualhosts %}
+        {% if vh.get('zodb_path') %}
+            curl http://localhost:808${client}/{{ vh.zodb_path }} -s -o - > /dev/null
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+done
