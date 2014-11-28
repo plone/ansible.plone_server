@@ -1,7 +1,15 @@
 plone_server
 ============
 
-Provisions a [Plone](https://plone.org) server with options to control client count. Uses either a built-in buildout.cfg or one picked up via git.
+This Ansible role provisions a [Plone](https://plone.org) server with options to control client count. It uses either a built-in buildout.cfg or one picked up via git. Required libraries (e.g. zlib) are build, even if available in the operation system.
+
+This playbooks takes care of
+- installs the required OS (development-) packages
+- creates the required users and groups (so Plone does not run as root)
+- downloads all required software (using the buildout-cache tar-file or git)
+- build the instance software
+- optional: sets up `supervisor` for starting the instance
+- optional: installs cron-jobs for packing the database and backup
 
 Requirements
 ------------
