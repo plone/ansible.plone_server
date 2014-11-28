@@ -1,15 +1,18 @@
 plone_server
 ============
 
-This Ansible role provisions a [Plone](https://plone.org) server with options to control client count. It uses either a built-in buildout.cfg or one picked up via git. Required libraries (e.g. zlib) are build, even if available in the operation system.
+This Ansible role provisions a [Plone](https://plone.org) server with options to control client count and memory profile. It uses either a built-in buildout.cfg or one picked up via git.
 
-This playbooks takes care of
-- installs the required OS (development-) packages
-- creates the required users and groups (so Plone does not run as root)
-- downloads all required software (using the buildout-cache tar-file or git)
-- build the instance software
-- optional: sets up `supervisor` for starting the instance
-- optional: installs cron-jobs for packing the database and backup
+This playbooks takes care of:
+
+- Installing the required OS (development-) packages;
+- Creating users and groups for running buildout and daemons;
+- Downloading a buildout-cache tarball and checking out your buildout if needed;
+- Building the ZEO cluster;
+- Optional: setting up `supervisor` for process management and autostart;
+- Optional: installing cron-jobs for packing the database and backup.
+
+If you'd like to use this role as part of a full-stack configuration kit, see the [Plone Ansible Playbook](https://github.com/plone/ansible-playbook).
 
 Requirements
 ------------
