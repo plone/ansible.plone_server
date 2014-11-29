@@ -32,7 +32,7 @@ plone_additional_versions:
 
 plone_zeo_port: 8100
 
-plone_client_base_port: 8080
+plone_client_base_port: 8081
 
 plone_environment_vars:
   - "PYTHON_EGG_CACHE {{ plone_var_path }}/.python-eggs"
