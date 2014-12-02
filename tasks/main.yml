@@ -1,5 +1,11 @@
 ---
 
+- name: Fail if no plone initial password set
+  fail:
+    msg: "You must set the plone_initial_password variable."
+  when: not plone_initial_password
+
+
 ###################################
 # Prerequisites
 
@@ -210,6 +216,12 @@
     chdir={{ plone_target_path }}/{{ plone_instance_name }}
   sudo_user: plone_buildout
 
+- name: Look for existing database
+  when: plone_create_site
+  stat: path={{ plone_var_path }}/{{ plone_instance_name }}/filestorage/Data.fs
+  register: db_status
+
+
 
 ###################################
 # Supervisor setup
@@ -241,6 +253,13 @@
     state=present
   with_sequence: count={{ plone_client_count }}
 
+- name: Supervisor zeoclients tasks are restarted
+  when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
+  supervisorctl:
+    name=zeoclient{{ item }}
+    state=restarted
+  with_sequence: count={{ plone_client_count }}
+
 - name: Ensure scripts directory
   file:
     path={{ plone_target_path }}/{{ plone_instance_name }}/scripts
@@ -253,6 +272,24 @@
     owner=root
     group=root
     mode=0755
+
+
+##################################
+# Add Plone site
+
+- name: Install site creation run script
+  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
+  template:
+    src=addPloneSite.py.j2
+    dest={{ plone_target_path }}/{{ plone_instance_name }}/bin/addPloneSite.py
+    mode=0444
+
+- name: Create initial Plone site
+  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
+  sudo_user: plone_daemon
+  command: bin/client_reserved run bin/addPloneSite.py
+  args:
+    chdir: "{{ plone_target_path }}/{{ plone_instance_name }}"
 
 
 ###################################

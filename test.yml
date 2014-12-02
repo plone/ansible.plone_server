@@ -6,8 +6,8 @@
 
   pre_tasks:
 
-    - name: Update host
-      apt: upgrade=dist update_cache=yes
+  - name: Update host
+    apt: upgrade=dist update_cache=yes
 
   tasks:
 

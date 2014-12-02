@@ -71,7 +71,7 @@ Which Plone version do you wish to install? This defaults to the current stable 
 
 Initial password of the Zope `admin` user. The initial password is used when the database is first created. Don't forget to change it.
 
-Defaults to `admin`
+Defaults to "" -- which will cause the role to halt.
 
 
 ### plone_client_count
@@ -263,7 +263,8 @@ Including an example of how to use your role (for instance, with variables passe
 
       roles:
 
-        - plone.plone_server
+        - role: plone.plone_server
+          plone_initial_password: super_secret
 
 License
 -------

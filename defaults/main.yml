@@ -16,7 +16,7 @@ plone_buildout_git_repo: no
 
 plone_buildout_git_version: master
 
-plone_initial_password: admin
+plone_initial_password:
 
 plone_client_count: 2
 
@@ -60,6 +60,10 @@ plone_keep_backups: 3
 plone_keep_blob_days: 21
 
 plone_backup_path: no
+
+plone_create_site: yes
+plone_site_id: Plone
+plone_default_language: en
 
 #########################
 # Supervisor options

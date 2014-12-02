@@ -1,0 +1,19 @@
+# Create a Plone site. This is a "run" script.
+
+from Products.CMFPlone.factory import addPloneSite
+
+import sys
+import transaction
+
+
+admin_username = 'admin'
+site_id = "{{ plone_site_id }}"
+language = "{{ plone_default_language }}"
+
+if site_id in app.objectIds():
+    print "A Plone site already exists"
+    sys.exit(1)
+
+addPloneSite(app, site_id, title='Portal', default_language=language)
+transaction.commit()
+
