@@ -278,7 +278,6 @@
 # Add Plone site
 
 - name: Install site creation run script
-  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
   template:
     src=addPloneSite.py.j2
     dest={{ plone_target_path }}/{{ plone_instance_name }}/bin/addPloneSite.py
