@@ -1,1 +1,1 @@
-1.0b2, Plone version 4.3.r4
+1.0b3, Plone version 4.3.r4
