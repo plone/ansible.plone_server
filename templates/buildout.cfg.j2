@@ -88,6 +88,11 @@ eggs =
 # use them. This is increasingly rare.
 zcml =
 #    plone.reload
+{% if plone_zcml_slugs %}
+{% for slug in plone_zcml_slugs %}
+    {{ slug }}
+{% endfor %}
+{% endif %}
 
 
 ############################################
@@ -195,11 +200,17 @@ environment-vars =
     {{ evar }}
 {% endfor %}
 {% endif %}
+{% if plone_client_extras %}
+{{ plone_client_extras }}
+{% endif %}
 
 [client1]
 <= aclient_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port }}
+{% if plone_client1_extras %}
+{{ plone_client1_extras }}
+{% endif %}
 
 {% for client in range(2, plone_client_count + 1) %}
 [client{{ client }}]

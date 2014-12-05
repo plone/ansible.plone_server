@@ -129,6 +129,12 @@ The default list is empty.
 
 > Plone hotfixes are typically added as additional eggs.
 
+### plone_zcml_slugs
+
+    plone_zcml_slugs:
+        - plone.reload
+
+List additional ZCML slugs that may be required by older packages that don't implement auto-discovery. The default list is empty. This is rarely needed.
 
 ### plone_additional_versions
 
@@ -165,6 +171,20 @@ Defaults to:
 
     - "PYTHON_EGG_CACHE ${buildout:directory}/var/.python-eggs"
 
+### plone_client_extras
+
+    plone_client_extras: |
+        z2-log-level = error
+
+Extra text to add to all the client buildout parts.
+
+### plone_client1_extras
+
+    plone_client1_extras: |
+        webdav-address = 9080
+        ftp-address = 8021
+
+Extra text to add to only the first client buildout part.
 
 ### plone_autorun_buildout
 

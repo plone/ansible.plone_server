@@ -28,6 +28,12 @@ plone_client_max_memory: 0
 
 plone_additional_eggs:
 
+plone_zcml_slugs:
+
+plone_client_extras:
+
+plone_client1_extras:
+
 plone_additional_versions:
 
 plone_zeo_port: 8100
