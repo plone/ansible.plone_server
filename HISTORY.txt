@@ -1,0 +1,7 @@
+1.0b5 unreleased
+
+- Refactored the client implementation in buildout to allow for separate handling of client1 and the remaining clients. This should allow for   single client options like webdav and ftp.
+
+1.0b4 2014-12-02
+
+- First really practical release.

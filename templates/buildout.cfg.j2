@@ -185,10 +185,8 @@ parts =
 recipe = plone.recipe.zeoserver
 zeo-address = 127.0.0.1:{{ plone_zeo_port }}
 
-[client1]
+[aclient_base]
 <= client_base
-recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ plone_client_base_port }}
 zodb-cache-size = {{ plone_zodb_cache_size }}
 zserver-threads = {{ plone_zserver_threads }}
 {% if plone_environment_vars %}
@@ -198,14 +196,20 @@ environment-vars =
 {% endfor %}
 {% endif %}
 
+[client1]
+<= aclient_base
+recipe = plone.recipe.zope2instance
+http-address = 127.0.0.1:{{ plone_client_base_port }}
+
 {% for client in range(2, plone_client_count + 1) %}
 [client{{ client }}]
-<= client1
+<= aclient_base
+recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port + client}}
 {% endfor %}
 
 [client_reserved]
-<= client_base
+<= aclient_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port + plone_client_count }}
 
