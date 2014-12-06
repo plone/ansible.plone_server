@@ -1,76 +1,37 @@
-############################################
-#
-# Buildout Configuration File for Plone
-# -------------------------------------
-#
-# ALWAYS back up all Plone/Zope data and components
-# before changing configuration.
-#
-# Running "bin/buildout" will update your installation,
-# installing missing components as necessary.
-#
-# This will update the add-on products you've added in the eggs= lines.
-# This will not, however, upgrade Plone itself (or anything else you've
-# pinned with a version specification). To upgrade Plone itself, see the
-# comments in "Plone Component Versions".
-#
-# Tutorial instructions for using zc.buildout for
-# configuration management are available at:
-# http://plone.org/documentation/tutorial/buildout
-# Full details at http://pypi.python.org/pypi/zc.buildout
-#
-############################################
-
-
 [buildout]
 
-############################################
-# Plone Component Versions
-# ------------------------
-# This version of the Unified Installer has the components of Plone 4
-# preloaded so that it can install without an Internet connection.
-# If you want to update, uncomment the "http://..." line below,
-# edit it to point to the current version URL, comment out the
-# "versions.cfg" line and run "bin/buildout" while attached to the
-# Internet. Generally, you only want to do that as part of a planned migration.
-# Note that if you are updating components, you should also check the versions
-# section at the end of this file, since recipes or components other than
-# those of Zope and Plone may need updating at the same time.
-#
-extends =
-    base.cfg
-    versions.cfg
-#    http://dist.plone.org/release/{{ plone_version }}/versions.cfg
+# For extensive comments, see the source for the Unified Installer:
+# https://github.com/plone/Installers-UnifiedInstaller
 
-# If you change your Plone version, you'll also need to update
-# the repository link below.
-find-links +=
+extends =
+    versions.cfg
+
+eggs-directory=../buildout-cache/eggs
+download-cache=../buildout-cache/downloads
+
+newest = false
+prefer-final = true
+show-picked-versions = true
+versions = versions
+
+find-links =
+    http://dist.plone.org
+    http://download.zope.org/ppix/
+    http://download.zope.org/distribution/
+    http://effbot.org/downloads
     http://dist.plone.org/release/{{ plone_version }}
 
-# If you try to start Zope as root, it will change user id to run as
-# the effective user specified here. This user id must own the var directory
-# of your buildout.
+extensions =
+    buildout.sanitycheck
+{% if plone_sources %}
+    mr.developer
+
+auto-checkout = *
+{% endif %}
+
 effective-user = plone_daemon
-# This user will own the rest of the installation, and should be used to
-# run buildout.
 buildout-user = plone_buildout
-# A flag to tell the Unified Installer whether or not to document sudo use.
-need-sudo = yes
 
-
-############################################
-# Eggs
-# ----
-# Add an indented line to the eggs section for any Python
-# eggs or packages you wish to include in your Plone instance.
-#
-# Note that versions may be specified here or in the [versions]
-# section below. You should always specify versions that you know
-# are compatible with the Plone release and at an acceptable
-# development level.
-#
-# If you update to a later version of Plone, remove the hotfix.
-#
 eggs =
     Plone
     Pillow
@@ -80,132 +41,107 @@ eggs =
 {% endfor %}
 {% endif %}
 
-
-############################################
-# ZCML Slugs
-# ----------
-# Some eggs need ZCML slugs to tell Zope to
-# use them. This is increasingly rare.
 zcml =
-#    plone.reload
 {% if plone_zcml_slugs %}
 {% for slug in plone_zcml_slugs %}
     {{ slug }}
 {% endfor %}
 {% endif %}
 
-
-############################################
-# Development Eggs
-# ----------------
-# You can use paster to create "development eggs" to
-# develop new products/themes. Put these in the src/
-# directory.
-# You will also need to add the egg names in the
-# eggs section above, and may also need to add them
-# to the zcml section.
-#
-# Provide the *paths* to the eggs you are developing here:
-develop =
-#    src/my.package
-
-
-############################################
-# var Directory
-# -------------
-# Sets the target directory for the "var" components of the install such as
-# database and log files.
-#
 var-dir={{ plone_var_path }}/{{ plone_instance_name }}
 
-
-############################################
-# Backup Directory
-# ----------------
-# Sets the target directory for the bin/backup and bin/snapshotbackup
-# commands. Default is inside this project's var directory, but ideally
-# this should be on a separate volume or backup server.
-#
 {% if plone_backup_path %}
 backups-dir={{ plone_backup_path }}/{{ plone_instance_name }}
 {% else %}
 backups-dir=${buildout:var-dir}
 {% endif %}
 
-
-############################################
-# Initial User
-# ------------
-# This is the user id and password that will be used to create the initial
-# user id that will allow you to log in and create a Plone site. This only
-# sets the initial password; it will not allow you to change an already
-# existing password. If you change the admin password via the web interface,
-# the one below will no longer be valid.
-# If you find yourself locked out of your Zope/Python installation, you may
-# add an emergency user via "bin/plonectl adduser".
 user=admin:{{ plone_initial_password }}
 
+{% if plone_environment_vars %}
+environment-vars =
+{% for evar in plone_environment_vars %}
+    {{ evar }}
+{% endfor %}
 
-############################################
-# Debug Options
-# -------------
-# Start Zope/Plone instances in "fg" mode to turn on debug mode;
-# this will dramatically slow Plone.
-#
-# Add-on developers should turn deprecation warnings on
-deprecation-warnings = off
-# change verbose-security to "on" for useful security errors while developing
-verbose-security = off
-
-
-############################################
-# Parts Specification
-#--------------------
-# Specifies the components that should be included in the buildout.
-# Most are defined in the base.cfg extension; you may add your
-# own if you need them at the end of this file.
 parts =
     zeoserver
 {% for client in range(1, plone_client_count+1) %}
     client{{ client }}
 {% endfor %}
     client_reserved
-    repozo
     backup
     zopepy
-    unifiedinstaller
     precompiler
     setpermissions
 
 
-############################################
-# Major Parts
-# ----------------------
-# These common parts make use of sane base settings from
-# base.cfg. To customize a part, just add whatever options
-# you need. Read base.cfg for common settings.
+{% if plone_sources %}
+[sources]
+{% for source in plone_sources %}
+{{ source }}
+{% endfor %}
+{% endif %}
+
 
 [zeoserver]
-<= zeoserver_base
 recipe = plone.recipe.zeoserver
 zeo-address = 127.0.0.1:{{ plone_zeo_port }}
+effective-user = ${buildout:effective-user}
+environment-vars = ${buildout:environment-vars}
+var = ${buildout:var-dir}
+blob-storage = ${buildout:var-dir}/blobstorage
 
-[aclient_base]
-<= client_base
+zeo-log     = ${buildout:var-dir}/zeoserver/zeoserver.log
+pid-file    = ${buildout:var-dir}/zeoserver/zeoserver.pid
+socket-name = ${buildout:var-dir}/zeoserver/zeo.zdsock
+
+
+[client_base]
+user = ${buildout:user}
+effective-user = ${buildout:effective-user}
+debug-mode = off
+verbose-security = off
+deprecation-warnings = off
+
+var = ${buildout:var-dir}
+blob-storage = ${:var}/blobstorage
+
+event-log-max-size = 5 MB
+event-log-old-files = 5
+access-log-max-size = 20 MB
+access-log-old-files = 5
+
+eggs =
+    ${buildout:eggs}
+
+zcml = ${buildout:zcml}
+
+products = ${buildout:directory}/products
+
+environment-vars = ${buildout:environment-vars}
+
+zeo-client = true
+shared-blob = on
+
+http-fast-listen = off
+
+event-log = ${buildout:var-dir}/${:_buildout_section_name_}/event.log
+z2-log    = ${buildout:var-dir}/${:_buildout_section_name_}/Z2.log
+pid-file  = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.pid
+lock-file = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.lock
+
 zodb-cache-size = {{ plone_zodb_cache_size }}
 zserver-threads = {{ plone_zserver_threads }}
-{% if plone_environment_vars %}
-environment-vars =
-{% for evar in plone_environment_vars %}
-    {{ evar }}
-{% endfor %}
+
 {% endif %}
 {% if plone_client_extras %}
 {{ plone_client_extras }}
 {% endif %}
 
+
 [client1]
-<= aclient_base
+<= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port }}
 {% if plone_client1_extras %}
@@ -214,20 +150,26 @@ http-address = 127.0.0.1:{{ plone_client_base_port }}
 
 {% for client in range(2, plone_client_count + 1) %}
 [client{{ client }}]
-<= aclient_base
+<= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port + client}}
 {% endfor %}
 
 [client_reserved]
-<= aclient_base
+<= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port + plone_client_count }}
 
+
 [backup]
-# This recipe builds the backup, restore and snapshotbackup commands.
-# For options see http://pypi.python.org/pypi/collective.recipe.backup
 recipe = collective.recipe.backup
+recipe = collective.recipe.backup
+location = ${buildout:backups-dir}/backups
+blobbackuplocation = ${buildout:backups-dir}/blobstoragebackups
+snapshotlocation = ${buildout:backups-dir}/snapshotbackups
+blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
+datafs = ${buildout:var-dir}/filestorage/Data.fs
+blob-storage = ${buildout:var-dir}/blobstorage
 location = ${buildout:backups-dir}/backups
 blobbackuplocation = ${buildout:backups-dir}/blobstoragebackups
 snapshotlocation = ${buildout:backups-dir}/snapshotbackups
@@ -238,27 +180,41 @@ keep = {{ plone_keep_backups }}
 keep_blob_days = {{ plone_keep_blob_days  }}
 
 
-############################################
-# Versions Specification
-# ----------------------
-# Version information supplied here will "pin" Python packages to a particular
-# version number, even when you use the "newest" flag running buildout.
-# Specifying versions for all packages is a good idea and can prevent
-# accidental changes when you add new packages to your buildout.
-# Note that versions specified here will override those specified earlier
-# in the configuration, including those from the Plone and Zope version
-# config files.
-#
+[setpermissions]
+recipe = plone.recipe.command
+command =
+    # Dummy references to force this to execute after referenced parts
+    echo ${backup:location} > /dev/null
+    chmod 600 .installed.cfg
+    # Make sure anything we've created in var is r/w by our group
+    find ${buildout:var-dir} -type d -exec chmod 770 {} \; 2> /dev/null
+    find ${buildout:var-dir} -type f -exec chmod 660 {} \; 2> /dev/null
+    find ${buildout:backups-dir} -type d -exec chmod 770 {} \; 2> /dev/null
+    find ${buildout:backups-dir} -type f -exec chmod 660 {} \; 2> /dev/null
+    chmod 754 ${buildout:directory}/bin/*
+update-command = ${:command}
+
+
+[zopepy]
+recipe = zc.recipe.egg
+eggs = ${buildout:eggs}
+interpreter = zopepy
+scripts = zopepy
+
+
+[precompiler]
+recipe = plone.recipe.precompiler
+eggs = ${buildout:eggs}
+compile-mo-files = true
+extra-paths = ${buildout:directory}/products
+
+
 [versions]
-setuptools = 7.0
-Cheetah = 2.2.1
-Products.DocFinderTab = 1.0.5
-ZopeSkel = 2.21.2
-collective.recipe.backup = 2.20
-plone.recipe.unifiedinstaller = 4.3.1
-zopeskel.dexterity = 1.5.4.1
-zopeskel.diazotheme = 1.1
 buildout.sanitycheck = 1.0b1
+collective.recipe.backup = 2.20
+plone.recipe.command = 1.1
+plone.recipe.precompiler = 0.6
+setuptools = 7.0
 {% if plone_additional_versions %}
 {% for eversion in plone_additional_versions %}
 {{ eversion}}

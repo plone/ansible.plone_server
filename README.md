@@ -129,12 +129,23 @@ The default list is empty.
 
 > Plone hotfixes are typically added as additional eggs.
 
+
+### plone_sources
+
+    plone_sources =
+      -  "my.package = svn http://example.com/svn/my.package/trunk update=true"
+      -  "some.other.package = git git://example.com/git/some.other.package.git"
+
+Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*".
+
+
 ### plone_zcml_slugs
 
     plone_zcml_slugs:
         - plone.reload
 
 List additional ZCML slugs that may be required by older packages that don't implement auto-discovery. The default list is empty. This is rarely needed.
+
 
 ### plone_additional_versions
 
@@ -171,12 +182,14 @@ Defaults to:
 
     - "PYTHON_EGG_CACHE ${buildout:directory}/var/.python-eggs"
 
+
 ### plone_client_extras
 
     plone_client_extras: |
         z2-log-level = error
 
 Extra text to add to all the client buildout parts.
+
 
 ### plone_client1_extras
 
@@ -185,6 +198,7 @@ Extra text to add to all the client buildout parts.
         ftp-address = 8021
 
 Extra text to add to only the first client buildout part.
+
 
 ### plone_autorun_buildout
 
@@ -250,6 +264,7 @@ How many generations of full backups do you wish to keep? Defaults to `2`.
     plone_keep_blob_days: 21
 
 How many days of blob backups do you wish to keep? This is typically set to `keep_backups * days_between_packs` days. Default is `14`.
+
 
 #### plone_backup_path
 
