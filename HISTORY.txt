@@ -1,4 +1,4 @@
-1.0b5 unreleased
+1.0b5 2014-12-08
 
 - Refactor to remove develop.cfg and base.cfg.
 
