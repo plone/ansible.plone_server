@@ -19,6 +19,18 @@ Requirements
 
 Currently only working with Debian/Ubuntu environments. Please put in a pull request if you can help get it going in an RPM environment.
 
+
+If you need to log in
+---------------------
+
+You should not need to. But if you do, you should know:
+
+1) The Plone zeoserver and zeoclient processes should be run under the plone_daemon login; they will normally be controlled via supervisor;
+
+2) Run buildout as plone_buildout.
+
+
+
 Role Variables
 --------------
 
