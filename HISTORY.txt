@@ -1,3 +1,7 @@
+1.0b6 2014-12-17
+
+- Update bootstrap.py to a version that allows pinning of setuptools; Pin it to 8.0.4.
+
 1.0b5 2014-12-08
 
 - Refactor to remove develop.cfg and base.cfg.
