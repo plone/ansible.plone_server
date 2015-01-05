@@ -1,3 +1,7 @@
+1.0b7 unreleased
+
+- Fix syntax error in restart_clients.sh script.
+
 1.0b6 2014-12-17
 
 - Update bootstrap.py to a version that allows pinning of setuptools; Pin it to 8.0.4.
