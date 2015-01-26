@@ -1,5 +1,8 @@
 1.0b7 unreleased
 
+- client web ports for clients > 1 were not enumerated correctly.
+  [smcmahon]
+
 - plone_zeo_port was not being respected in client parts. (Thanks, rockfruit)
   [smcmahon]
 
