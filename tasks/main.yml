@@ -98,9 +98,11 @@
     url: "{{ plone_buildout_cache_url }}"
     dest: "{{ plone_target_path }}/buildout-cache.tar.bz2"
     force: no
+  ignore_errors: yes
+  register: cache_download_result
 
 - name: Unpack downloaded buildout cache
-  when: plone_buildout_cache_url
+  when: not cache_stat.stat.exists and not plone_buildout_cache_file and plone_buildout_cache_url and not cache_download_result
   command: tar xf buildout-cache.tar.bz2
   args:
     chdir: "{{ plone_target_path }}"
@@ -110,14 +112,6 @@
   file:
     path={{ plone_target_path }}/buildout-cache.tar.bz2
     state=absent
-
-- name: Fix file ownership in cache
-  when: plone_buildout_cache_file or plone_buildout_cache_url
-  file:
-    path={{ plone_target_path }}/buildout-cache
-    owner=plone_buildout
-    group=plone_group
-    recurse=yes
 
 - name: Buildout cache directory
   file:
@@ -132,6 +126,14 @@
     state=directory
     owner=plone_buildout
     group=plone_group
+
+- name: Fix file ownership in cache
+  when: plone_buildout_cache_file or plone_buildout_cache_url
+  file:
+    path={{ plone_target_path }}/buildout-cache
+    owner=plone_buildout
+    group=plone_group
+    recurse=yes
 
 - name: Buildout cache downloads directory
   file:

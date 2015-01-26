@@ -1,5 +1,11 @@
 1.0b7 unreleased
 
+- Not working with versions other than dist. Fixed.
+  [smcmahon]
+
+- If there was no buildout cache available, this failed. Fixed.
+  [smcmahon]
+
 - client web ports for clients > 1 were not enumerated correctly.
   [smcmahon]
 
