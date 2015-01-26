@@ -230,7 +230,7 @@
   when: plone_use_supervisor
   template:
     src=supervisor_task.j2
-    dest={{ supervisor_config_dir }}/{{ plone_instance_name }}-zeo.conf
+    dest={{ supervisor_config_dir }}/{{ plone_instance_name }}-zeocluster.conf
     owner=root
     group=root
     mode=644
