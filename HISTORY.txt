@@ -1,5 +1,8 @@
 1.0b7 unreleased
 
+- plone_zeo_port was not being respected in client parts. (Thanks, rockfruit)
+  [smcmahon]
+
 - Fix syntax error in restart_clients.sh script.
 
 1.0b6 2014-12-17
