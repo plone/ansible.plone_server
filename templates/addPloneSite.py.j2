@@ -13,6 +13,9 @@ language = "{{ plone_default_language }}"
 default_extension_profiles = (
     'plonetheme.classic:default',
     'plonetheme.sunburst:default',
+    {% for addon in plone_extension_profiles %}
+    '{{ addon }}',
+    {% endfor %}
     )
 
 if site_id in app.objectIds():
