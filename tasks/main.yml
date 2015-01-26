@@ -230,7 +230,7 @@
   when: plone_use_supervisor
   template:
     src=supervisor_task.j2
-    dest={{ supervisor_config_dir }}/zeo.conf
+    dest={{ supervisor_config_dir }}/{{ plone_instance_name }}-zeo.conf
     owner=root
     group=root
     mode=644
@@ -243,20 +243,20 @@
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoserver
+    name={{ plone_instance_name }}-zeoserver
     state=present
 
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoclient{{ item }}
+    name={{ plone_instance_name }}-zeoclient{{ item }}
     state=present
   with_sequence: count={{ plone_client_count }}
 
 - name: Supervisor zeoclients tasks are restarted
   when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name=zeoclient{{ item }}
+    name={{ plone_instance_name }}-zeoclient{{ item }}
     state=restarted
   with_sequence: count={{ plone_client_count }}
 
