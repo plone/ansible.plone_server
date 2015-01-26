@@ -246,6 +246,12 @@
     name={{ plone_instance_name }}-zeoserver
     state=present
 
+- name: Supervisor zeoserver process is started
+  when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
+  supervisorctl:
+    name={{ plone_instance_name }}-zeoserver
+    state=started
+
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
