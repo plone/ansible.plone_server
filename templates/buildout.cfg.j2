@@ -152,13 +152,13 @@ http-address = 127.0.0.1:{{ plone_client_base_port }}
 [client{{ client }}]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ plone_client_base_port + client}}
+http-address = 127.0.0.1:{{ "%s" % (plone_client_base_port|int + loop.index) }}
 {% endfor %}
 
 [client_reserved]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ plone_client_base_port + plone_client_count }}
+http-address = 127.0.0.1:{{ "%s" % (plone_client_base_port|int + plone_client_count) }}
 
 
 [backup]
