@@ -1,4 +1,8 @@
-1.0b7 unreleased
+1.0b7 2015-01-27
+
+- There is a zope package that has some files that are not world-readable.
+  Fix generally by making sure the whole buildout cache is readable.
+  [smcmahon]
 
 - Not working with versions other than dist. Fixed.
   [smcmahon]
@@ -26,7 +30,9 @@
 
 - Added extra variables for zcml slugs, client extras and client1 extras.
 
-- Refactored the client implementation in buildout to allow for separate handling of client1 and the remaining clients. This should allow for   single client options like webdav and ftp.
+- Refactored the client implementation in buildout to allow for separate handling
+  of client1 and the remaining clients. This should allow for single client options
+  like webdav and ftp.
 
 1.0b4 2014-12-02
 
