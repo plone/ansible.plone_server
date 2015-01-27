@@ -1,5 +1,8 @@
 1.0b8 unreleased
 
+- Make more complex specifications of base ports possible.
+  [rockfruit]
+
 - Add ability to set extension profiles for site creation.
   [rockfruit]
 
