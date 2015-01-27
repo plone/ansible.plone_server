@@ -150,6 +150,12 @@ The default list is empty.
 
 Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*".
 
+### plone_extension_profiles
+
+    plone_extension_profiles:
+        - jarn.jsi18n:default
+
+List additional Plone profiles which should be activated in the new Plone site.  These are only activated if the plone_create_site variable is set.
 
 ### plone_zcml_slugs
 

@@ -73,6 +73,7 @@ plone_backup_path: no
 plone_create_site: yes
 plone_site_id: Plone
 plone_default_language: en
+plone_extension_profiles:
 
 #########################
 # Supervisor options
