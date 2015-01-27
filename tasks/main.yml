@@ -303,7 +303,7 @@
 - name: Pack cron job
   when: plone_pack_at
   cron:
-    name="Plone packing"
+    name="Plone packing - {{ plone_instance_name }}"
     job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/zeopack"
     user=plone_daemon
     minute={{ plone_pack_at["minute"] }}
@@ -313,7 +313,7 @@
 - name: Backup cron job
   when: plone_backup_at
   cron:
-    name="Plone backup"
+    name="Plone backup - {{ plone_instance_name }}"
     job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/backup"
     user=plone_daemon
     minute={{ plone_backup_at["minute"] }}
