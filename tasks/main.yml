@@ -99,10 +99,13 @@
     dest: "{{ plone_target_path }}/buildout-cache.tar.bz2"
     force: no
   ignore_errors: yes
-  register: cache_download_result
+
+- name: Check for existence of buildout cache
+  stat: path="{{ plone_target_path }}/buildout-cache"
+  register: tarball_stat
 
 - name: Unpack downloaded buildout cache
-  when: not cache_stat.stat.exists and not plone_buildout_cache_file and plone_buildout_cache_url and not cache_download_result
+  when: tarball_stat.stat.exists and not cache_stat.stat.exists
   command: tar xf buildout-cache.tar.bz2
   args:
     chdir: "{{ plone_target_path }}"
@@ -113,7 +116,7 @@
     path={{ plone_target_path }}/buildout-cache.tar.bz2
     state=absent
 
-- name: Buildout cache directory
+- name: Buildout cache directory exists and is owned by plone_buildout
   file:
     path={{ plone_target_path }}/buildout-cache
     state=directory
@@ -217,6 +220,9 @@
   command: bin/buildout
     chdir={{ plone_target_path }}/{{ plone_instance_name }}
   sudo_user: plone_buildout
+
+- name: Everything in buildout cache is group-readable
+  command: chmod -R g+r,o+r {{ plone_target_path }}/buildout-cache
 
 - name: Look for existing database
   when: plone_create_site
