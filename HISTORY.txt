@@ -1,3 +1,8 @@
+1.0b8 unreleased
+
+- Add ability to set extension profiles for site creation.
+  [rockfruit]
+
 1.0b7 2015-01-27
 
 - There is a zope package that has some files that are not world-readable.
