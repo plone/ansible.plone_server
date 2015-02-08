@@ -3,7 +3,7 @@ plone_server
 
 This Ansible role provisions a [Plone](https://plone.org) server with options to control client count and memory profile. It uses either a built-in buildout.cfg or one picked up via git.
 
-This playbooks takes care of:
+This role takes care of:
 
 - Installing the required OS (development-) packages;
 - Creating users and groups for running buildout and daemons;
@@ -16,6 +16,8 @@ If you'd like to use this role as part of a full-stack configuration kit, see th
 
 Requirements
 ------------
+
+Since this role creates and uses users and groups, it must be run as part of a playbook that sets sudo to "yes".
 
 Currently only working with Debian/Ubuntu environments. Please put in a pull request if you can help get it going in an RPM environment.
 
