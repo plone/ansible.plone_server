@@ -1,5 +1,8 @@
 1.0b8 unreleased
 
+- Re-running role does re-run "Run buildout" correctly
+  [zylinx]
+
 - Make more complex specifications of base ports possible.
   [rockfruit]
 
