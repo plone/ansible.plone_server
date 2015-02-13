@@ -243,6 +243,12 @@ The full local (host) filepath of a buildout egg cache. Defaults to none. Should
 
 ### Cron jobs
 
+#### plone_cron_prefix
+
+    plone_cron_prefix: prefix
+
+If you want to create multiple Plone instances on one server, then multiple cron jobs will probably need to be created.  Ansible uses the provided prefix to manage these.
+
 #### plone_pack_at
 
     plone_pack_at:
@@ -301,6 +307,13 @@ Where do you want to put your backups? The destination must be writable by the `
 
 When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
 
+#### supervisor_instance_name
+
+    supervisor_instance_name: name
+
+    When creating multiple Plone instances, multiple supervisor configurations are required.  This value is used as a prefix for the supervisor configuration filename, and for the programs defined inside that file.
+
+    If this value is not specified, the configuration file is named 'zeo.conf', and the programs are called 'zeoserver' and 'zeoclient<x>'.
 
 Example Playbook
 ----------------

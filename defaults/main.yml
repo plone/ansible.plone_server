@@ -52,6 +52,8 @@ plone_buildout_cache_file:
 
 plone_sources:
 
+plone_cron_prefix:
+
 plone_pack_at:
   minute: 30
   hour: 1
@@ -79,6 +81,8 @@ plone_extension_profiles:
 # Supervisor options
 #
 plone_use_supervisor: yes
+
+supervisor_instance_name:
 
 supervisor_config_dir: "/etc/supervisor/conf.d/"
 plone_redirect_stderr: "false"

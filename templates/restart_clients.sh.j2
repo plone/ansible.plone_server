@@ -11,9 +11,9 @@
 
 for client in {% for client in range(1, plone_client_count+1) %}{{ client }} {% endfor %}; do
     echo Restarting client $client
-    supervisorctl stop zeoclient${client}
+    supervisorctl stop {{ supervisor_instance_name or '' }}zeoclient${client}
     sleep 40
-    supervisorctl start zeoclient${client}
+    supervisorctl start {{ supervisor_instance_name or '' }}zeoclient${client}
     sleep 10
 
 {% if webserver_virtualhosts is defined %}

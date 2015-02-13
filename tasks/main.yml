@@ -5,7 +5,6 @@
     msg: "You must set the plone_initial_password variable."
   when: not plone_initial_password
 
-
 ###################################
 # Prerequisites
 
@@ -242,7 +241,7 @@
   when: plone_use_supervisor
   template:
     src=supervisor_task.j2
-    dest={{ supervisor_config_dir }}/zeo.conf
+    dest={{ supervisor_config_dir }}/{{ supervisor_instance_name or ''}}zeo.conf
     owner=root
     group=root
     mode=644
@@ -255,20 +254,20 @@
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoserver
+    name={{ supervisor_instance_name or ''}}zeoserver
     state=present
 
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoclient{{ item }}
+    name={{ supervisor_instance_name or '' }}zeoclient{{ item }}
     state=present
   with_sequence: count={{ plone_client_count }}
 
 - name: Supervisor zeoclients tasks are restarted
   when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name=zeoclient{{ item }}
+    name={{ supervisor_instance_name or ''}}zeoclient{{ item }}
     state=restarted
   with_sequence: count={{ plone_client_count }}
 
@@ -306,22 +305,23 @@
 ###################################
 # cron jobs
 
-- name: Pack cron job
+- name: "{{ plone_cron_prefix + ' ' or ''}}Pack cron job"
   when: plone_pack_at
   cron:
-    name="Plone packing"
+    name="{{ plone_cron_prefix + ' ' or ''}} Plone packing"
     job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/zeopack"
     user=plone_daemon
     minute={{ plone_pack_at["minute"] }}
     hour={{ plone_pack_at.hour }}
     weekday={{ plone_pack_at.weekday }}
 
-- name: Backup cron job
+- name: "{{ plone_cron_prefix + ' ' or ''}}Backup cron job"
   when: plone_backup_at
   cron:
-    name="Plone backup"
+    name="{{ plone_cron_prefix + ' ' or ''}}Plone backup"
     job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/backup"
     user=plone_daemon
     minute={{ plone_backup_at["minute"] }}
     hour={{ plone_backup_at.hour }}
     weekday={{ plone_backup_at.weekday }}
+
