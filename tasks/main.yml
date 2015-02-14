@@ -305,7 +305,7 @@
 ###################################
 # cron jobs
 
-- name: "{{ plone_cron_prefix + ' ' or ''}}Pack cron job"
+- name: "Pack cron job"
   when: plone_pack_at
   cron:
     name="{{ plone_cron_prefix + ' ' or ''}} Plone packing"
@@ -315,7 +315,7 @@
     hour={{ plone_pack_at.hour }}
     weekday={{ plone_pack_at.weekday }}
 
-- name: "{{ plone_cron_prefix + ' ' or ''}}Backup cron job"
+- name: "Backup cron job"
   when: plone_backup_at
   cron:
     name="{{ plone_cron_prefix + ' ' or ''}}Plone backup"
