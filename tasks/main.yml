@@ -308,7 +308,7 @@
 - name: "Pack cron job"
   when: plone_pack_at
   cron:
-    name="{{ plone_cron_prefix + ' ' or ''}} Plone packing"
+    name="{{ plone_cron_prefix + ' ' or ''}}Plone packing"
     job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/zeopack"
     user=plone_daemon
     minute={{ plone_pack_at["minute"] }}
