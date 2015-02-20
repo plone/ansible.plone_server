@@ -99,8 +99,8 @@
     force: no
   ignore_errors: yes
 
-- name: Check for existence of buildout cache
-  stat: path="{{ plone_target_path }}/buildout-cache"
+- name: Check for existence of buildout cache tarball
+  stat: path="{{ plone_target_path }}/buildout-cache.tar.bz2"
   register: tarball_stat
 
 - name: Unpack downloaded buildout cache

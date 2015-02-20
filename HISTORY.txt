@@ -1,5 +1,8 @@
 1.0b8 unreleased
 
+- Correct the check for existance of buildout tarball download
+  [rockfruit]
+
 - Re-running role does re-run "Run buildout" correctly
   [zylinx]
 
