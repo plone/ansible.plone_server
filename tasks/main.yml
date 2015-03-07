@@ -255,7 +255,7 @@
 
 - name: Supervisor task list is updated
   when: plone_use_supervisor and supervisor_task_conf|changed
-  shell: "supervisorctl update"
+  command: supervisorctl update
 
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
