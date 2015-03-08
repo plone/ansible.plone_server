@@ -53,6 +53,7 @@
   user:
     name=plone_daemon
     group=plone_group
+    home={{ plone_instance_home }}
 
 
 ####################################
