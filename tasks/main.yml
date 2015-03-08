@@ -148,7 +148,7 @@
 
 - name: Instance directory
   file:
-    path={{ plone_target_path }}/{{ plone_instance_name }}
+    path={{ plone_instance_home }}
     state=directory
     owner=plone_buildout
     group=plone_group
@@ -157,7 +157,7 @@
   when: not plone_buildout_git_repo
   copy:
     src=zeocluster/
-    dest={{ plone_target_path }}/{{ plone_instance_name }}
+    dest={{ plone_instance_home }}
     owner=plone_buildout
     group=plone_group
 
@@ -166,7 +166,7 @@
   git:
     repo={{ plone_buildout_git_repo }}
     force=no
-    dest={{ plone_target_path }}/{{ plone_instance_name }}
+    dest={{ plone_instance_home }}
     version={{ plone_buildout_git_version | default('HEAD') }}
     depth=1
     accept_hostkey=yes
@@ -174,7 +174,7 @@
 
 - name: Instance var directory
   file:
-    path={{ plone_var_path }}/{{ plone_instance_name }}
+    path={{ plone_instance_var_path }}
     state=directory
     owner=plone_daemon
     group=plone_group
@@ -183,7 +183,7 @@
 - name: Instance backup directory
   when: plone_backup_path
   file:
-    path={{ plone_backup_path }}/{{ plone_instance_name }}
+    path={{ plone_instance_backup_path }}
     state=directory
     owner=plone_daemon
     group=plone_group
@@ -200,14 +200,14 @@
   when: not plone_buildout_git_repo
   template:
     src=buildout.cfg.j2
-    dest={{ plone_target_path }}/{{ plone_instance_name }}/buildout.cfg
+    dest={{ plone_instance_home }}/buildout.cfg
     owner=plone_buildout
     group=plone_group
     backup=yes
   register: instance_status
   
 - name: Check that buildout ran successfully
-  stat: path={{ plone_target_path }}/{{ plone_instance_name }}/bin/client_reserved
+  stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
 
 
@@ -216,14 +216,14 @@
 
 - name: Bootstrap buildout
   command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
-    creates={{ plone_target_path }}/{{ plone_instance_name }}/bin/buildout
-    chdir={{ plone_target_path }}/{{ plone_instance_name }}
+    creates={{ plone_instance_home }}/bin/buildout
+    chdir={{ plone_instance_home }}
   sudo_user: plone_buildout
 
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
   command: bin/buildout
-    chdir={{ plone_target_path }}/{{ plone_instance_name }}
+    chdir={{ plone_instance_home }}
   sudo_user: plone_buildout
 
 - name: Everything in buildout cache is group-readable
@@ -231,7 +231,7 @@
 
 - name: Look for existing database
   when: plone_create_site
-  stat: path={{ plone_var_path }}/{{ plone_instance_name }}/filestorage/Data.fs
+  stat: path={{ plone_instance_var_path }}/filestorage/Data.fs
   register: db_status
 
 
@@ -279,13 +279,13 @@
 
 - name: Ensure scripts directory
   file:
-    path={{ plone_target_path }}/{{ plone_instance_name }}/scripts
+    path={{ plone_instance_home }}/scripts
     state=directory
 
 - name: Create restart script
   template:
     src=restart_clients.sh.j2
-    dest={{ plone_target_path }}/{{ plone_instance_name }}/scripts/restart_clients.sh
+    dest={{ plone_instance_home }}/scripts/restart_clients.sh
     owner=root
     group=root
     mode=0755
@@ -297,7 +297,7 @@
 - name: Install site creation run script
   template:
     src=addPloneSite.py.j2
-    dest={{ plone_target_path }}/{{ plone_instance_name }}/bin/addPloneSite.py
+    dest={{ plone_instance_home }}/bin/addPloneSite.py
     mode=0444
 
 - name: Create initial Plone site
@@ -305,7 +305,7 @@
   sudo_user: plone_daemon
   command: bin/client_reserved run bin/addPloneSite.py
   args:
-    chdir: "{{ plone_target_path }}/{{ plone_instance_name }}"
+    chdir: "{{ plone_instance_home }}"
 
 
 ###################################
@@ -315,7 +315,7 @@
   when: plone_pack_at
   cron:
     name="Plone packing"
-    job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/zeopack"
+    job="cd {{ plone_instance_home }} && bin/zeopack"
     user=plone_daemon
     minute={{ plone_pack_at["minute"] }}
     hour={{ plone_pack_at.hour }}
@@ -325,7 +325,7 @@
   when: plone_backup_at
   cron:
     name="Plone backup"
-    job="cd {{ plone_target_path }}/{{ plone_instance_name }} && bin/backup"
+    job="cd {{ plone_instance_home }} && bin/backup"
     user=plone_daemon
     minute={{ plone_backup_at["minute"] }}
     hour={{ plone_backup_at.hour }}

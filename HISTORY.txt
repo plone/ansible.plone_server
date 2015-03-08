@@ -12,6 +12,9 @@
 - Add ability to set extension profiles for site creation.
   [rockfruit]
 
+- Introduce variables `plone_instance_home`, `plone_instance_var_path`
+  and `plone_instance_backup_path`. [htgoebel]
+
 - Fix some bugs occuring in uncommon environments. [htgoebel]
 
 1.0b7 2015-01-27
