@@ -71,7 +71,7 @@ Defaults to `/var/local/plone-{{ plone_major_version }}`
 
 ### plone_major_version
 
-    plone_version: 4.3
+    plone_major_version: 4.3
 
 ### plone_version
 
