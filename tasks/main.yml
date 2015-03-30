@@ -13,6 +13,8 @@
   apt: pkg={{ item }} state=present
   with_items:
     - build-essential
+    - cron
+    - curl
     - python-dev
     - python-pip
     - libz-dev
@@ -247,6 +249,10 @@
     group=root
     mode=644
   register: supervisor_task_conf
+
+- name: Ensure supervisord is running
+  when: plone_use_supervisor
+  service: name=supervisor state=running
 
 - name: Supervisor task list is updated
   when: plone_use_supervisor and supervisor_task_conf|changed
