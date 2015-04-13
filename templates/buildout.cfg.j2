@@ -48,10 +48,10 @@ zcml =
 {% endfor %}
 {% endif %}
 
-var-dir={{ plone_var_path }}/{{ plone_instance_name }}
+var-dir={{ plone_instance_var_path }}
 
 {% if plone_backup_path %}
-backups-dir={{ plone_backup_path }}/{{ plone_instance_name }}
+backups-dir={{ plone_instance_backup_path }}
 {% else %}
 backups-dir=${buildout:var-dir}
 {% endif %}
