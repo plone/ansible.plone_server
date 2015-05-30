@@ -206,7 +206,7 @@
     group=plone_group
     backup=yes
   register: instance_status
-  
+
 - name: Check that buildout ran successfully
   stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
@@ -282,14 +282,6 @@
   file:
     path={{ plone_instance_home }}/scripts
     state=directory
-
-- name: Create restart script
-  template:
-    src=restart_clients.sh.j2
-    dest={{ plone_instance_home }}/scripts/restart_clients.sh
-    owner=root
-    group=root
-    mode=0755
 
 
 ##################################
