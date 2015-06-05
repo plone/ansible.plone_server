@@ -1,3 +1,7 @@
+1.0 2015-06-05
+
+- Update to 4.3.6 default.
+
 1.0b8 unreleased
 
 - Remove restart script. It belongs in the full-stack playbook
