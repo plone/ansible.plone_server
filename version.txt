@@ -1,1 +1,1 @@
-1.0.0, Plone version 4.3.6
+1.0.1, Plone version 4.3.6
