@@ -207,7 +207,7 @@
     backup=yes
   register: instance_status
 
-- name: Check that buildout ran successfully
+- name: Check to see if buildout has already run
   stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
 
