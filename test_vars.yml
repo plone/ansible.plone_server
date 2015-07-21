@@ -1,3 +1,6 @@
 ---
 
 plone_initial_password: admin
+
+plone_target_path: '/opt/plone-4.3'
+plone_backup_path: '/var/backups/plone-4.3'

@@ -36,6 +36,14 @@ You should not need to. But if you do, you should know:
 Role Variables
 --------------
 
+### plone_instance_name
+
+    plone_instance_name: frodos_site
+
+Sets the name that discriminates this install from others that use the same paths.
+
+Defaults to `zeoserver`
+
 ### plone_target_path
 
     plone_target_path: /opt/plone
@@ -44,6 +52,7 @@ Sets the Plone installation directory.
 
 Defaults to `/usr/local/plone-{{ plone_major_version }}`
 
+Your install's buildout directory will be {{ plone_target_path }}/{{ plone_instance_name }}.
 
 ### plone_var_path
 
@@ -53,6 +62,17 @@ Sets the Plone installation directory.
 
 Defaults to `/var/local/plone-{{ plone_major_version }}`
 
+Your install's var directory will be {{ plone_var_path }}/{{ plone_instance_name }}.
+
+#### plone_backup_path
+
+    plone_backup_path: /mnt/backup/plone
+
+Where do you want to put your backups? The destination must be writable by the `plone_daemon` user. Subdirectories are created for blob and filestorage backups.
+
+Defaults to your instance's var directory.
+
+Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instance_name }}.
 
 ### plone_buildout_git_repo
 
@@ -284,13 +304,6 @@ How many generations of full backups do you wish to keep? Defaults to `2`.
     plone_keep_blob_days: 21
 
 How many days of blob backups do you wish to keep? This is typically set to `keep_backups * days_between_packs` days. Default is `14`.
-
-
-#### plone_backup_path
-
-    plone_backup_path: /mnt/backup/plone
-
-Where do you want to put your backups? The destination must be writable by the `plone_daemon` user. Defaults to `./var` inside your buildout directory. Subdirectories are created for blob and filestorage backups.
 
 
 ### Supervisor Control

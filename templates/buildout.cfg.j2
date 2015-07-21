@@ -50,11 +50,7 @@ zcml =
 
 var-dir={{ plone_instance_var_path }}
 
-{% if plone_backup_path %}
 backups-dir={{ plone_instance_backup_path }}
-{% else %}
-backups-dir=${buildout:var-dir}
-{% endif %}
 
 user=admin:{{ plone_initial_password }}
 

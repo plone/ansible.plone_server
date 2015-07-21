@@ -6,14 +6,18 @@
 
   pre_tasks:
 
-  - name: Update host
-    apt: upgrade=dist update_cache=yes
+  - name: Update apt cache
+    apt: upgrade=yes update_cache=yes
 
   tasks:
 
     - include_vars: defaults/main.yml
 
     - include_vars: test_vars.yml
+
+    - include: tasks/main.yml
+
+    - include_vars: test_vars_1.yml
 
     - include: tasks/main.yml
 

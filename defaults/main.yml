@@ -10,11 +10,14 @@ plone_target_path: /usr/local/plone-{{ plone_major_version }}
 
 plone_var_path: /var/local/plone-{{ plone_major_version }}
 
+# backup patch defaults to var path unless you set this variable
+plone_backup_path: no
+
 plone_instance_name: zeoserver
 
 plone_instance_home: '{{ plone_target_path }}/{{ plone_instance_name }}'
 plone_instance_var_path: '{{ plone_var_path }}/{{ plone_instance_name }}'
-plone_instance_backup_path: '{{ plone_backup_path }}/{{ plone_instance_name }}'
+plone_instance_backup_path: '{{ plone_backup_path|default(plone_var_path, true) }}/{{ plone_instance_name }}'
 
 plone_buildout_git_repo: no
 
@@ -71,8 +74,6 @@ plone_backup_at:
 plone_keep_backups: 3
 
 plone_keep_blob_days: 21
-
-plone_backup_path: no
 
 plone_create_site: yes
 plone_site_id: Plone
