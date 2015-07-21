@@ -13,4 +13,14 @@
 
     - include_vars: defaults/main.yml
 
+    - include_vars: test_vars.yml
+
     - include: tasks/main.yml
+
+    - pip: name=httplib2
+
+    - name: Check to see if Plone is running
+      uri:
+        url: http://localhost:8081/Plone
+        method: GET
+        status_code: 200
