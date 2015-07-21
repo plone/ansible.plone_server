@@ -40,9 +40,9 @@ Role Variables
 
     plone_instance_name: frodos_site
 
-Sets the name that discriminates this install from others that use the same paths.
+Sets the name that discriminates this install from others. This name should be globally unique on the server as it's used to discriminate between supervisor and cron jobs.
 
-Defaults to `zeoserver`
+Defaults to `zeoserver`.
 
 ### plone_target_path
 

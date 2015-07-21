@@ -244,7 +244,7 @@
   when: plone_use_supervisor
   template:
     src=supervisor_task.j2
-    dest={{ supervisor_config_dir }}/zeo.conf
+    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
     owner=root
     group=root
     mode=644
@@ -261,13 +261,13 @@
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoserver
+    name='{{ supervisor_instance_discriminator }}zeoserver'
     state=present
 
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
-    name=zeoclient{{ item }}
+    name='{{ supervisor_instance_discriminator }}zeoclient{{ item }}'
     state=present
   with_sequence: count={{ plone_client_count }}
 
@@ -307,7 +307,7 @@
 - name: Pack cron job
   when: plone_pack_at
   cron:
-    name="Plone packing"
+    name="{{ plone_instance_name }} Plone packing"
     job="cd {{ plone_instance_home }} && bin/zeopack"
     user=plone_daemon
     minute={{ plone_pack_at["minute"] }}
@@ -317,7 +317,7 @@
 - name: Backup cron job
   when: plone_backup_at
   cron:
-    name="Plone backup"
+    name="{{ plone_instance_name }} Plone backup"
     job="cd {{ plone_instance_home }} && bin/backup"
     user=plone_daemon
     minute={{ plone_backup_at["minute"] }}

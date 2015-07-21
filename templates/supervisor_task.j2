@@ -1,4 +1,4 @@
-[program:zeoserver]
+[program:{{ supervisor_instance_discriminator }}zeoserver]
 command={{ plone_instance_home }}/bin/zeoserver fg
 directory={{ plone_instance_home }}
 redirect_stderr={{ plone_redirect_stderr }}
@@ -12,7 +12,7 @@ environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ val
 {% endif %}
 
 {% for client in range(1, plone_client_count+1) %}
-[program:zeoclient{{ client }}]
+[program:{{ supervisor_instance_discriminator }}zeoclient{{ client }}]
 command={{ plone_instance_home }}/bin/client{{ client }} console
 directory={{ plone_instance_home }}
 redirect_stderr={{ plone_redirect_stderr }}
@@ -28,7 +28,7 @@ environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ val
 {% endfor %}
 
 {% if plone_client_max_memory != 0 %}
-[eventlistener:memmon]
+[eventlistener:{{ supervisor_instance_discriminator }}memmon]
 command=memmon -a {{ plone_client_max_memory }} -c -m root
 events=TICK_60
 {% endif %}

@@ -23,8 +23,14 @@
 
     - pip: name=httplib2
 
-    - name: Check to see if Plone is running
+    - name: Check to see if Plone 1 is running
       uri:
-        url: http://localhost:8081/Plone
+        url: http://127.0.0.1:8081/Plone
+        method: GET
+        status_code: 200
+
+    - name: Check to see if Plone 2 is running
+      uri:
+        url: http://127.0.0.1:6081/Plone
         method: GET
         status_code: 200
