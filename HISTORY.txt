@@ -1,3 +1,7 @@
+1.1.1 (unreleased)
+
+- Get vagrant test running with admin password.
+
 1.1.0 2015-06-15
 
 - Ansible Galaxy does not recognize 1.0.1 as later than 1.0b1,
