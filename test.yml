@@ -4,10 +4,10 @@
   sudo: yes
   gather_facts: no
 
-  pre_tasks:
+  # pre_tasks:
 
-  - name: Update apt cache
-    apt: upgrade=yes update_cache=yes
+  # - name: Update apt cache
+  #   apt: upgrade=yes update_cache=yes
 
   tasks:
 
@@ -15,9 +15,21 @@
 
     - include_vars: test_vars.yml
 
+    - when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
+      debug: msg="repo not defined or not"
+
+    - when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
+      debug: msg="repo defined and true-ish"
+
     - include: tasks/main.yml
 
     - include_vars: test_vars_1.yml
+
+    - when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
+      debug: msg="repo not defined or not true-ish"
+
+    - when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
+      debug: msg="repo defined and true-ish"
 
     - include: tasks/main.yml
 

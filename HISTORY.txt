@@ -1,6 +1,14 @@
 1.1.1 (unreleased)
 
+- buildout git repo checkout was not working. Fixed.
+  [jpgimenez]
+
+- Make it possible to have multiple instance installs by adding
+  cron and supervisor discriminators based on instance name.
+  [smcmahon]
+
 - Get vagrant test running with admin password.
+  [smcmahon]
 
 1.1.0 2015-06-15
 

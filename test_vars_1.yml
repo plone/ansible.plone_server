@@ -3,3 +3,4 @@
 plone_instance_name: client5
 plone_zeo_port: 6100
 plone_client_base_port: 6080
+plone_buildout_git_repo:

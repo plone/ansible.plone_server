@@ -155,7 +155,7 @@
     group=plone_group
 
 - name: Copy buildout skeleton
-  when: not plone_buildout_git_repo
+  when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
   copy:
     src=zeocluster/
     dest={{ plone_instance_home }}
@@ -163,7 +163,7 @@
     group=plone_group
 
 - name: Instance directory via git
-  when: plone_buildout_git_repo
+  when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
   git:
     repo={{ plone_buildout_git_repo }}
     force=no
