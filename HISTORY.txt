@@ -1,4 +1,4 @@
-1.1.1 (unreleased)
+1.1.1 2015-07-28
 
 - buildout git repo checkout was not working. Fixed.
   [jpgimenez]
