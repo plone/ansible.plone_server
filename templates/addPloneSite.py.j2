@@ -22,7 +22,7 @@ default_extension_profiles = (
 
 if site_id in app.objectIds():
     print "A Plone site already exists"
-    sys.exit(1)
+    sys.exit(0)
 
 addPloneSite(
     app, site_id,
