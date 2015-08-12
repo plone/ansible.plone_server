@@ -4,7 +4,7 @@ directory={{ plone_instance_home }}
 redirect_stderr={{ plone_redirect_stderr }}
 autostart={{ plone_autostart }}
 autorestart={{ plone_autorestart }}
-user=plone_daemon
+user={{ plone_daemon_user }}
 startsecs={{ plone_startsecs }}
 stopwaitsecs={{ plone_stopwaitsecs }}
 {% if plone_task_env_vars|length > 0 %}
@@ -18,7 +18,7 @@ directory={{ plone_instance_home }}
 redirect_stderr={{ plone_redirect_stderr }}
 autostart={{ plone_autostart }}
 autorestart={{ plone_autorestart }}
-user=plone_daemon
+user={{ plone_daemon_user }}
 startsecs={{ plone_startsecs }}
 stopwaitsecs={{ plone_stopwaitsecs }}
 {% if plone_task_env_vars|length > 0 %}
