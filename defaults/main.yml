@@ -59,6 +59,12 @@ plone_buildout_cache_file:
 
 plone_sources:
 
+plone_group: plone_group
+
+plone_buildout_user: plone_buildout
+
+plone_daemon_user: plone_daemon
+
 plone_pack_at:
   minute: 30
   hour: 1

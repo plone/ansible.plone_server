@@ -29,8 +29,8 @@ extensions =
 auto-checkout = *
 {% endif %}
 
-effective-user = plone_daemon
-buildout-user = plone_buildout
+effective-user = {{ plone_daemon_user }}
+buildout-user = {{ plone_buildout_user }}
 
 eggs =
     Plone
