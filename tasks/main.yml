@@ -10,6 +10,7 @@
 # Prerequisites
 
 - name: Ensure required packages
+  when: ansible_os_family == 'Debian'
   apt: pkg={{ item }} state=present
   with_items:
     - build-essential
@@ -28,10 +29,63 @@
     - git
     - wv
 
+- name: CentOS enable aditional repos
+  yum: pkg={{ item }} state=present
+  when: ansible_distribution == 'CentOS'
+  with_items:
+    - epel-release
+
+- name: CentOS 6 install GhettoForge repos
+  yum: pkg=http://mirror.symnds.com/distributions/gf/el/6/gf/x86_64/gf-release-6-8.gf.el6.noarch.rpm state=present
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
+- name: CentOS 6 enable GhettoForge plus repo
+  command: yum-config-manager --enable gf-plus
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
+- name: Ensure required packages
+  yum: pkg={{ item }} state=present
+  when: ansible_os_family == 'RedHat'
+  with_items:
+    - gcc-c++
+    - patch
+    - openssl-devel
+    - libjpeg-devel
+    - libxslt-devel
+    - libselinux-python
+    - readline-devel
+    - make
+    - which
+    - python-devel
+    - cronie
+    - curl
+    - python-pip
+    - python-virtualenv
+    - zlib-devel
+    - poppler-utils
+    - lynx
+    - unzip
+    - supervisor
+    - git
+
+- name: Ensure wv installed
+  when: ansible_os_family == 'RedHat'
+  shell: yum install -y wv || yum install -y http://pkgs.repoforge.org/wv/wv-1.2.4-1.el6.rf.x86_64.rpm
+    creates=/usr/bin/wvHtml
+
 - name: Ensure recent python-virtualenv
-  pip: name=virtualenv
+  when: ansible_os_family == 'Debian'
+  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin"' state=latest
   # note that this installs to /usr/local/bin
   # which is not automatically on the path
+
+- name: Set virtualenv path
+  when: ansible_os_family == 'Debian'
+  set_fact: virtualenv_path=/usr/local/bin/
+
+- name: Set python version
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+  set_fact: plone_python_version=2.6
 
 - name: Superlance installed
   when: plone_client_max_memory != "0"
@@ -78,8 +132,8 @@
     mode=0755
 
 - name: Python virtualenv
-  command: /usr/local/bin/virtualenv --python=python{{ plone_python_version }} {{ plone_target_path }}/Python-{{ plone_python_version }}
-    creates={{ plone_target_path }}/Python-{{ plone_python_version }}
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_target_path }}/Python-{{ plone_python_version }} \
+    creates={{ plone_target_path }}/Python-{{ plone_python_version }}"
 
 - name: Check for existence of buildout cache
   stat: path="{{ plone_target_path }}/buildout-cache"
@@ -240,8 +294,13 @@
 ###################################
 # Supervisor setup
 
+- name: Supervisor config dir
+  set_fact:
+    supervisor_config_dir: "/etc/supervisord.d/"
+  when: ansible_os_family == 'RedHat'
+
 - name: Supervisor process control setup
-  when: plone_use_supervisor
+  when: plone_use_supervisor and ansible_os_family == 'Debian'
   template:
     src=supervisor_task.j2
     dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
@@ -250,9 +309,23 @@
     mode=644
   register: supervisor_task_conf
 
+- name: Supervisor process control setup
+  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  template:
+    src=supervisor_task.j2
+    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.ini'
+    owner=root
+    group=root
+    mode=644
+  register: supervisor_task_conf
+
 - name: Ensure supervisord is running
-  when: plone_use_supervisor
+  when: plone_use_supervisor and ansible_pkg_mgr == 'Debian'
   service: name=supervisor state=running
+
+- name: Ensure supervisord is running
+  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  service: name=supervisord state=running
 
 - name: Supervisor task list is updated
   when: plone_use_supervisor and supervisor_task_conf|changed
