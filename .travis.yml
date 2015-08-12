@@ -22,13 +22,8 @@ script:
   # Run the role/playbook with ansible-playbook.
   - "ansible-playbook -i inventory $SITE --connection=local --sudo"
 
-  # Run the role/playbook again, checking to make sure it's idempotent.
-  - >
-    ansible-playbook -i inventory $SITE --connection=local --sudo
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
   # Check to see if Plone 1 is running
-  - curl http://127.0.0.1:8081/Plone
+  - "curl http://127.0.0.1:8081/Plone"
+
   # Check to see if Plone 2 is running
-  - curl http://127.0.0.1:6081/Plone
+  - "curl http://127.0.0.1:6081/Plone"
