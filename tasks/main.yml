@@ -293,6 +293,10 @@
     dest={{ plone_instance_home }}/bin/addPloneSite.py
     mode=0444
 
+- name: Wait for client1 end startup
+  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
+  wait_for: port={{ plone_client_base_port }}
+
 - name: Create initial Plone site
   when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
   sudo_user: plone_daemon
