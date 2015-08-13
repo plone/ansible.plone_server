@@ -47,6 +47,8 @@
   yum: pkg={{ item }} state=present
   when: ansible_os_family == 'RedHat'
   with_items:
+    - tar
+    - bzip2
     - gcc-c++
     - patch
     - openssl-devel
