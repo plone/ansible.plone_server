@@ -19,7 +19,7 @@ Requirements
 
 Since this role creates and uses users and groups, it must be run as part of a playbook that sets sudo to "yes".
 
-Currently only working with Debian/Ubuntu environments. Please put in a pull request if you can help get it going in an RPM environment.
+Currently working with Debian/Ubuntu and CentOS/Fedora environments. Please put in a pull request if you can help get it going in other ansible's os families (FreeBSD, Gentoo, Suse, etc.).
 
 
 If you need to log in
