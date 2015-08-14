@@ -83,6 +83,8 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 
 `buildout_git_version` is the tag or branch. Defaults to `master`.
 
+`buildout_git_file` is the buildout configuration file to run. Defaults to `buildout.cfg`.
+
 > If you use your own buildout from a repository, you still need to specify your client count so that the playbook can 1) set up the supervisor specifications to start/stop and monitor clients, and 2) set up the load balancer.
 >
 > Client part names must follow the pattern `client#` where # is a number (1,2,3 ...). Client ports must be numbered sequentially beginning with 8081 or the value you set for plone_client_base_port. The zeoserver part must be named `zeoserver` and be at 8100 or the value you set for plone_zeo_port.

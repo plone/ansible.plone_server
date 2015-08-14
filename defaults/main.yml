@@ -23,6 +23,8 @@ plone_buildout_git_repo: no
 
 plone_buildout_git_version: master
 
+plone_buildout_file: buildout.cfg
+
 plone_initial_password:
 
 plone_client_count: 2

@@ -272,14 +272,14 @@
 # Bootstrap and run buildout
 
 - name: Bootstrap buildout
-  command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
+  command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4 -c {{ plone_buildout_file }}
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
   sudo_user: "{{ plone_buildout_user }}"
 
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
-  command: bin/buildout
+  command: bin/buildout -c {{ plone_buildout_file }}
     chdir={{ plone_instance_home }}
   sudo_user: "{{ plone_buildout_user }}"
 
