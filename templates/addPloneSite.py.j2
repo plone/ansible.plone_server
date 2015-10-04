@@ -11,8 +11,7 @@ admin_username = 'admin'
 site_id = "{{ plone_site_id }}"
 language = "{{ plone_default_language }}"
 default_extension_profiles = (
-    'plonetheme.classic:default',
-    'plonetheme.sunburst:default',
+    'plonetheme.barceloneta:default',
 {% if plone_extension_profiles %}
 {% for addon in plone_extension_profiles %}
     '{{ addon }}',
