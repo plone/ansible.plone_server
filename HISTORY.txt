@@ -1,3 +1,8 @@
+Unreleased
+
+- Upgrade to Plone 5.0
+  [fulv]
+
 1.1.1 2015-07-28
 
 - buildout git repo checkout was not working. Fixed.
