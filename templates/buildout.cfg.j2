@@ -210,11 +210,11 @@ extra-paths = ${buildout:directory}/products
 
 
 [versions]
-{% if plone_version < '5.0' %}
 buildout.sanitycheck = 1.0b1
 collective.recipe.backup = 2.20
 plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
+{% if plone_version < '5.0' %}
 setuptools = 7.0
 {% if plone_version < '4.3.8' %}
 plone.csrffixes = 1.0.6
