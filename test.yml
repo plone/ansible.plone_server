@@ -4,10 +4,10 @@
   sudo: yes
   gather_facts: yes
 
-  # pre_tasks:
+  pre_tasks:
 
-  # - name: Update apt cache
-  #   apt: upgrade=yes update_cache=yes
+  - name: Update apt cache
+    apt: upgrade=yes update_cache=yes
 
   tasks:
 
