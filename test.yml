@@ -4,6 +4,7 @@
   sudo: yes
   gather_facts: yes
 
+
   pre_tasks:
 
   - name: Update apt cache
@@ -13,36 +14,24 @@
 
     - include_vars: defaults/main.yml
 
-    - include_vars: test_vars.yml
-
-    - when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
-      debug: msg="repo not defined or not"
-
-    - when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
-      debug: msg="repo defined and true-ish"
-
-    - include: tasks/main.yml
-
-    - include_vars: test_vars_1.yml
-
-    - when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
-      debug: msg="repo not defined or not true-ish"
-
-    - when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
-      debug: msg="repo defined and true-ish"
+    - include_vars: test_vars_P5.yml
 
     - include: tasks/main.yml
 
     - pip: name=httplib2
 
-    - name: Check to see if Plone 1 is running
+    - name: Check to see if Plone 5 is running
       uri:
-        url: http://127.0.0.1:8081/Plone
+        url: http://127.0.0.1:5081/Plone
         method: GET
         status_code: 200
 
-    - name: Check to see if Plone 2 is running
+    - include_vars: test_vars_P4.yml
+
+    - include: tasks/main.yml
+
+    - name: Check to see if Plone 4.3.x is running
       uri:
-        url: http://127.0.0.1:6081/Plone
+        url: http://127.0.0.1:4081/Plone
         method: GET
         status_code: 200

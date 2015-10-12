@@ -136,6 +136,7 @@
 - name: Python virtualenv
   command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_target_path }}/Python-{{ plone_python_version }} \
     creates={{ plone_target_path }}/Python-{{ plone_python_version }}"
+  when: plone_version < '5.0'
 
 - name: Check for existence of buildout cache
   stat: path="{{ plone_target_path }}/buildout-cache"
@@ -263,6 +264,13 @@
     backup=yes
   register: instance_status
 
+- name: Python virtualenv
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_instance_home }}"
+  args:
+    creates: "{{ plone_instance_home }}/bin/python"
+  when: plone_version >= '5.0'
+  sudo_user: "{{ plone_buildout_user }}"
+
 - name: Check to see if buildout has already run
   stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
@@ -271,10 +279,20 @@
 ###################################
 # Bootstrap and run buildout
 
-- name: Bootstrap buildout
+# Plone 5.0+; avoid bootstrap.py
+- name: pip install zc.buildout
+  command: "{{ plone_instance_home }}/bin/pip install zc.buildout"
+  args:
+    creates: "{{ plone_instance_home }}/bin/buildout"
+  when: plone_version >= '5.0' and buildout_status.stat.exists == False
+  sudo_user: "{{ plone_buildout_user }}"
+
+# Plone < 5.0; use bootstrap
+- name: Bootstrap buildout for Plone 4.x
   command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
+  when: plone_version < '5.0' and buildout_status.stat.exists == False
   sudo_user: "{{ plone_buildout_user }}"
 
 - name: Run buildout

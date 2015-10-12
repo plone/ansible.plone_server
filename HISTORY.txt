@@ -1,3 +1,11 @@
+1.1.2 unreleased
+
+- Adapt to build either Plone 4.3.x or Plone 5.0.
+  [smcmahon]
+
+- Remove unused version cfg files.
+  [smcmahon]
+
 1.1.1 2015-07-28
 
 - buildout git repo checkout was not working. Fixed.

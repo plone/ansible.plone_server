@@ -223,6 +223,11 @@ plone.keyring = 3.0.1
 plone.locking = 2.0.8
 {% endif %}
 {% endif %}
+{% if plone_version >= '5.0' %}
+# Use virtualenv's setuptools and zc.buildout
+setuptools =
+zc.buildout =
+{% endif %}
 {% if plone_additional_versions %}
 {% for eversion in plone_additional_versions %}
 {{ eversion}}

@@ -5,14 +5,13 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.define "test", primary: true, autostart: true do |test|
-    test.vm.box = "debian/jessie64"
-  # config.vm.box = "ubuntu/trusty64"
+  config.vm.define "test", primary: true, autostart: true do |jessie|
+    jessie.vm.box = "debian/jessie64"
 
-    test.vm.network "forwarded_port", guest: 8080, host: 8080
-    test.vm.network "forwarded_port", guest: 8081, host: 8081
+    jessie.vm.network "forwarded_port", guest: 8080, host: 8080
+    jessie.vm.network "forwarded_port", guest: 8081, host: 8081
 
-    test.vm.provision "ansible" do |ansible|
+    jessie.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
@@ -40,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "centos70", primary: false, autostart: false do |centos70|
-    centos70.vm.box = "chef/centos-7.0"
+    centos70.vm.box = "centos/7"
 
     centos70.vm.network "forwarded_port", guest: 8080, host: 8086
     centos70.vm.network "forwarded_port", guest: 8081, host: 8087
@@ -60,7 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.playbook = "test.yml"
     end
   end
-  
+
   config.vm.define "centos65", primary: false, autostart: false do |centos65|
     centos65.vm.box = "chef/centos-6.5"
 
