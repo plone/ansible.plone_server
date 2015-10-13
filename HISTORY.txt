@@ -1,4 +1,4 @@
-1.1.2 unreleased
+1.1.2 2015-10-13
 
 - Adapt to build either Plone 4.3.x or Plone 5.0.
   [smcmahon]
