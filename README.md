@@ -16,6 +16,8 @@ This role takes care of:
 
 If you'd like to use this role as part of a full-stack configuration kit, see the [Plone Ansible Playbook](https://github.com/plone/ansible-playbook).
 
+This role should be able to work with Plone 4.3.x or 5.0. Just set the version variables documented below.
+
 Requirements
 ------------
 
@@ -93,13 +95,13 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 
 ### plone_major_version
 
-    plone_major_version: 4.3
+    plone_major_version: '5.0'
 
 ### plone_version
 
-    plone_version: 4.3.3
+    plone_version: '5.0'
 
-Which Plone version do you wish to install? This defaults to the current stable version at the time you copy or clone the playbook.
+Which Plone version do you wish to install? This defaults to the current stable version at the time you copy or clone the playbook. Make sure plone_major_version and plone_version are string variables or they won't compare correctly.
 
 ### plone_initial_password
 
