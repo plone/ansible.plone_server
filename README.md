@@ -145,7 +145,7 @@ Defaults to `1`
 
     plone_client_max_memory: 800MB
 
-A size (suffix-multiplied using “KB”, “MB” or “GB”) that should be considered “too much”. If any Zope/Plone process exceeds this maximum, it will be restarted. Set to `0` for no memory monitoring.
+A size (suffix-multiplied using "KB", "MB" or "GB") that should be considered "too much". If any Zope/Plone process exceeds this maximum, it will be restarted. Set to `0` for no memory monitoring.
 
 Defaults to `0` (turned off)
 
