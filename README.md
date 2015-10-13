@@ -1,8 +1,6 @@
 plone_server
 ============
 
-[![](https://img.shields.io/travis/jpgimenez/ansible.plone_server.svg)](https://travis-ci.org/#!/jpgimenez/ansible.plone_server)
-
 This Ansible role provisions a [Plone](https://plone.org) server with options to control client count and memory profile. It uses either a built-in buildout.cfg or one picked up via git.
 
 This role takes care of:
