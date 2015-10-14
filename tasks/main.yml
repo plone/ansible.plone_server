@@ -288,7 +288,7 @@
   sudo_user: "{{ plone_buildout_user }}"
 
 # Plone < 5.0; use bootstrap
-- name: Bootstrap buildout for Plone 4.x
+- name: Bootstrap buildout
   command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
