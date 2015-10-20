@@ -1,8 +1,11 @@
 ---
 
+supervisor_instance_discriminator: p4
+
 plone_major_version: '4.3'
 plone_version: '4.3.7'
 
 plone_initial_password: admin
 plone_zeo_port: 4100
 plone_client_base_port: 4080
+plone_sources:

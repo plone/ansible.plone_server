@@ -1,3 +1,9 @@
+1.1.4 unreleased
+
+- Set mr.developer git_clone_depth to 1 when using mr.developer.
+  Elaborate documentation for plone_sources variable.
+  [smcmahon]
+
 1.1.3 2015-10-13
 
 - Doc update.

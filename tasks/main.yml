@@ -367,7 +367,7 @@
 - name: Supervisor zeoclients tasks are restarted
   when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name=zeoclient{{ item }}
+    name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted
   with_sequence: count={{ plone_client_count }}
 
