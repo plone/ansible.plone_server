@@ -176,6 +176,7 @@ This setting allows you to check out and include repository-based sources in you
 
 Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) sources format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*" and git_clone_depth set to "1".
 
+
 ### plone_extension_profiles
 
     plone_extension_profiles:
@@ -317,6 +318,16 @@ How many days of blob backups do you wish to keep? This is typically set to `kee
     plone_use_supervisor: no
 
 When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
+
+
+#### supervisor_instance_discriminator
+
+    supervisor_instance_discriminator: customer_15
+
+Optionally use this variable when you're installing multiple plone servers on the same machine.
+The value for supervisor_instance_discriminator will be set as a prefix to all supervisor jobs for this plone server.
+
+You do not need to set a supervisor_instance_discriminator if the servers have different instance names.
 
 
 Example Playbook
