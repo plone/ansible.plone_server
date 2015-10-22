@@ -320,16 +320,6 @@ How many days of blob backups do you wish to keep? This is typically set to `kee
 When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
 
 
-#### supervisor_instance_discriminator
-
-    supervisor_instance_discriminator: customer_15
-
-Optionally use this variable when you're installing multiple plone servers on the same machine.
-The value for supervisor_instance_discriminator will be set as a prefix to all supervisor jobs for this plone server.
-
-You do not need to set a supervisor_instance_discriminator if the servers have different instance names.
-
-
 Example Playbook
 ----------------
 
@@ -348,6 +338,62 @@ Including an example of how to use your role (for instance, with variables passe
 
         - role: plone.plone_server
           plone_initial_password: super_secret
+
+Multiple Server Example
+-----------------------
+
+Here's an example playbook that sets up multiple Plone servers on the same target.
+Note the use of distinct `plone_instance_name` settings to make sure that cron and supervisor jobs do not collide.
+
+    - hosts: all
+      sudo: yes
+      gather_facts: yes
+
+      pre_tasks:
+
+        - name: Update host
+          apt: upgrade=dist update_cache=yes
+
+      roles:
+
+        - role: plone.plone_server
+          plone_instance_name: primary_plone
+          plone_target_path: /opt/primary_plone
+          plone_var_path: /var/local/primary_plone
+          plone_major_version: '5.0'
+          plone_version: '5.0'
+          plone_initial_password: admin
+          plone_zeo_port: 5100
+          plone_client_base_port: 5080
+          plone_create_site: no
+
+        - role: plone.plone_server
+          plone_instance_name: secondary_plone
+          plone_target_path: /opt/secondary_plone
+          plone_var_path: /var/local/secondary_plone
+          plone_major_version: '4.3'
+          plone_version: '4.3.7'
+          plone_initial_password: admin
+          plone_zeo_port: 4100
+          plone_client_base_port: 4080
+          plone_create_site: no
+
+      tasks:
+        - pause: seconds=30
+
+        - name: Check to see if Plone 5 is running
+          uri:
+            url: http://127.0.0.1:5081/
+            method: GET
+            status_code: 200
+
+        - name: Check to see if Plone 4.3.x is running
+          uri:
+            url: http://127.0.0.1:4081/
+            method: GET
+            status_code: 200
+
+
 
 License
 -------

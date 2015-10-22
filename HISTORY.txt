@@ -1,5 +1,9 @@
 1.1.4 unreleased
 
+- Add documentation example for setting up multiple plones on
+  a single target server.
+  [smcmahon]
+
 - Set mr.developer git_clone_depth to 1 when using mr.developer.
   Elaborate documentation for plone_sources variable.
   [smcmahon]
