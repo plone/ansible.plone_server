@@ -32,3 +32,21 @@ environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ val
 command=memmon -a {{ plone_client_max_memory }} -c -m root
 events=TICK_60
 {% endif %}
+
+[program:pound]
+command=/etc/init.d/pound restart
+directory=/etc/init.d
+autostart={{ plone_autostart }}
+autorestart={{ plone_autorestart }}
+user=root
+startsecs=0
+exitcodes=0
+
+[program:varnish]
+command=/etc/init.d/varnish restart
+directory=/etc/init.d
+autostart={{ plone_autostart }}
+autorestart={{ plone_autorestart }}
+user=root
+startsecs=0
+exitcodes=0
