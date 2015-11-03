@@ -98,18 +98,18 @@
 # Users and groups
 
 - name: Ensure plone group
-  group: name={{ plone_group }}
+  group: name={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Ensure plone buildout user
   user:
-    name={{ plone_buildout_user }}
-    group={{ plone_group }}
+    name={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
     generate_ssh_key=yes
 
 - name: Ensure plone daemon user
   user:
-    name={{ plone_daemon_user }}
-    group={{ plone_group }}
+    name={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 
 ####################################
@@ -117,162 +117,162 @@
 
 - name: Ensure base directory
   file:
-    path={{ plone_target_path }}
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}
     state=directory
 
 - name: Instance var base directory
   file:
-    path={{ plone_var_path }}
+    path={{ plone_config.plone_var_path|default(plone_var_path) }}
     state=directory
     mode=0755
 
 - name: Instance backup base directory
   when: plone_backup_path
   file:
-    path={{ plone_backup_path }}
+    path={{ plone_config.plone_backup_path|default(plone_backup_path) }}
     state=directory
     mode=0755
 
 - name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_target_path }}/Python-{{ plone_python_version }} \
-    creates={{ plone_target_path }}/Python-{{ plone_python_version }}"
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_config.plone_python_version|default(plone_python_version) }} {{ plone_config.plone_target_path|default(plone_target_path) }}/Python-{{ plone_config.plone_python_version|default(plone_python_version) }} \
+    creates={{ plone_config.plone_target_path|default(plone_target_path) }}/Python-{{ plone_config.plone_python_version|default(plone_python_version) }}"
   when: plone_version < '5.0'
 
 - name: Check for existence of buildout cache
-  stat: path="{{ plone_target_path }}/buildout-cache"
+  stat: path="{{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache"
   register: cache_stat
 
 - name: Load buildout cache from host file
   when: plone_buildout_cache_file and not cache_stat.stat.exists
   unarchive:
-    creates="{{ plone_target_path }}/buildout-cache"
-    src="{{ plone_buildout_cache_file }}"
-    dest="{{ plone_target_path }}"
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    creates="{{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache"
+    src="{{ plone_config.plone_buildout_cache_file|default(plone_buildout_cache_file) }}"
+    dest="{{ plone_config.plone_target_path|default(plone_target_path) }}"
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Download buildout cache if needed
   when: plone_buildout_cache_url and not (plone_buildout_cache_file or cache_stat.stat.exists)
   get_url:
-    url: "{{ plone_buildout_cache_url }}"
-    dest: "{{ plone_target_path }}/buildout-cache.tar.bz2"
+    url: "{{ plone_config.plone_buildout_cache_url|default(plone_buildout_cache_url) }}"
+    dest: "{{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache.tar.bz2"
     force: no
   ignore_errors: yes
 
 - name: Check for existence of buildout cache tarball
-  stat: path="{{ plone_target_path }}/buildout-cache.tar.bz2"
+  stat: path="{{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache.tar.bz2"
   register: tarball_stat
 
 - name: Unpack downloaded buildout cache
   when: tarball_stat.stat.exists and not cache_stat.stat.exists
   command: tar xf buildout-cache.tar.bz2
   args:
-    chdir: "{{ plone_target_path }}"
-    creates: "{{ plone_target_path }}/buildout-cache"
+    chdir: "{{ plone_config.plone_target_path|default(plone_target_path) }}"
+    creates: "{{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache"
 
 - name: Delete old buildout cache tarball
   file:
-    path={{ plone_target_path }}/buildout-cache.tar.bz2
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache.tar.bz2
     state=absent
 
 - name: Buildout cache directory exists and is owned by plone buildout user
   file:
-    path={{ plone_target_path }}/buildout-cache
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache
     state=directory
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Buildout cache eggs directory
   file:
-    path={{ plone_target_path }}/buildout-cache/eggs
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache/eggs
     state=directory
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Fix file ownership in cache
   when: plone_buildout_cache_file or plone_buildout_cache_url
   file:
-    path={{ plone_target_path }}/buildout-cache
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
     recurse=yes
 
 - name: Buildout cache downloads directory
   file:
-    path={{ plone_target_path }}/buildout-cache/downloads
+    path={{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache/downloads
     state=directory
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Instance directory
   file:
-    path={{ plone_instance_home }}
+    path={{ plone_config.plone_instance_home|default(plone_instance_home) }}
     state=directory
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Copy buildout skeleton
   when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
   copy:
     src=zeocluster/
-    dest={{ plone_instance_home }}
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Instance directory via git
   when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
   git:
-    repo={{ plone_buildout_git_repo }}
+    repo={{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}
     force=no
-    dest={{ plone_instance_home }}
-    version={{ plone_buildout_git_version | default('HEAD') }}
+    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    version={{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) | default('HEAD') }}
     depth=1
     accept_hostkey=yes
-  sudo_user: "{{ plone_buildout_user }}"
+  sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Instance var directory
   file:
-    path={{ plone_instance_var_path }}
+    path={{ plone_config.plone_instance_var_path|default(plone_instance_var_path) }}
     state=directory
-    owner={{ plone_daemon_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
     mode=02770
 
 - name: Instance backup directory
   when: plone_backup_path
   file:
-    path={{ plone_instance_backup_path }}
+    path={{ plone_config.plone_instance_backup_path|default(plone_instance_backup_path) }}
     state=directory
-    owner={{ plone_daemon_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
     mode=0750
 
 - name: Python eggs directory
   file:
-    path={{ plone_var_path }}/.python-eggs
+    path={{ plone_config.plone_var_path|default(plone_var_path) }}/.python-eggs
     state=directory
-    owner={{ plone_daemon_user }}
-    group={{ plone_group }}
+    owner={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
 
 - name: Copy buildout template
   when: not plone_buildout_git_repo
   template:
     src=buildout.cfg.j2
-    dest={{ plone_instance_home }}/buildout.cfg
-    owner={{ plone_buildout_user }}
-    group={{ plone_group }}
+    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}/buildout.cfg
+    owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
+    group={{ plone_config.plone_group|default(plone_group) }}
     backup=yes
   register: instance_status
 
 - name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_instance_home }}"
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_config.plone_python_version|default(plone_python_version) }} {{ plone_config.plone_instance_home|default(plone_instance_home) }}"
   args:
-    creates: "{{ plone_instance_home }}/bin/python"
+    creates: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/python"
   when: plone_version >= '5.0'
-  sudo_user: "{{ plone_buildout_user }}"
+  sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Check to see if buildout has already run
-  stat: path={{ plone_instance_home }}/bin/client_reserved
+  stat: path={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/client_reserved
   register: buildout_status
 
 
@@ -281,32 +281,32 @@
 
 # Plone 5.0+; avoid bootstrap.py
 - name: pip install zc.buildout
-  command: "{{ plone_instance_home }}/bin/pip install zc.buildout"
+  command: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/pip install zc.buildout"
   args:
-    creates: "{{ plone_instance_home }}/bin/buildout"
+    creates: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/buildout"
   when: plone_version >= '5.0' and buildout_status.stat.exists == False
-  sudo_user: "{{ plone_buildout_user }}"
+  sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
-  command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
-    creates={{ plone_instance_home }}/bin/buildout
-    chdir={{ plone_instance_home }}
+  command: ../Python-{{ plone_config.plone_python_version|default(plone_python_version) }}/bin/python bootstrap.py --setuptools-version=8.0.4
+    creates={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/buildout
+    chdir={{ plone_config.plone_instance_home|default(plone_instance_home) }}
   when: plone_version < '5.0' and buildout_status.stat.exists == False
-  sudo_user: "{{ plone_buildout_user }}"
+  sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
   command: bin/buildout
-    chdir={{ plone_instance_home }}
-  sudo_user: "{{ plone_buildout_user }}"
+    chdir={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+  sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Everything in buildout cache is group-readable
-  command: chmod -R g+r,o+r {{ plone_target_path }}/buildout-cache
+  command: chmod -R g+r,o+r {{ plone_config.plone_target_path|default(plone_target_path) }}/buildout-cache
 
 - name: Look for existing database
   when: plone_create_site
-  stat: path={{ plone_instance_var_path }}/filestorage/Data.fs
+  stat: path={{ plone_config.plone_instance_var_path|default(plone_instance_var_path) }}/filestorage/Data.fs
   register: db_status
 
 
@@ -323,7 +323,7 @@
   when: plone_use_supervisor and ansible_os_family == 'Debian'
   template:
     src=supervisor_task.j2
-    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
+    dest='{{ plone_config.supervisor_config_dir|default(supervisor_config_dir) }}/{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeo.conf'
     owner=root
     group=root
     mode=644
@@ -333,7 +333,7 @@
   when: plone_use_supervisor and ansible_os_family == 'RedHat'
   template:
     src=supervisor_task.j2
-    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.ini'
+    dest='{{ plone_config.supervisor_config_dir|default(supervisor_config_dir) }}/{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeo.ini'
     owner=root
     group=root
     mode=644
@@ -354,26 +354,26 @@
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
   supervisorctl:
-    name='{{ supervisor_instance_discriminator }}zeoserver'
+    name='{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoserver'
     state=present
 
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
-    name='{{ supervisor_instance_discriminator }}zeoclient{{ item }}'
+    name='{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoclient{{ item }}'
     state=present
-  with_sequence: count={{ plone_client_count }}
+  with_sequence: count={{ plone_config.plone_client_count|default(plone_client_count) }}
 
 - name: Supervisor zeoclients tasks are restarted
   when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
+    name={{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoclient{{ item }}
     state=restarted
-  with_sequence: count={{ plone_client_count }}
+  with_sequence: count={{ plone_config.plone_client_count|default(plone_client_count) }}
 
 - name: Ensure scripts directory
   file:
-    path={{ plone_instance_home }}/scripts
+    path={{ plone_config.plone_instance_home|default(plone_instance_home) }}/scripts
     state=directory
 
 
@@ -383,40 +383,46 @@
 - name: Install site creation run script
   template:
     src=addPloneSite.py.j2
-    dest={{ plone_instance_home }}/bin/addPloneSite.py
+    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/addPloneSite.py
     mode=0444
 
 - name: Wait for client1 end startup
   when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
-  wait_for: port={{ plone_client_base_port }}
+  wait_for: port={{ plone_config.plone_client_base_port|default(plone_client_base_port) }}
 
 - name: Create initial Plone site
   when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
-  sudo_user: "{{ plone_daemon_user }}"
+  sudo_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
   command: bin/client_reserved run bin/addPloneSite.py
   args:
-    chdir: "{{ plone_instance_home }}"
+    chdir: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}"
 
 
 ###################################
 # cron jobs
 
+# with_item is used with a constructed, single-element list to simplify
+# handling the default.
+
 - name: Pack cron job
   when: plone_pack_at
   cron:
-    name="{{ plone_instance_name }} Plone packing"
-    job="cd {{ plone_instance_home }} && bin/zeopack"
-    user={{ plone_daemon_user }}
-    minute={{ plone_pack_at["minute"] }}
-    hour={{ plone_pack_at.hour }}
-    weekday={{ plone_pack_at.weekday }}
+    name="{{ plone_config.plone_instance_name|default(plone_instance_name) }} Plone packing"
+    job="cd {{ plone_config.plone_instance_home|default(plone_instance_home) }} && bin/zeopack"
+    user={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    minute={{ item.minute }}
+    hour={{ item.hour }}
+    weekday={{ item.weekday }}
+  with_items: "{{ [plone_config.plone_pack_at|default(plone_pack_at)] }}"
 
 - name: Backup cron job
   when: plone_backup_at
   cron:
-    name="{{ plone_instance_name }} Plone backup"
-    job="cd {{ plone_instance_home }} && bin/backup"
-    user={{ plone_daemon_user }}
-    minute={{ plone_backup_at["minute"] }}
-    hour={{ plone_backup_at.hour }}
-    weekday={{ plone_backup_at.weekday }}
+    name="{{ plone_config.plone_instance_name|default(plone_instance_name) }} Plone backup"
+    job="cd {{ plone_config.plone_instance_home|default(plone_instance_home) }} && bin/backup"
+    user={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+    minute={{ item.minute }}
+    hour={{ item.hour }}
+    weekday={{ item.weekday }}
+  with_items: "{{ [plone_config.plone_backup_at|default(plone_backup_at)] }}"
+

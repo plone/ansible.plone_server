@@ -99,3 +99,5 @@ plone_startsecs: 1
 plone_stopwaitsecs: 10
 plone_autostart: "true"
 plone_task_env_vars: {}
+
+plone_config: "{{ playbook_plones[0] }}"
