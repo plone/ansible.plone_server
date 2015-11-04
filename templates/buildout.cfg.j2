@@ -170,13 +170,6 @@ http-address = 127.0.0.1:{{ "%s" % (plone_client_base_port|int + plone_client_co
 
 [backup]
 recipe = collective.recipe.backup
-recipe = collective.recipe.backup
-location = ${buildout:backups-dir}/backups
-blobbackuplocation = ${buildout:backups-dir}/blobstoragebackups
-snapshotlocation = ${buildout:backups-dir}/snapshotbackups
-blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
-datafs = ${buildout:var-dir}/filestorage/Data.fs
-blob-storage = ${buildout:var-dir}/blobstorage
 location = ${buildout:backups-dir}/backups
 blobbackuplocation = ${buildout:backups-dir}/blobstoragebackups
 snapshotlocation = ${buildout:backups-dir}/snapshotbackups
