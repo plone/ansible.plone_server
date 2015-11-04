@@ -1,3 +1,9 @@
+{# convenient module variables #}
+{% set plone_client_count = plone_config.plone_client_count|default(plone_client_count) %}
+{% set plone_client_base_port = plone_config.plone_client_base_port|default(plone_client_base_port)  %}
+{% set plone_version = plone_config.plone_version|default(plone_version) %}
+{% set plone_sources = plone_config.plone_sources|default(plone_sources) %}
+{% set plone_zeo_port = plone_config.plone_zeo_port|default(plone_zeo_port) %}
 [buildout]
 
 # For extensive comments, see the source for the Unified Installer:
@@ -30,8 +36,8 @@ auto-checkout = *
 git-clone-depth = 1
 {% endif %}
 
-effective-user = {{ plone_daemon_user }}
-buildout-user = {{ plone_buildout_user }}
+effective-user = {{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
+buildout-user = {{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
 
 eggs =
     Plone
@@ -39,15 +45,15 @@ eggs =
 {% if plone_version < '4.3.8' %}
     plone4.csrffixes
 {% endif %}
-{% if plone_additional_eggs %}
-{% for egg in plone_additional_eggs %}
+{% if plone_config.plone_additional_eggs|default(plone_additional_eggs) %}
+{% for egg in plone_config.plone_additional_eggs|default(plone_additional_eggs) %}
     {{ egg }}
 {% endfor %}
 {% endif %}
 
 zcml =
-{% if plone_zcml_slugs %}
-{% for slug in plone_zcml_slugs %}
+{% if plone_config.plone_zcml_slugs|default(plone_zcml_slugs) %}
+{% for slug in plone_config.plone_zcml_slugs|default(plone_zcml_slugs) %}
     {{ slug }}
 {% endfor %}
 {% endif %}
@@ -56,11 +62,11 @@ var-dir={{ plone_instance_var_path }}
 
 backups-dir={{ plone_instance_backup_path }}
 
-user=admin:{{ plone_initial_password }}
+user=admin:{{ plone_config.plone_initial_password|default(plone_initial_password) }}
 
-{% if plone_environment_vars %}
+{% if plone_config.plone_environment_vars|default(plone_environment_vars) %}
 environment-vars =
-{% for evar in plone_environment_vars %}
+{% for evar in plone_config.plone_environment_vars|default(plone_environment_vars) %}
     {{ evar }}
 {% endfor %}
 
@@ -132,12 +138,12 @@ z2-log    = ${buildout:var-dir}/${:_buildout_section_name_}/Z2.log
 pid-file  = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.pid
 lock-file = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.lock
 
-zodb-cache-size = {{ plone_zodb_cache_size }}
-zserver-threads = {{ plone_zserver_threads }}
+zodb-cache-size = {{ plone_config.plone_zodb_cache_size|default(plone_zodb_cache_size) }}
+zserver-threads = {{ plone_config.plone_zserver_threads|default(plone_zserver_threads) }}
 
 {% endif %}
-{% if plone_client_extras %}
-{{ plone_client_extras }}
+{% if plone_config.plone_client_extras|default(plone_client_extras) %}
+{{ plone_config.plone_client_extras|default(plone_client_extras) }}
 {% endif %}
 
 
@@ -145,8 +151,8 @@ zserver-threads = {{ plone_zserver_threads }}
 <= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ plone_client_base_port }}
-{% if plone_client1_extras %}
-{{ plone_client1_extras }}
+{% if plone_config.plone_client1_extras|default(plone_client1_extras) %}
+{{ plone_config.plone_client1_extras|default(plone_client1_extras) }}
 {% endif %}
 
 {% for client in range(2, plone_client_count + 1) %}
@@ -177,8 +183,8 @@ snapshotlocation = ${buildout:backups-dir}/snapshotbackups
 blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
 datafs = ${buildout:var-dir}/filestorage/Data.fs
 blob-storage = ${buildout:var-dir}/blobstorage
-keep = {{ plone_keep_backups }}
-keep_blob_days = {{ plone_keep_blob_days  }}
+keep = {{ plone_config.plone_keep_backups|default(plone_keep_backups) }}
+keep_blob_days = {{ plone_config.plone_keep_blob_days|default(plone_keep_blob_days) }}
 
 
 [setpermissions]
@@ -229,8 +235,8 @@ plone.locking = 2.0.8
 setuptools =
 zc.buildout =
 {% endif %}
-{% if plone_additional_versions %}
-{% for eversion in plone_additional_versions %}
+{% if plone_config.plone_additional_versions|default(plone_additional_versions) %}
+{% for eversion in plone_config.plone_additional_versions|default(plone_additional_versions) %}
 {{ eversion}}
 {% endfor %}
 {% endif %}

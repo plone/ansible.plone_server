@@ -204,9 +204,15 @@
     owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
 
+- set_fact:
+    plone_instance_home: "{{ plone_config.plone_target_path|default(plone_target_path) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
+    plone_instance_var_path: "{{ plone_config.plone_var_path|default(plone_var_path) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
+    plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
+    supervisor_instance_discriminator: "{{ '%s_' % plone_config.plone_instance_name|default(plone_instance_name) if plone_config.plone_instance_name|default(plone_instance_name) != 'zeoserver' else '' }}"
+
 - name: Instance directory
   file:
-    path={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    path={{ plone_instance_home }}
     state=directory
     owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
@@ -215,7 +221,7 @@
   when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
   copy:
     src=zeocluster/
-    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    dest={{ plone_instance_home }}
     owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
 
@@ -224,7 +230,7 @@
   git:
     repo={{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}
     force=no
-    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    dest={{ plone_instance_home }}
     version={{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) | default('HEAD') }}
     depth=1
     accept_hostkey=yes
@@ -232,7 +238,7 @@
 
 - name: Instance var directory
   file:
-    path={{ plone_config.plone_instance_var_path|default(plone_instance_var_path) }}
+    path={{ plone_instance_var_path }}
     state=directory
     owner={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
@@ -241,7 +247,7 @@
 - name: Instance backup directory
   when: plone_backup_path
   file:
-    path={{ plone_config.plone_instance_backup_path|default(plone_instance_backup_path) }}
+    path="{{ plone_instance_backup_path }}"
     state=directory
     owner={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
@@ -258,21 +264,21 @@
   when: not plone_buildout_git_repo
   template:
     src=buildout.cfg.j2
-    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}/buildout.cfg
+    dest={{ plone_instance_home }}/buildout.cfg
     owner={{ plone_config.plone_buildout_user|default(plone_buildout_user) }}
     group={{ plone_config.plone_group|default(plone_group) }}
     backup=yes
   register: instance_status
 
 - name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_config.plone_python_version|default(plone_python_version) }} {{ plone_config.plone_instance_home|default(plone_instance_home) }}"
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_config.plone_python_version|default(plone_python_version) }} {{ plone_instance_home }}"
   args:
-    creates: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/python"
+    creates: "{{ plone_instance_home }}/bin/python"
   when: plone_version >= '5.0'
   sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Check to see if buildout has already run
-  stat: path={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/client_reserved
+  stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
 
 
@@ -281,24 +287,24 @@
 
 # Plone 5.0+; avoid bootstrap.py
 - name: pip install zc.buildout
-  command: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/pip install zc.buildout"
+  command: "{{ plone_instance_home }}/bin/pip install zc.buildout"
   args:
-    creates: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/buildout"
+    creates: "{{ plone_instance_home }}/bin/buildout"
   when: plone_version >= '5.0' and buildout_status.stat.exists == False
   sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
   command: ../Python-{{ plone_config.plone_python_version|default(plone_python_version) }}/bin/python bootstrap.py --setuptools-version=8.0.4
-    creates={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/buildout
-    chdir={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    creates={{ plone_instance_home }}/bin/buildout
+    chdir={{ plone_instance_home }}
   when: plone_version < '5.0' and buildout_status.stat.exists == False
   sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
   command: bin/buildout
-    chdir={{ plone_config.plone_instance_home|default(plone_instance_home) }}
+    chdir={{ plone_instance_home }}
   sudo_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
 
 - name: Everything in buildout cache is group-readable
@@ -306,7 +312,7 @@
 
 - name: Look for existing database
   when: plone_create_site
-  stat: path={{ plone_config.plone_instance_var_path|default(plone_instance_var_path) }}/filestorage/Data.fs
+  stat: path={{ plone_instance_var_path }}/filestorage/Data.fs
   register: db_status
 
 
@@ -323,7 +329,7 @@
   when: plone_use_supervisor and ansible_os_family == 'Debian'
   template:
     src=supervisor_task.j2
-    dest='{{ plone_config.supervisor_config_dir|default(supervisor_config_dir) }}/{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeo.conf'
+    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
     owner=root
     group=root
     mode=644
@@ -333,7 +339,7 @@
   when: plone_use_supervisor and ansible_os_family == 'RedHat'
   template:
     src=supervisor_task.j2
-    dest='{{ plone_config.supervisor_config_dir|default(supervisor_config_dir) }}/{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeo.ini'
+    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.ini'
     owner=root
     group=root
     mode=644
@@ -354,26 +360,26 @@
 - name: Supervisor zeoserver task is present
   when: plone_use_supervisor
   supervisorctl:
-    name='{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoserver'
+    name='{{ supervisor_instance_discriminator }}zeoserver'
     state=present
 
 - name: Supervisor zeoclient tasks are present
   when: plone_use_supervisor
   supervisorctl:
-    name='{{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoclient{{ item }}'
+    name='{{ supervisor_instance_discriminator }}zeoclient{{ item }}'
     state=present
   with_sequence: count={{ plone_config.plone_client_count|default(plone_client_count) }}
 
 - name: Supervisor zeoclients tasks are restarted
   when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name={{ plone_config.supervisor_instance_discriminator|default(supervisor_instance_discriminator) }}zeoclient{{ item }}
+    name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted
   with_sequence: count={{ plone_config.plone_client_count|default(plone_client_count) }}
 
 - name: Ensure scripts directory
   file:
-    path={{ plone_config.plone_instance_home|default(plone_instance_home) }}/scripts
+    path={{ plone_instance_home }}/scripts
     state=directory
 
 
@@ -383,7 +389,7 @@
 - name: Install site creation run script
   template:
     src=addPloneSite.py.j2
-    dest={{ plone_config.plone_instance_home|default(plone_instance_home) }}/bin/addPloneSite.py
+    dest={{ plone_instance_home }}/bin/addPloneSite.py
     mode=0444
 
 - name: Wait for client1 end startup
@@ -395,7 +401,7 @@
   sudo_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
   command: bin/client_reserved run bin/addPloneSite.py
   args:
-    chdir: "{{ plone_config.plone_instance_home|default(plone_instance_home) }}"
+    chdir: "{{ plone_instance_home }}"
 
 
 ###################################
@@ -408,7 +414,7 @@
   when: plone_pack_at
   cron:
     name="{{ plone_config.plone_instance_name|default(plone_instance_name) }} Plone packing"
-    job="cd {{ plone_config.plone_instance_home|default(plone_instance_home) }} && bin/zeopack"
+    job="cd {{ plone_instance_home }} && bin/zeopack"
     user={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
     minute={{ item.minute }}
     hour={{ item.hour }}
@@ -419,7 +425,7 @@
   when: plone_backup_at
   cron:
     name="{{ plone_config.plone_instance_name|default(plone_instance_name) }} Plone backup"
-    job="cd {{ plone_config.plone_instance_home|default(plone_instance_home) }} && bin/backup"
+    job="cd {{ plone_instance_home }} && bin/backup"
     user={{ plone_config.plone_daemon_user|default(plone_daemon_user) }}
     minute={{ item.minute }}
     hour={{ item.hour }}

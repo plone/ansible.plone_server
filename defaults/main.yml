@@ -15,10 +15,6 @@ plone_backup_path: no
 
 plone_instance_name: zeoserver
 
-plone_instance_home: '{{ plone_target_path }}/{{ plone_instance_name }}'
-plone_instance_var_path: '{{ plone_var_path }}/{{ plone_instance_name }}'
-plone_instance_backup_path: '{{ plone_backup_path|default(plone_var_path, true) }}/{{ plone_instance_name }}'
-
 plone_buildout_git_repo: no
 
 plone_buildout_git_version: master
@@ -92,7 +88,6 @@ plone_extension_profiles:
 plone_use_supervisor: yes
 
 supervisor_config_dir: "/etc/supervisor/conf.d/"
-supervisor_instance_discriminator: "{{ '%s_' % plone_instance_name if plone_instance_name != 'zeoserver' else '' }}"
 plone_redirect_stderr: "false"
 plone_autorestart: "unexpected"
 plone_startsecs: 1
