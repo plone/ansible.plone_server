@@ -394,7 +394,6 @@ Note the use of distinct `plone_instance_name` settings to make sure that cron a
             status_code: 200
 
 
-
 License
 -------
 
