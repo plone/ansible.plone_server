@@ -208,7 +208,7 @@
     plone_instance_home: "{{ plone_config.plone_target_path|default(plone_target_path) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
     plone_instance_var_path: "{{ plone_config.plone_var_path|default(plone_var_path) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
     plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
-    supervisor_instance_discriminator: "{{ '%s_' % plone_config.plone_instance_name|default(plone_instance_name) if plone_config.plone_instance_name|default(plone_instance_name) != 'zeoserver' else '' }}"
+    supervisor_instance_discriminator: "{{ '%s_' % plone_config.plone_instance_name|default(plone_instance_name) }}"
 
 - name: Instance directory
   file:
@@ -389,7 +389,7 @@
 - name: Install site creation run script
   template:
     src=addPloneSite.py.j2
-    dest={{ plone_instance_home }}/bin/addPloneSite.py
+    dest={{ plone_instance_home }}/scripts/addPloneSite.py
     mode=0444
 
 - name: Wait for client1 end startup
@@ -399,7 +399,7 @@
 - name: Create initial Plone site
   when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
   sudo_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
-  command: bin/client_reserved run bin/addPloneSite.py
+  command: bin/client_reserved run scripts/addPloneSite.py
   args:
     chdir: "{{ plone_instance_home }}"
 

@@ -95,4 +95,10 @@ plone_stopwaitsecs: 10
 plone_autostart: "true"
 plone_task_env_vars: {}
 
+webserver_virtualhosts:
+  - hostname: "{{ inventory_hostname }}"
+    aliases:
+      - default
+    zodb_path: /Plone
+playbook_plones: "{{ [{'webserver_virtualhosts':webserver_virtualhosts}] }}"
 plone_config: "{{ playbook_plones[0] }}"
