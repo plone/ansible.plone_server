@@ -1,34 +1,34 @@
 [program:{{ supervisor_instance_discriminator }}zeoserver]
 command={{ plone_instance_home }}/bin/zeoserver fg
 directory={{ plone_instance_home }}
-redirect_stderr={{ plone_redirect_stderr }}
-autostart={{ plone_autostart }}
-autorestart={{ plone_autorestart }}
-user={{ plone_daemon_user }}
-startsecs={{ plone_startsecs }}
-stopwaitsecs={{ plone_stopwaitsecs }}
-{% if plone_task_env_vars|length > 0 %}
+redirect_stderr={{ instance_config.plone_redirect_stderr }}
+autostart={{ instance_config.plone_autostart }}
+autorestart={{ instance_config.plone_autorestart }}
+user={{ instance_config.plone_daemon_user }}
+startsecs={{ instance_config.plone_startsecs }}
+stopwaitsecs={{ instance_config.plone_stopwaitsecs }}
+{% if instance_config.plone_task_env_vars|length > 0 %}
 environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
 {% endif %}
 
-{% for client in range(1, plone_client_count+1) %}
+{% for client in range(1, instance_config.plone_client_count|int + 1) %}
 [program:{{ supervisor_instance_discriminator }}zeoclient{{ client }}]
 command={{ plone_instance_home }}/bin/client{{ client }} console
 directory={{ plone_instance_home }}
-redirect_stderr={{ plone_redirect_stderr }}
-autostart={{ plone_autostart }}
-autorestart={{ plone_autorestart }}
-user={{ plone_daemon_user }}
-startsecs={{ plone_startsecs }}
-stopwaitsecs={{ plone_stopwaitsecs }}
-{% if plone_task_env_vars|length > 0 %}
+redirect_stderr={{ instance_config.plone_redirect_stderr }}
+autostart={{ instance_config.plone_autostart }}
+autorestart={{ instance_config.plone_autorestart }}
+user={{ instance_config.plone_daemon_user }}
+startsecs={{ instance_config.plone_startsecs }}
+stopwaitsecs={{ instance_config.plone_stopwaitsecs }}
+{% if instance_config.plone_task_env_vars|length > 0 %}
 environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
 {% endif %}
 
 {% endfor %}
 
-{% if plone_client_max_memory != 0 %}
+{% if instance_config.plone_client_max_memory != 0 %}
 [eventlistener:{{ supervisor_instance_discriminator }}memmon]
-command=memmon -a {{ plone_client_max_memory }} -c -m root
+command=memmon -a {{ instance_config.plone_client_max_memory }} -c -m root
 events=TICK_60
 {% endif %}

@@ -1,8 +1,8 @@
 ---
 
-plone_major_version: '5.0'
-
 plone_version: '5.0'
+
+plone_major_version: "{{ plone_version|truncate(3, end='') }}"
 
 plone_python_version: 2.7
 
@@ -45,7 +45,7 @@ plone_client_base_port: 8081
 
 plone_environment_vars:
   - "zope_i18n_compile_mo_files true"
-  - "PYTHON_EGG_CACHE {{ plone_var_path }}/.python-eggs"
+  - "PYTHON_EGG_CACHE {{ plone_var_path }}/{{ plone_instance_name }}/.python-eggs"
 
 plone_autorun_buildout: yes
 
@@ -100,5 +100,70 @@ webserver_virtualhosts:
     aliases:
       - default
     zodb_path: /Plone
+
 playbook_plones: "{{ [{'webserver_virtualhosts':webserver_virtualhosts}] }}"
 plone_config: "{{ playbook_plones[0] }}"
+
+
+#########################
+# The rest of this file solves a particular problem: we need to merge all of our defaults
+# into plone_config, which acts as a default dict. This would be easy in Python,
+# but Ansible/Jinja2 doesn't quite give us enough tools to automate it.
+# This would be a good candidate for a custom module.
+
+# working variables; these make creating instance_config a bit easier.
+work_version: "{{ plone_config.plone_version|default(plone_version) }}"
+work_major_version: "{{ work_version|truncate(length=3, end='') }}"
+work_var_path: "{{ plone_config.plone_var_path|default('/var/local/plone-' + work_major_version) }}"
+work_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
+work_environment_vars: "{{ plone_config.plone_environment_vars|default(['zope_i18n_compile_mo_files true', 'PYTHON_EGG_CACHE ' + work_var_path + '/' + work_instance_name]) }}"
+work_buildout_cache_url: "{{ plone_config.plone_buildout_cache_url|default('http://dist.plone.org/release/' +  work_version + '/buildout-cache.tar.bz2') }}"
+
+instance_config:
+  plone_version: "{{ work_version }}"
+  plone_major_version: "{{ work_major_version }}"
+  plone_python_version: "{{ plone_config.plone_python_version|default(plone_python_version) }}"
+  plone_target_path: "{{ plone_config.plone_target_path|default('/usr/local/plone-' + work_major_version) }}"
+  plone_var_path: "{{ work_var_path }}"
+  plone_backup_path: "{{ plone_config.plone_backup_path|default(plone_backup_path) }}"
+  plone_instance_name: "{{ work_instance_name }}"
+  plone_buildout_git_repo: "{{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}"
+  plone_buildout_git_version: "{{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) }}"
+  plone_initial_password: "{{ plone_config.plone_initial_password|default(plone_initial_password) }}"
+  plone_client_count: "{{ plone_config.plone_client_count|default(plone_client_count) }}"
+  plone_zodb_cache_size: "{{ plone_config.plone_zodb_cache_size|default(plone_zodb_cache_size) }}"
+  plone_zserver_threads: "{{ plone_config.plone_zserver_threads|default(plone_zserver_threads) }}"
+  plone_client_max_memory: "{{ plone_config.plone_client_max_memory|default(plone_client_max_memory) }}"
+  plone_additional_eggs: "{{ plone_config.plone_additional_eggs|default(plone_additional_eggs) }}"
+  plone_zcml_slugs: "{{ plone_config.plone_zcml_slugs|default(plone_zcml_slugs) }}"
+  plone_client_extras: "{{ plone_config.plone_client_extras|default(plone_client_extras) }}"
+  plone_client1_extras: "{{ plone_config.plone_client1_extras|default(plone_client1_extras) }}"
+  plone_additional_versions: "{{ plone_config.plone_additional_versions|default(plone_additional_versions) }}"
+  plone_zeo_port: "{{ plone_config.plone_zeo_port|default(plone_zeo_port) }}"
+  plone_client_base_port: "{{ plone_config.plone_client_base_port|default(plone_client_base_port) }}"
+  plone_environment_vars: "{{ work_environment_vars }}"
+  plone_autorun_buildout: "{{ plone_config.plone_autorun_buildout|default(plone_autorun_buildout) }}"
+  plone_buildout_cache_url: "{{ work_buildout_cache_url }}"
+  plone_buildout_cache_file: "{{ plone_config.plone_buildout_cache_file|default(plone_buildout_cache_file) }}"
+  plone_sources: "{{ plone_config.plone_sources|default(plone_sources) }}"
+  plone_group: "{{ plone_config.plone_group|default(plone_group) }}"
+  plone_buildout_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
+  plone_daemon_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
+  plone_pack_at: "{{ plone_config.plone_pack_at|default(plone_pack_at) }}"
+  plone_keep_days: "{{ plone_config.plone_keep_days|default(plone_keep_days) }}"
+  plone_backup_at: "{{ plone_config.plone_backup_at|default(plone_backup_at) }}"
+  plone_keep_backups: "{{ plone_config.plone_keep_backups|default(plone_keep_backups) }}"
+  plone_keep_blob_days: "{{ plone_config.plone_keep_blob_days|default(plone_keep_blob_days) }}"
+  plone_create_site: "{{ plone_config.plone_create_site|default(plone_create_site) }}"
+  plone_site_id: "{{ plone_config.plone_site_id|default(plone_site_id) }}"
+  plone_default_language: "{{ plone_config.plone_default_language|default(plone_default_language) }}"
+  plone_extension_profiles: "{{ plone_config.plone_extension_profiles|default(plone_extension_profiles) }}"
+  plone_use_supervisor: "{{ plone_config.plone_use_supervisor|default(plone_use_supervisor) }}"
+  supervisor_config_dir: "{{ plone_config.supervisor_config_dir|default(supervisor_config_dir) }}"
+  plone_redirect_stderr: "{{ plone_config.plone_redirect_stderr|default(plone_redirect_stderr) }}"
+  plone_autorestart: "{{ plone_config.plone_autorestart|default(plone_autorestart) }}"
+  plone_startsecs: "{{ plone_config.plone_startsecs|default(plone_startsecs) }}"
+  plone_stopwaitsecs: "{{ plone_config.plone_stopwaitsecs|default(plone_stopwaitsecs) }}"
+  plone_autostart: "{{ plone_config.plone_autostart|default(plone_autostart) }}"
+  plone_task_env_vars: "{{ plone_config.plone_task_env_vars|default(plone_task_env_vars) }}"
+  webserver_virtualhosts: "{{ plone_config.webserver_virtualhosts|default(webserver_virtualhosts) }}"
