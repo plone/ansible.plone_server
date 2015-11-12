@@ -16,6 +16,11 @@ If you'd like to use this role as part of a full-stack configuration kit, see th
 
 This role should be able to work with Plone 4.3.x or 5.0. Just set the version variables documented below.
 
+.. warning::
+
+    Some of the changes made in version 1.2.0 may cause your Plone-related supervisor job names to change.
+    To avoid problems, before you first run this version of the role, stop your Plone-related supervisor jobs and remove them from the supervisor/conf.d directory.
+
 Requirements
 ------------
 
