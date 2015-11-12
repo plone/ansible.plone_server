@@ -1,4 +1,7 @@
-1.1.4 unreleased
+1.2.0 (unreleased)
+
+- Refactor default variables to support multiple Plones more easily.
+  [smcmahon]
 
 - Add documentation example for setting up multiple plones on
   a single target server.

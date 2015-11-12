@@ -8,21 +8,20 @@ import transaction
 
 
 admin_username = 'admin'
-site_id = "{{ plone_site_id }}"
-language = "{{ plone_default_language }}"
+site_id = "{{ instance_config.plone_site_id }}"
+language = "{{ instance_config.plone_default_language }}"
 default_extension_profiles = (
-{% if plone_version >= '5.0' %}
+{% if instance_config.plone_version >= '5.0' %}
     'plone.app.caching:default',
     'plonetheme.barceloneta:default',
-{% endif %}
-{% if plone_version < '5.0' %}
+{% else %}
     'plonetheme.classic:default',
     'plonetheme.sunburst:default',
 {% endif %}
 
 
-{% if plone_extension_profiles %}
-{% for addon in plone_extension_profiles %}
+{% if instance_config.plone_extension_profiles %}
+{% for addon in instance_config.plone_extension_profiles %}
     '{{ addon }}',
 {% endfor %}
 {% endif %}

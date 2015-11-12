@@ -1,10 +1,16 @@
+{# convenient module variables #}
+{% set plone_client_count = instance_config.plone_client_count %}
+{% set plone_client_base_port = instance_config.plone_client_base_port  %}
+{% set plone_version = instance_config.plone_version %}
+{% set plone_sources = instance_config.plone_sources %}
+{% set plone_zeo_port = instance_config.plone_zeo_port %}
 [buildout]
 
 # For extensive comments, see the source for the Unified Installer:
 # https://github.com/plone/Installers-UnifiedInstaller
 
 extends =
-    http://dist.plone.org/release/{{ plone_version }}/versions.cfg
+    http://dist.plone.org/release/{{ instance_config.plone_version }}/versions.cfg
 
 eggs-directory=../buildout-cache/eggs
 download-cache=../buildout-cache/downloads
@@ -19,7 +25,7 @@ find-links =
     http://download.zope.org/ppix/
     http://download.zope.org/distribution/
     http://effbot.org/downloads
-    http://dist.plone.org/release/{{ plone_version }}
+    http://dist.plone.org/release/{{ instance_config.plone_version }}
 
 extensions =
     buildout.sanitycheck
@@ -30,24 +36,24 @@ auto-checkout = *
 git-clone-depth = 1
 {% endif %}
 
-effective-user = {{ plone_daemon_user }}
-buildout-user = {{ plone_buildout_user }}
+effective-user = {{ instance_config.plone_daemon_user }}
+buildout-user = {{ instance_config.plone_buildout_user }}
 
 eggs =
     Plone
     Pillow
-{% if plone_version < '4.3.8' %}
+{% if instance_config.plone_version < '4.3.8' %}
     plone4.csrffixes
 {% endif %}
-{% if plone_additional_eggs %}
-{% for egg in plone_additional_eggs %}
+{% if instance_config.plone_additional_eggs %}
+{% for egg in instance_config.plone_additional_eggs %}
     {{ egg }}
 {% endfor %}
 {% endif %}
 
 zcml =
-{% if plone_zcml_slugs %}
-{% for slug in plone_zcml_slugs %}
+{% if instance_config.plone_zcml_slugs %}
+{% for slug in instance_config.plone_zcml_slugs %}
     {{ slug }}
 {% endfor %}
 {% endif %}
@@ -56,17 +62,18 @@ var-dir={{ plone_instance_var_path }}
 
 backups-dir={{ plone_instance_backup_path }}
 
-user=admin:{{ plone_initial_password }}
+user=admin:{{ instance_config.plone_initial_password }}
 
-{% if plone_environment_vars %}
+{% if instance_config.plone_environment_vars %}
 environment-vars =
-{% for evar in plone_environment_vars %}
+{% for evar in instance_config.plone_environment_vars %}
     {{ evar }}
 {% endfor %}
+{% endif %}
 
 parts =
     zeoserver
-{% for client in range(1, plone_client_count+1) %}
+{% for client in range(1, instance_config.plone_client_count|int + 1) %}
     client{{ client }}
 {% endfor %}
     client_reserved
@@ -76,9 +83,9 @@ parts =
     setpermissions
 
 
-{% if plone_sources %}
+{% if instance_config.plone_sources %}
 [sources]
-{% for source in plone_sources %}
+{% for source in instance_config.plone_sources %}
 {{ source }}
 {% endfor %}
 {% endif %}
@@ -86,7 +93,7 @@ parts =
 
 [zeoserver]
 recipe = plone.recipe.zeoserver
-zeo-address = 127.0.0.1:{{ plone_zeo_port }}
+zeo-address = 127.0.0.1:{{ instance_config.plone_zeo_port }}
 effective-user = ${buildout:effective-user}
 environment-vars = ${buildout:environment-vars}
 var = ${buildout:var-dir}
@@ -122,7 +129,7 @@ products = ${buildout:directory}/products
 environment-vars = ${buildout:environment-vars}
 
 zeo-client = true
-zeo-address = {{ plone_zeo_port }}
+zeo-address = {{ instance_config.plone_zeo_port }}
 shared-blob = on
 
 http-fast-listen = off
@@ -132,34 +139,33 @@ z2-log    = ${buildout:var-dir}/${:_buildout_section_name_}/Z2.log
 pid-file  = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.pid
 lock-file = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.lock
 
-zodb-cache-size = {{ plone_zodb_cache_size }}
-zserver-threads = {{ plone_zserver_threads }}
+zodb-cache-size = {{ instance_config.plone_zodb_cache_size }}
+zserver-threads = {{ instance_config.plone_zserver_threads }}
 
-{% endif %}
-{% if plone_client_extras %}
-{{ plone_client_extras }}
+{% if instance_config.plone_client_extras %}
+{{ instance_config.plone_client_extras }}
 {% endif %}
 
 
 [client1]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ plone_client_base_port }}
-{% if plone_client1_extras %}
-{{ plone_client1_extras }}
+http-address = 127.0.0.1:{{ instance_config.plone_client_base_port }}
+{% if instance_config.plone_client1_extras %}
+{{ instance_config.plone_client1_extras }}
 {% endif %}
 
-{% for client in range(2, plone_client_count + 1) %}
+{% for client in range(2, instance_config.plone_client_count|int + 1) %}
 [client{{ client }}]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ "%s" % (plone_client_base_port|int + loop.index) }}
+http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + loop.index) }}
 {% endfor %}
 
 [client_reserved]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ "%s" % (plone_client_base_port|int + plone_client_count) }}
+http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + instance_config.plone_client_count|int) }}
 
 
 [backup]
@@ -170,8 +176,8 @@ snapshotlocation = ${buildout:backups-dir}/snapshotbackups
 blobsnapshotlocation = ${buildout:backups-dir}/blobstoragesnapshots
 datafs = ${buildout:var-dir}/filestorage/Data.fs
 blob-storage = ${buildout:var-dir}/blobstorage
-keep = {{ plone_keep_backups }}
-keep_blob_days = {{ plone_keep_blob_days  }}
+keep = {{ instance_config.plone_keep_backups }}
+keep_blob_days = {{ instance_config.plone_keep_blob_days }}
 
 
 [setpermissions]
@@ -208,22 +214,22 @@ buildout.sanitycheck = 1.0b1
 collective.recipe.backup = 2.20
 plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
-{% if plone_version < '5.0' %}
+{% if instance_config.plone_version < '5.0' %}
 setuptools = 7.0
-{% if plone_version < '4.3.8' %}
+{% if instance_config.plone_version < '4.3.8' %}
 plone.csrffixes = 1.0.6
 plone.protect = 3.0.14
 plone.keyring = 3.0.1
 plone.locking = 2.0.8
 {% endif %}
 {% endif %}
-{% if plone_version >= '5.0' %}
+{% if instance_config.plone_version >= '5.0' %}
 # Use virtualenv's setuptools and zc.buildout
 setuptools =
 zc.buildout =
 {% endif %}
-{% if plone_additional_versions %}
-{% for eversion in plone_additional_versions %}
+{% if instance_config.plone_additional_versions %}
+{% for eversion in instance_config.plone_additional_versions %}
 {{ eversion}}
 {% endfor %}
 {% endif %}
