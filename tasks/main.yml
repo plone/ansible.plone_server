@@ -255,7 +255,7 @@
 
 - name: Python eggs directory
   file:
-    path={{ instance_config.plone_var_path }}/.python-eggs
+    path={{ plone_instance_var_path }}/.python-eggs
     state=directory
     owner={{ instance_config.plone_daemon_user }}
     group={{ instance_config.plone_group }}
