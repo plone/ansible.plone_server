@@ -1,4 +1,4 @@
-1.2.0 (unreleased)
+1.2.0 2015-11-15
 
 - Refactor default variables to support multiple Plones more easily.
   [smcmahon]
