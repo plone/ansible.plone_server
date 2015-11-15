@@ -1,6 +1,6 @@
 ---
 
-supervisor_instance_discriminator: p4
+plone_instance_name: p4
 
 plone_major_version: '4.3'
 plone_version: '4.3.7'
