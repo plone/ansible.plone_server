@@ -119,6 +119,7 @@
   file:
     path={{ instance_config.plone_target_path }}
     state=directory
+    mode=0755
 
 - name: Instance var base directory
   file:
@@ -255,10 +256,11 @@
 
 - name: Python eggs directory
   file:
-    path={{ plone_instance_var_path }}/.python-eggs
+    path="{{ plone_instance_var_path }}/.python-eggs"
     state=directory
     owner={{ instance_config.plone_daemon_user }}
     group={{ instance_config.plone_group }}
+    mode=0700
 
 - name: Copy buildout template
   when: not plone_buildout_git_repo
