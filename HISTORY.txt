@@ -1,3 +1,8 @@
+1.2.1 2015-12-02
+
+- Use instance and program discrimination when setting supervisor memmon.
+  [smcmahon]
+
 1.2.0 2015-11-15
 
 - Refactor default variables to support multiple Plones more easily.
