@@ -42,6 +42,7 @@ buildout-user = {{ instance_config.plone_buildout_user }}
 eggs =
     Plone
     Pillow
+    Products.PloneHotfix20151208==1.0
 {% if instance_config.plone_version < '4.3.8' %}
     plone4.csrffixes
 {% endif %}
