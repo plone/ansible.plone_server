@@ -1,3 +1,11 @@
+1.2.2 2015-12-10
+
+- Memmon was getting installed in supervisor task even if max client memory was 0. Thanks, oggers. Fixes #49
+  [smcmahon]
+
+- Add 20151208 hotfix
+  [smcmahon]
+
 1.2.1 2015-12-02
 
 - Use instance and program discrimination when setting supervisor memmon.
