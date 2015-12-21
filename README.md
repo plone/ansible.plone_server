@@ -286,6 +286,16 @@ The full local (host) filepath of a buildout egg cache. Defaults to none. Should
 Extra parts to add to the automatically generated buildout. These should be in a key/value format with the key being the part name and the value being the text of the part. Defaults to ``{}``.
 
 
+### plone_buildout_extra
+
+    plone_buildout_extra: |
+      allow-picked-versions = false
+      socket-timeout = 5
+
+Allows you to add settings to the automatically generated buildout. Any text specified this way is inserted at the end of the ``[buildout]`` part and before any of the other parts. Defaults to empty.
+
+Use this variable to add or override controlling settings to buildout. If you need to add parts, use ``plone_extra_parts`` for better maintainability.
+
 ### Cron jobs
 
 #### plone_pack_at

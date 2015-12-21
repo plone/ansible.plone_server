@@ -86,6 +86,7 @@ parts =
     {{ key }}
 {% endfor %}
 
+{{ instance_config.plone_buildout_extra }}
 
 {% if instance_config.plone_sources %}
 [sources]
