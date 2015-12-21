@@ -82,6 +82,9 @@ parts =
     zopepy
     precompiler
     setpermissions
+{% for key in instance_config.plone_extra_parts.keys() %}
+    {{ key }}
+{% endfor %}
 
 
 {% if instance_config.plone_sources %}
@@ -209,6 +212,12 @@ eggs = ${buildout:eggs}
 compile-mo-files = true
 extra-paths = ${buildout:directory}/products
 
+
+{% for key, value in instance_config.plone_extra_parts.items() %}
+[{{ key }}]
+{{ value }}
+
+{% endfor %}
 
 [versions]
 buildout.sanitycheck = 1.0b1

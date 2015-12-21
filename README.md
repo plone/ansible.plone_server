@@ -271,6 +271,21 @@ The URL of a buildout egg cache. Defaults to the one for the current stable vers
 The full local (host) filepath of a buildout egg cache. Defaults to none. Should not be used at the same time as plone_buildout_cache_url.
 
 
+### plone_extra_parts
+
+    plone_extra_parts:
+      zopepy: |
+        recipe = zc.recipe.egg
+        eggs = ${buildout:eggs}
+        interpreter = zopepy
+        scripts = zopepy
+      diazotools: |
+        recipe = zc.recipe.egg
+        eggs = diazo
+
+Extra parts to add to the automatically generated buildout. These should be in a key/value format with the key being the part name and the value being the text of the part. Defaults to ``{}``.
+
+
 ### Cron jobs
 
 #### plone_pack_at
