@@ -1,3 +1,11 @@
+1.2.3 unreleased
+
+- Add plone_buildout_extra option.
+  [smcmahon]
+
+- Add plone_extra_parts option to add additional buildout parts to automatically generated buildout.
+  [smcmahon]
+
 1.2.2 2015-12-10
 
 - Memmon was getting installed in supervisor task even if max client memory was 0. Thanks, oggers. Fixes #49
