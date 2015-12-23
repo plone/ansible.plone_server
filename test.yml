@@ -5,19 +5,61 @@
   gather_facts: yes
 
 
+  vars:
+
+    plone_initial_password: admin
+
+    servers:
+      - plone_major_version: '5.0'
+        plone_version: '5.0'
+
+        plone_zeo_port: 5100
+        plone_client_base_port: 5080
+        plone_sources:
+          - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git"
+
+      - plone_instance_name: p4
+
+        plone_major_version: '4.3'
+        plone_version: '4.3.7'
+
+        plone_initial_password: admin
+        plone_zeo_port: 4100
+        plone_client_base_port: 4080
+        plone_sources:
+        plone_extra_parts:
+          zopepy: |
+            recipe = zc.recipe.egg
+            eggs = ${buildout:eggs}
+            interpreter = zopepy
+            scripts = zopepy
+
+        plone_buildout_extra: |
+          allow-picked-versions = false
+
+        plone_additional_versions:
+          - "plone4.csrffixes = 1.0.9"
+          - "cssselect = 0.9.1"
+
+
   pre_tasks:
 
-  - name: Update apt cache
-    apt: upgrade=yes update_cache=yes
+    - name: Update apt cache
+      apt: upgrade=yes update_cache=yes
+
+  roles:
+
+    - {
+        role: ../plone.plone_server,
+        plone_config: "{{ servers[0] }}"
+      }
+
+    - {
+        role: ../plone.plone_server,
+        plone_config: "{{ servers[1] }}"
+      }
 
   tasks:
-
-    - include_vars: defaults/main.yml
-
-    - include_vars: test_vars_P5.yml
-
-    - include: tasks/main.yml
-
     - pip: name=httplib2
 
     - name: Check to see if Plone 5 is running
@@ -25,10 +67,6 @@
         url: http://127.0.0.1:5081/Plone
         method: GET
         status_code: 200
-
-    - include_vars: test_vars_P4.yml
-
-    - include: tasks/main.yml
 
     - name: Check to see if Plone 4.3.x is running
       uri:
