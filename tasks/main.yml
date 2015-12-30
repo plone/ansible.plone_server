@@ -3,7 +3,7 @@
 - name: Fail if no plone initial password set
   fail:
     msg: "You must set the plone_initial_password variable."
-  when: not plone_initial_password
+  when: not instance_config.plone_initial_password
 
 
 ###################################
