@@ -2,7 +2,7 @@
 
 plone_version: '5.0'
 
-plone_major_version: "{{ plone_version|truncate(3, end='') }}"
+plone_major_version: "{{ plone_version|truncate(3, killwords=true, end='') }}"
 
 plone_python_version: 2.7
 
@@ -113,7 +113,7 @@ plone_config: "{{ playbook_plones[0] }}"
 
 # working variables; these make creating instance_config a bit easier.
 work_version: "{{ plone_config.plone_version|default(plone_version) }}"
-work_major_version: "{{ work_version|truncate(length=3, end='') }}"
+work_major_version: "{{ work_version|truncate(length=3, killwords=true, end='') }}"
 work_var_path: "{{ plone_config.plone_var_path|default('/var/local/plone-' + work_major_version) }}"
 work_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
 work_environment_vars: "{{ plone_config.plone_environment_vars|default(['zope_i18n_compile_mo_files true', 'PYTHON_EGG_CACHE ' + work_var_path + '/' + work_instance_name]) }}"

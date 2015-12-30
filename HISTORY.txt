@@ -1,3 +1,8 @@
+1.2.3 unreleased
+
+- Instance path fouled up for three-decimal versions. Thanks, oggers.
+  [smcmahon]
+
 1.2.2 2015-12-10
 
 - Memmon was getting installed in supervisor task even if max client memory was 0. Thanks, oggers. Fixes #49
