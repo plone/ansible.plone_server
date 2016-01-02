@@ -1,4 +1,4 @@
-1.2.3 unreleased
+1.2.3 2016-01-02
 
 - Instance path fouled up for three-decimal versions. Thanks, oggers.
   [smcmahon]
