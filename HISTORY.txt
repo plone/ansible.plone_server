@@ -1,3 +1,7 @@
+1.2.4 2016-01-10
+
+- Update to 5.0.2. Remove 20151208 hotfix.
+
 1.2.3 2016-01-02
 
 - Instance path fouled up for three-decimal versions. Thanks, oggers.
