@@ -38,17 +38,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "centos70", primary: false, autostart: false do |centos70|
-    centos70.vm.box = "centos/7"
-
-    centos70.vm.network "forwarded_port", guest: 8080, host: 8086
-    centos70.vm.network "forwarded_port", guest: 8081, host: 8087
-
-    centos70.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
-
   config.vm.define "centos66", primary: false, autostart: false do |centos66|
     centos66.vm.box = "chef/centos-6.6"
 
@@ -70,4 +59,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.playbook = "test.yml"
     end
   end
+
+  config.vm.define "centos71", primary: false, autostart: false do |centos65|
+    centos65.vm.box = "bento/centos-7.1"
+
+    centos65.vm.network "forwarded_port", guest: 8080, host: 8090
+    centos65.vm.network "forwarded_port", guest: 8081, host: 8091
+
+    centos65.vm.provision "ansible" do |ansible|
+      ansible.playbook = "test.yml"
+    end
+  end
+
 end
