@@ -1,3 +1,8 @@
+1.2.5 unreleased
+
+- Make sure supervisord is enabled after install. The CentOS package does not do that by default.
+  [smcmahon]
+
 1.2.4 2016-01-10
 
 - Update to 5.0.2. Remove 20151208 hotfix.
