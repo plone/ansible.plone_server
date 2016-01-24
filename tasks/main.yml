@@ -355,10 +355,11 @@
   when: plone_use_supervisor and ansible_os_family == 'RedHat'
   service: name=supervisord state=running
 
-- name: Enable supervisord to start on boot
-  when: plone_use_supervisor
-  command: systemctl enable supervisord.service
-  ignore_errors: yes
+- name: Enable supervisord to start on boot - CentOS
+  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  service:
+    name=supervisord
+    enabled=yes
 
 - name: Supervisor task list is updated
   when: plone_use_supervisor and supervisor_task_conf|changed

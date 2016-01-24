@@ -1,5 +1,8 @@
 1.2.5 unreleased
 
+- Update supervisord enable to use ansible's service module.
+  [smcmahon]
+
 - Make sure supervisord is enabled after install. The CentOS package does not do that by default.
   [smcmahon]
 
