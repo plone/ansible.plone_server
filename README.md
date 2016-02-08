@@ -427,7 +427,7 @@ Note the use of distinct `plone_instance_name` settings to make sure that cron a
 License
 -------
 
-GPLv2
+BSD-3-Clause
 
 Author Information
 ------------------
