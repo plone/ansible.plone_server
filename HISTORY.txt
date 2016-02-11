@@ -2,6 +2,9 @@
 
 - Relicense as BSD-3-Clause.
 
+- Add missing instance_config for multi instance use 
+  [gomez] 
+
 1.2.5 2016-01-24
 
 - Update supervisord enable to use ansible's service module.

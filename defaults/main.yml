@@ -108,6 +108,12 @@ webserver_virtualhosts:
 playbook_plones: "{{ [{'webserver_virtualhosts':webserver_virtualhosts}] }}"
 plone_config: "{{ playbook_plones[0] }}"
 
+##########################
+# Starzel buildout
+#
+
+starzel_buildout: no
+
 
 #########################
 # The rest of this file solves a particular problem: we need to merge all of our defaults
@@ -173,3 +179,4 @@ instance_config:
   plone_autostart: "{{ plone_config.plone_autostart|default(plone_autostart) }}"
   plone_task_env_vars: "{{ plone_config.plone_task_env_vars|default(plone_task_env_vars) }}"
   webserver_virtualhosts: "{{ plone_config.webserver_virtualhosts|default(webserver_virtualhosts) }}"
+  starzel_buildout: "{{ plone_config.starzel_buildout|default(starzel_buildout) }}"
