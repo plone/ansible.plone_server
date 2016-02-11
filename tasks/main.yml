@@ -219,7 +219,7 @@
     group={{ instance_config.plone_group }}
 
 - name: Copy buildout skeleton
-  when: (plone_buildout_git_repo is not defined) or not (plone_buildout_git_repo)
+  when: (instance_config.plone_buildout_git_repo is not defined) or not (instance_config.plone_buildout_git_repo)
   copy:
     src=zeocluster/
     dest={{ plone_instance_home }}
@@ -227,7 +227,7 @@
     group={{ instance_config.plone_group }}
 
 - name: Instance directory via git
-  when: (plone_buildout_git_repo is defined) and (plone_buildout_git_repo)
+  when: (instance_config.plone_buildout_git_repo is defined) and (instance_config.plone_buildout_git_repo)
   git:
     repo={{ instance_config.plone_buildout_git_repo }}
     force=no
@@ -263,7 +263,7 @@
     mode=0700
 
 - name: Copy buildout template
-  when: not plone_buildout_git_repo
+  when: not instance_config.plone_buildout_git_repo
   template:
     src=buildout.cfg.j2
     dest={{ plone_instance_home }}/buildout.cfg
@@ -328,60 +328,60 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Supervisor process control setup
-  when: plone_use_supervisor and ansible_os_family == 'Debian'
+  when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
   template:
     src=supervisor_task.j2
-    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
+    dest='{{ instance_config.supervisor_config_dir }}/{{ instance_config.supervisor_instance_discriminator }}zeo.conf'
     owner=root
     group=root
     mode=644
   register: supervisor_task_conf
 
 - name: Supervisor process control setup
-  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
   template:
     src=supervisor_task.j2
-    dest='{{ supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.ini'
+    dest='{{ instance_config.supervisor_config_dir }}/{{ instance_config.supervisor_instance_discriminator }}zeo.ini'
     owner=root
     group=root
     mode=644
   register: supervisor_task_conf
 
 - name: Ensure supervisord is running
-  when: plone_use_supervisor and ansible_pkg_mgr == 'Debian'
+  when: instance_config.plone_use_supervisor and ansible_pkg_mgr == 'Debian'
   service: name=supervisor state=running
 
 - name: Ensure supervisord is running
-  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
   service: name=supervisord state=running
 
 - name: Enable supervisord to start on boot - CentOS
-  when: plone_use_supervisor and ansible_os_family == 'RedHat'
+  when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
   service:
     name=supervisord
     enabled=yes
 
 - name: Supervisor task list is updated
-  when: plone_use_supervisor and supervisor_task_conf|changed
+  when: instance_config.plone_use_supervisor and supervisor_task_conf|changed
   command: supervisorctl update
 
 - name: Supervisor zeoserver task is present
-  when: plone_use_supervisor
+  when: instance_config.plone_use_supervisor
   supervisorctl:
     name='{{ supervisor_instance_discriminator }}zeoserver'
     state=present
 
 - name: Supervisor zeoclient tasks are present
-  when: plone_use_supervisor
+  when: instance_config.plone_use_supervisor
   supervisorctl:
-    name='{{ supervisor_instance_discriminator }}zeoclient{{ item }}'
+    name='{{ instance_config.supervisor_instance_discriminator }}zeoclient{{ item }}'
     state=present
   with_sequence: count={{ instance_config.plone_client_count }}
 
 - name: Supervisor zeoclients tasks are restarted
-  when: plone_use_supervisor and plone_autorun_buildout and instance_status.changed
+  when: instance_config.plone_use_supervisor and instance_config.plone_autorun_buildout and instance_status.changed
   supervisorctl:
-    name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
+    name={{ instance_config.supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted
   with_sequence: count={{ instance_config.plone_client_count }}
 
@@ -401,11 +401,11 @@
     mode=0444
 
 - name: Wait for client1 end startup
-  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
+  when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
   wait_for: port={{ instance_config.plone_client_base_port }}
 
 - name: Create initial Plone site
-  when: plone_use_supervisor and plone_create_site and not db_status.stat.exists
+  when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
   sudo_user: "{{ instance_config.plone_daemon_user }}"
   command: bin/client_reserved run scripts/addPloneSite.py
   args:
