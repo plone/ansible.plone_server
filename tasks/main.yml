@@ -303,6 +303,20 @@
   when: plone_version < '5.0' and buildout_status.stat.exists == False
   sudo_user: "{{ instance_config.plone_buildout_user }}"
 
+- name: Copy starzel.buildout local.cfg to buildout dir
+  copy:
+    content: "[buildout]\nextends = local_production.cfg\n"
+    dest: "{{ plone_instance_home }}/local.cfg"
+    force: no
+  when: instance_config.starzel_buildout
+
+- name: Copy starzel.buildout secret.cfg to buildout dir
+  copy:
+    content: "[buildout]\nlogin = admin\npassword = admin\n"
+    dest: "{{ plone_instance_home }}/secret.cfg"
+    force: no
+  when: instance_config.starzel_buildout
+
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
   command: bin/buildout
