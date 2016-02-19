@@ -51,6 +51,8 @@ plone_extra_parts: {}
 
 plone_buildout_extra:
 
+plone_buildout_extra_dir:
+
 plone_autorun_buildout: yes
 
 plone_buildout_cache_url: http://dist.plone.org/release/{{ plone_version }}/buildout-cache.tar.bz2
@@ -173,3 +175,4 @@ instance_config:
   plone_autostart: "{{ plone_config.plone_autostart|default(plone_autostart) }}"
   plone_task_env_vars: "{{ plone_config.plone_task_env_vars|default(plone_task_env_vars) }}"
   webserver_virtualhosts: "{{ plone_config.webserver_virtualhosts|default(webserver_virtualhosts) }}"
+  plone_buildout_extra_dir: "{{ plone_config.plone_buildout_extra_dir|default(plone_buildout_extra_dir) }}"
