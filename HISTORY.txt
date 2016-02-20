@@ -1,7 +1,12 @@
-1.2.6 2016-02-20
+1.2.6 unreleased
 
 - Add plone_extra_find_links option to enable download eggs from private servers.
   [jpgimenez]
+
+- Relicense as BSD-3-Clause.
+
+- Add missing instance_config for multi instance use 
+  [gomez] 
 
 1.2.5 2016-01-24
 
