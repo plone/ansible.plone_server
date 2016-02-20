@@ -85,6 +85,7 @@ plone_create_site: yes
 plone_site_id: Plone
 plone_default_language: en
 plone_extension_profiles:
+plone_extra_find_links:
 
 #########################
 # Supervisor options
@@ -173,3 +174,4 @@ instance_config:
   plone_autostart: "{{ plone_config.plone_autostart|default(plone_autostart) }}"
   plone_task_env_vars: "{{ plone_config.plone_task_env_vars|default(plone_task_env_vars) }}"
   webserver_virtualhosts: "{{ plone_config.webserver_virtualhosts|default(webserver_virtualhosts) }}"
+  plone_extra_find_links: "{{ plone_config.plone_extra_find_links|default(plone_extra_find_links) }}"

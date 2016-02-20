@@ -1,3 +1,8 @@
+1.2.6 2016-02-20
+
+- Add plone_extra_find_links option to enable download eggs from private servers.
+  [jpgimenez]
+
 1.2.5 2016-01-24
 
 - Update supervisord enable to use ansible's service module.
