@@ -26,6 +26,11 @@ find-links =
     http://download.zope.org/distribution/
     http://effbot.org/downloads
     http://dist.plone.org/release/{{ instance_config.plone_version }}
+{% if instance_config.plone_extra_find_links %}
+{% for link in instance_config.plone_extra_find_links %}
+    {{ link }}
+{% endfor %}
+{% endif %}
 
 extensions =
     buildout.sanitycheck
@@ -102,7 +107,6 @@ effective-user = ${buildout:effective-user}
 environment-vars = ${buildout:environment-vars}
 var = ${buildout:var-dir}
 blob-storage = ${buildout:var-dir}/blobstorage
-
 zeo-log     = ${buildout:var-dir}/zeoserver/zeoserver.log
 pid-file    = ${buildout:var-dir}/zeoserver/zeoserver.pid
 socket-name = ${buildout:var-dir}/zeoserver/zeo.zdsock

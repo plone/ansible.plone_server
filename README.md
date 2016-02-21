@@ -296,6 +296,17 @@ Allows you to add settings to the automatically generated buildout. Any text spe
 
 Use this variable to add or override controlling settings to buildout. If you need to add parts, use ``plone_extra_parts`` for better maintainability.
 
+
+### plone_extra_find_links
+
+    plone_extra_find_links:
+      - http://download.zope.org/distribution/
+      - /some/otherpath
+      - /some/path/someegg-1.0.0-py2.3.eggs
+
+Allows you to add to the list of locations to search for distributions.
+
+
 ### Cron jobs
 
 #### plone_pack_at
