@@ -16,6 +16,7 @@
         plone_client_base_port: 5080
         plone_sources:
           - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git"
+        plone_buildout_extra_dir: ./meta/
 
       - plone_instance_name: p4
 
@@ -72,3 +73,11 @@
         url: http://127.0.0.1:4081/Plone
         method: GET
         status_code: 200
+
+    - stat: path=/usr/local/plone-5.0/zeoserver/main.yml
+      register: st
+    - fail: msg="copy of extra dir failed"
+      when: not st.stat.exists
+
+    - name: Check to see if we copied the extra buildout file
+      command: "ls /usr/local/plone-5.0/zeoserver/main.yml"

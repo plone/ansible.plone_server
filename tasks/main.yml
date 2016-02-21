@@ -304,12 +304,14 @@
   sudo_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Copy files from the buildout extra dir
-  synchronize:
-    src: "{{ instance_config.plone_buildout_extra_dir }}"
-    dest: "{{ plone_instance_home }}"
-    archive: yes
-  delegate_to: "{{ inventory_hostname }}"
-  when: (instance_config.plone_buildout_extra_dir) and (instance_config.plone_buildout_extra_dir)
+  copy:
+    src="{{ instance_config.plone_buildout_extra_dir }}"
+    dest="{{ plone_instance_home }}"
+    force=yes
+    backup=yes
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+  when: instance_config.plone_buildout_extra_dir
 
 - name: Run buildout
   when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
