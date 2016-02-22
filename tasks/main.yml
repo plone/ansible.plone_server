@@ -1,5 +1,8 @@
 ---
 
+- fail: msg="We need bug fixes in Ansible 2. Please update your kit. 'pip install -U Ansible'"
+  when: ansible_version.major < 2
+
 - name: Fail if no plone initial password set
   fail:
     msg: "You must set the plone_initial_password variable."
@@ -235,7 +238,7 @@
     version={{ instance_config.plone_buildout_git_version | default('HEAD') }}
     depth=1
     accept_hostkey=yes
-  sudo_user: "{{ instance_config.plone_buildout_user }}"
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Instance var directory
   file:
@@ -277,7 +280,7 @@
   args:
     creates: "{{ plone_instance_home }}/bin/python"
   when: plone_version >= '5.0'
-  sudo_user: "{{ instance_config.plone_buildout_user }}"
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Check to see if buildout has already run
   stat: path={{ plone_instance_home }}/bin/client_reserved
@@ -293,7 +296,7 @@
   args:
     creates: "{{ plone_instance_home }}/bin/buildout"
   when: plone_version >= '5.0' and buildout_status.stat.exists == False
-  sudo_user: "{{ instance_config.plone_buildout_user }}"
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
@@ -301,22 +304,25 @@
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
   when: plone_version < '5.0' and buildout_status.stat.exists == False
-  sudo_user: "{{ instance_config.plone_buildout_user }}"
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Run buildout
-  when: plone_autorun_buildout and (instance_status.changed or buildout_status.stat.exists == False)
+  when: instance_config.plone_always_run_buildout or
+        instance_config.plone_autorun_buildout and (instance_status.changed or not buildout_status.stat.exists)
   command: bin/buildout
     chdir={{ plone_instance_home }}
-  sudo_user: "{{ instance_config.plone_buildout_user }}"
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Everything in buildout cache is group-readable
-  command: chmod -R g+r,o+r {{ instance_config.plone_target_path }}/buildout-cache
+  file:
+    path="{{ instance_config.plone_target_path }}/buildout-cache"
+    mode="g+r"
+    recurse=yes
 
 - name: Look for existing database
-  when: plone_create_site
+  when: instance_config.plone_create_site
   stat: path={{ plone_instance_var_path }}/filestorage/Data.fs
   register: db_status
-
 
 
 ###################################
@@ -409,7 +415,7 @@
 
 - name: Create initial Plone site
   when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
-  sudo_user: "{{ instance_config.plone_daemon_user }}"
+  become_user: "{{ instance_config.plone_daemon_user }}"
   command: bin/client_reserved run scripts/addPloneSite.py
   args:
     chdir: "{{ plone_instance_home }}"

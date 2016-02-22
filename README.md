@@ -179,7 +179,7 @@ The default list is empty.
 
 This setting allows you to check out and include repository-based sources in your buildout.
 
-Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) sources format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*" and git_clone_depth set to "1".
+Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) sources format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*".
 
 
 ### plone_extension_profiles
@@ -255,6 +255,13 @@ Extra text to add to only the first client buildout part.
     plone_autorun_buildout: (yes|no)
 
 Do you wish to automatically run buildout if any of the Plone settings change? Defaults to `yes`.
+
+
+### plone_always_run_buildout
+
+    plone_always_run_buildout: (yes|no)
+
+Do you wish to run buildout even if the buildout has not changed? Mainly useful in CI situations.
 
 
 ### plone_buildout_cache_url
