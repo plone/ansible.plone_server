@@ -5,6 +5,11 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 1
+  end
+
   config.vm.define "test", primary: true, autostart: true do |jessie|
     jessie.vm.box = "debian/jessie64"
 

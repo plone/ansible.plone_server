@@ -404,6 +404,9 @@
   when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
   wait_for: port={{ instance_config.plone_client_base_port }}
 
+- pause: seconds=20
+  when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
+
 - name: Create initial Plone site
   when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
   sudo_user: "{{ instance_config.plone_daemon_user }}"
