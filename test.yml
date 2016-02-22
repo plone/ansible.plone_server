@@ -44,12 +44,12 @@
   roles:
 
     - {
-        role: ../plone.plone_server,
+        role: ./
         plone_config: "{{ servers[0] }}"
       }
 
     - {
-        role: ../plone.plone_server,
+        role: ./
         plone_config: "{{ servers[1] }}"
       }
 
