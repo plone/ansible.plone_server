@@ -14,6 +14,8 @@
 
         plone_zeo_port: 5100
         plone_client_base_port: 5080
+        plone_additional_eggs:
+          - collective.recaptcha
         plone_sources:
           - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git"
 
@@ -39,13 +41,6 @@
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
 
-
-  pre_tasks:
-
-    - name: Update apt cache
-      apt: upgrade=yes update_cache=yes
-      when: ansible_os_family == 'Debian'
-
   roles:
 
     - {
@@ -59,6 +54,10 @@
       }
 
   tasks:
+
+    # make sure plone daemons have had time to come up
+    - pause: minutes=1
+
     - pip: name=httplib2
 
     - name: Check to see if Plone 5 is running
