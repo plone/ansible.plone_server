@@ -43,15 +43,11 @@
 
   roles:
 
-    - {
-        role: ./
-        plone_config: "{{ servers[0] }}"
-      }
+    - role: ./
+      plone_config: "{{ servers[0] }}"
 
-    - {
-        role: ./
-        plone_config: "{{ servers[1] }}"
-      }
+    - role: ./
+      plone_config: "{{ servers[1] }}"
 
   tasks:
 
