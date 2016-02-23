@@ -1,5 +1,8 @@
 1.2.6 unreleased
 
+- Add plone_restart_after_buildout option.
+  [smcmahon]
+
 - A nasty bug in expression evaluation in Ansible 1.9 makes us require Ansible 2.0+.
   [smcmahon]
 
