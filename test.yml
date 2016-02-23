@@ -20,9 +20,9 @@
         plone_sources:
           - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git rev=tags/1.1.5"
           - "pas.plugins.authomatic = git https://github.com/collective/pas.plugins.authomatic.git update=true depth=1"
+        plone_buildout_cache_file: /home/steve/ssd/nui5.0/packages/buildout-cache.tar.bz2
 
       - plone_instance_name: p4
-
         plone_version: '4.3.7'
 
         plone_initial_password: admin
@@ -43,6 +43,9 @@
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
           - "nothing.much = 0.9.1"
+
+        plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
+
 
   roles:
 

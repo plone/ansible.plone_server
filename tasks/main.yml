@@ -1,12 +1,20 @@
 ---
 
-- fail: msg="We need bug fixes in Ansible 2. Please update your kit. 'pip install -U Ansible'"
+- name: Fail if Ansible is ancient
+  fail: msg="We need bug fixes in Ansible 2. Please update your kit. 'pip install -U Ansible'"
   when: ansible_version.major < 2
 
 - name: Fail if no plone initial password set
-  fail:
-    msg: "You must set the plone_initial_password variable."
+  fail: msg="You must set the plone_initial_password variable."
   when: not instance_config.plone_initial_password
+
+- name: Set convenience variables
+  set_fact:
+    plone_instance_home: "{{ instance_config.plone_target_path }}/{{ instance_config.plone_instance_name }}"
+    plone_instance_var_path: "{{ instance_config.plone_var_path }}/{{ instance_config.plone_instance_name }}"
+    plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
+    supervisor_instance_discriminator: "{{ '%s_' % instance_config.plone_instance_name }}"
+    plone_python_version: "{{ instance_config.plone_python_version }}"
 
 
 ###################################
@@ -138,46 +146,57 @@
     mode=0755
 
 - name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ instance_config.plone_python_version }} {{ instance_config.plone_target_path }}/Python-{{ instance_config.plone_python_version }} \
-    creates={{ instance_config.plone_target_path }}/Python-{{ instance_config.plone_python_version }}"
-  when: plone_version < '5.0'
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ instance_config.plone_target_path }}/Python-{{ plone_python_version }} \
+    creates={{ instance_config.plone_target_path }}/Python-{{ plone_python_version }}"
+  when: instance_config.plone_version < '5.0'
 
 - name: Check for existence of buildout cache
   stat: path="{{ instance_config.plone_target_path }}/buildout-cache"
   register: cache_stat
 
 - name: Load buildout cache from host file
-  when: plone_buildout_cache_file and not cache_stat.stat.exists
+  when: instance_config.plone_buildout_cache_file and not cache_stat.stat.exists
   unarchive:
     creates="{{ instance_config.plone_target_path }}/buildout-cache"
     src="{{ instance_config.plone_buildout_cache_file }}"
     dest="{{ instance_config.plone_target_path }}"
-    owner={{ instance_config.plone_buildout_user }}
-    group={{ instance_config.plone_group }}
+    owner="{{ instance_config.plone_buildout_user }}"
+    group="{{ instance_config.plone_group }}"
+
+# - name: Download buildout cache if needed
+#   when: plone_buildout_cache_url and not (plone_buildout_cache_file or cache_stat.stat.exists)
+#   get_url:
+#     url: "{{ instance_config.plone_buildout_cache_url }}"
+#     dest: "{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
+#     force: no
+#   ignore_errors: yes
 
 - name: Download buildout cache if needed
-  when: plone_buildout_cache_url and not (plone_buildout_cache_file or cache_stat.stat.exists)
-  get_url:
-    url: "{{ instance_config.plone_buildout_cache_url }}"
-    dest: "{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
-    force: no
+  when: instance_config.plone_buildout_cache_url and not
+    (instance_config.plone_buildout_cache_file or cache_stat.stat.exists)
+  unarchive:
+    copy: no
+    src: "{{ instance_config.plone_buildout_cache_url }}"
+    dest: "{{ instance_config.plone_target_path }}"
+    owner: "{{ instance_config.plone_buildout_user }}"
+    group: "{{ instance_config.plone_group }}"
   ignore_errors: yes
 
-- name: Check for existence of buildout cache tarball
-  stat: path="{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
-  register: tarball_stat
+# - name: Check for existence of buildout cache tarball
+#   stat: path="{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
+#   register: tarball_stat
 
-- name: Unpack downloaded buildout cache
-  when: tarball_stat.stat.exists and not cache_stat.stat.exists
-  command: tar xf buildout-cache.tar.bz2
-  args:
-    chdir: "{{ instance_config.plone_target_path }}"
-    creates: "{{ instance_config.plone_target_path }}/buildout-cache"
+# - name: Unpack downloaded buildout cache
+#   when: tarball_stat.stat.exists and not cache_stat.stat.exists
+#   command: tar xf buildout-cache.tar.bz2
+#   args:
+#     chdir: "{{ instance_config.plone_target_path }}"
+#     creates: "{{ instance_config.plone_target_path }}/buildout-cache"
 
-- name: Delete old buildout cache tarball
-  file:
-    path={{ instance_config.plone_target_path }}/buildout-cache.tar.bz2
-    state=absent
+# - name: Delete old buildout cache tarball
+#   file:
+#     path={{ instance_config.plone_target_path }}/buildout-cache.tar.bz2
+#     state=absent
 
 - name: Buildout cache directory exists and is owned by plone buildout user
   file:
@@ -207,12 +226,6 @@
     state=directory
     owner={{ instance_config.plone_buildout_user }}
     group={{ instance_config.plone_group }}
-
-- set_fact:
-    plone_instance_home: "{{ instance_config.plone_target_path }}/{{ instance_config.plone_instance_name }}"
-    plone_instance_var_path: "{{ instance_config.plone_var_path }}/{{ instance_config.plone_instance_name }}"
-    plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
-    supervisor_instance_discriminator: "{{ '%s_' % instance_config.plone_instance_name }}"
 
 - name: Instance directory
   file:
@@ -276,10 +289,10 @@
   register: instance_status
 
 - name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ instance_config.plone_python_version }} {{ plone_instance_home }}"
+  command: "{{ virtualenv_path | default() }}virtualenv --python=python{{ plone_python_version }} {{ plone_instance_home }}"
   args:
     creates: "{{ plone_instance_home }}/bin/python"
-  when: plone_version >= '5.0'
+  when: instance_config.plone_version >= '5.0'
   become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Check to see if buildout has already run
@@ -295,15 +308,15 @@
   command: "{{ plone_instance_home }}/bin/pip install zc.buildout"
   args:
     creates: "{{ plone_instance_home }}/bin/buildout"
-  when: plone_version >= '5.0' and buildout_status.stat.exists == False
+  when: instance_config.plone_version >= '5.0' and buildout_status.stat.exists == False
   become_user: "{{ instance_config.plone_buildout_user }}"
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
-  command: ../Python-{{ instance_config.plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
+  command: ../Python-{{ plone_python_version }}/bin/python bootstrap.py --setuptools-version=8.0.4
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
-  when: plone_version < '5.0' and buildout_status.stat.exists == False
+  when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False
   become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Run buildout
@@ -410,7 +423,8 @@
   when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
   wait_for: port={{ instance_config.plone_client_base_port }}
 
-- pause: seconds=20
+- name: Pause to let ZODB settle a bit
+  pause: seconds=20
   when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
 
 - name: Create initial Plone site
