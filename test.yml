@@ -42,7 +42,6 @@
         plone_additional_versions:
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
-          - "nothing.much = 0.9.1"
 
         # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
 

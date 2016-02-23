@@ -370,6 +370,14 @@ How many days of blob backups do you wish to keep? This is typically set to `kee
 When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
 
 
+### plone_restart_after_buildout
+
+    plone_restart_after_buildout: yes
+
+When set to `yes` (the default), the role will restart the clients that are running under supervisor whenever buildout runs. This may be undesirable in situations where uptime is a high priority and clients are slow to start serving requests.
+
+The full Plone Ansible Playbook has a nice alternative in such cases: a restart script that removes clients from the load-balancer cluster and doesn't return them until after priming caches.
+
 Example Playbook
 ----------------
 

@@ -163,14 +163,6 @@
     owner="{{ instance_config.plone_buildout_user }}"
     group="{{ instance_config.plone_group }}"
 
-# - name: Download buildout cache if needed
-#   when: plone_buildout_cache_url and not (plone_buildout_cache_file or cache_stat.stat.exists)
-#   get_url:
-#     url: "{{ instance_config.plone_buildout_cache_url }}"
-#     dest: "{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
-#     force: no
-#   ignore_errors: yes
-
 - name: Download buildout cache if needed
   when: instance_config.plone_buildout_cache_url and not
     (instance_config.plone_buildout_cache_file or cache_stat.stat.exists)
@@ -181,22 +173,6 @@
     owner: "{{ instance_config.plone_buildout_user }}"
     group: "{{ instance_config.plone_group }}"
   ignore_errors: yes
-
-# - name: Check for existence of buildout cache tarball
-#   stat: path="{{ instance_config.plone_target_path }}/buildout-cache.tar.bz2"
-#   register: tarball_stat
-
-# - name: Unpack downloaded buildout cache
-#   when: tarball_stat.stat.exists and not cache_stat.stat.exists
-#   command: tar xf buildout-cache.tar.bz2
-#   args:
-#     chdir: "{{ instance_config.plone_target_path }}"
-#     creates: "{{ instance_config.plone_target_path }}/buildout-cache"
-
-# - name: Delete old buildout cache tarball
-#   file:
-#     path={{ instance_config.plone_target_path }}/buildout-cache.tar.bz2
-#     state=absent
 
 - name: Buildout cache directory exists and is owned by plone buildout user
   file:
@@ -321,10 +297,12 @@
 
 - name: Run buildout
   when: instance_config.plone_always_run_buildout or
-        instance_config.plone_autorun_buildout and (instance_status.changed or not buildout_status.stat.exists)
+        instance_config.plone_autorun_buildout and
+        (instance_status.changed or not buildout_status.stat.exists)
   command: bin/buildout
     chdir={{ plone_instance_home }}
   become_user: "{{ instance_config.plone_buildout_user }}"
+  register: ran_buildout
 
 - name: Everything in buildout cache is group-readable
   file:
@@ -398,7 +376,9 @@
   with_sequence: count={{ instance_config.plone_client_count }}
 
 - name: Supervisor zeoclients tasks are restarted
-  when: instance_config.plone_use_supervisor and instance_config.plone_autorun_buildout and instance_status.changed
+  when: instance_config.plone_use_supervisor and
+        instance_config.plone_restart_after_buildout and
+        ran_buildout.changed
   supervisorctl:
     name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted
