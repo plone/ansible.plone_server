@@ -1,2 +1,6 @@
 .vagrant
 ._*
+bin/
+include/
+lib/
+local/

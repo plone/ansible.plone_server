@@ -24,6 +24,8 @@ This role should be able to work with Plone 4.3.x or 5.0. Just set the version v
 Requirements
 ------------
 
+Version 1.2.6 requires Ansible 2.0+.
+
 Since this role creates and uses users and groups, it must be run as part of a playbook that sets sudo to "yes".
 
 Currently working with Debian/Ubuntu and CentOS/Fedora environments. Please put in a pull request if you can help get it going in other ansible's os families (FreeBSD, Gentoo, Suse, etc.).
