@@ -1,12 +1,21 @@
 1.2.6 unreleased
 
+- A nasty bug in expression evaluation in Ansible 1.9 makes us require Ansible 2.0+.
+  [smcmahon]
+
+- Add plone_always_run_buildout option. Mainly useful for CI situations.
+  [smcmahon]
+
+- Change strategy on mr.developer. No longer set git-clone-depth=1, as this destroyed ability to set revisions and branches. If you want a shallow clone, use "depth=1" in the source spec.
+  [smcmahon]
+
 - Add plone_extra_find_links option to enable download eggs from private servers.
   [jpgimenez]
 
 - Relicense as BSD-3-Clause.
 
-- Add missing instance_config for multi instance use 
-  [gomez] 
+- Add missing instance_config for multi instance use
+  [gomez]
 
 1.2.5 2016-01-24
 
