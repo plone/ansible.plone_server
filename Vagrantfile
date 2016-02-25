@@ -59,7 +59,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "centos7", primary: false, autostart: false do |centos7|
-    # centos71.vm.box = "bento/centos-7.1"
     centos7.vm.box = "centos/7"
     centos7.vm.synced_folder ".", "/vagrant", disabled: true
     centos7.vm.provision "ansible" do |ansible|

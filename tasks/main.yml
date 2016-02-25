@@ -21,7 +21,7 @@
 # Prerequisites
 
 - include: debian.yml
-  when: ansible_os_family == 'debian'
+  when: ansible_os_family == 'Debian'
 
 - include: el.yml
   when: ansible_os_family == 'RedHat'
