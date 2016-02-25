@@ -10,68 +10,59 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = 1
   end
 
-  config.vm.define "test", primary: true, autostart: true do |jessie|
+  config.vm.define "wheezy", autostart: false do |wheezy|
+    wheezy.vm.box = "debian/wheezy64"
+    wheezy.vm.synced_folder ".", "/vagrant", disabled: true
+    wheezy.vm.provision "ansible" do |ansible|
+      ansible.playbook = "test.yml"
+    end
+  end
+
+  config.vm.define "jessie", autostart: false do |jessie|
     jessie.vm.box = "debian/jessie64"
-
-    jessie.vm.network "forwarded_port", guest: 8080, host: 8080
-    jessie.vm.network "forwarded_port", guest: 8081, host: 8081
-
+    jessie.vm.synced_folder ".", "/vagrant", disabled: true
     jessie.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
 
-  config.vm.define "f21", primary: false, autostart: false do |f21|
-    f21.vm.box = "chef/fedora-21"
-
-    f21.vm.network "forwarded_port", guest: 8080, host: 8082
-    f21.vm.network "forwarded_port", guest: 8081, host: 8083
-
-    f21.vm.provision "ansible" do |ansible|
+  config.vm.define "precise", autostart: false do |precise|
+    precise.vm.box = "ubuntu/precise64"
+    precise.vm.synced_folder ".", "/vagrant", disabled: true
+    precise.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
 
-  config.vm.define "f20", primary: false, autostart: false do |f20|
-    f20.vm.box = "chef/fedora-20"
-
-    f20.vm.network "forwarded_port", guest: 8080, host: 8084
-    f20.vm.network "forwarded_port", guest: 8081, host: 8085
-
-    f20.vm.provision "ansible" do |ansible|
+  config.vm.define "trusty", primary: true, autostart: true do |trusty|
+    trusty.vm.box = "ubuntu/trusty64"
+    trusty.vm.synced_folder ".", "/vagrant", disabled: true
+    trusty.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
 
-  config.vm.define "centos66", primary: false, autostart: false do |centos66|
-    centos66.vm.box = "chef/centos-6.6"
-
-    centos66.vm.network "forwarded_port", guest: 8080, host: 8088
-    centos66.vm.network "forwarded_port", guest: 8081, host: 8089
-
-    centos66.vm.provision "ansible" do |ansible|
+  config.vm.define "wily", autostart: false do |wily|
+    wily.vm.box = "ubuntu/wily64"
+    wily.vm.synced_folder ".", "/vagrant", disabled: true
+    wily.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
 
-  config.vm.define "centos65", primary: false, autostart: false do |centos65|
-    centos65.vm.box = "chef/centos-6.5"
-
-    centos65.vm.network "forwarded_port", guest: 8080, host: 8090
-    centos65.vm.network "forwarded_port", guest: 8081, host: 8091
-
-    centos65.vm.provision "ansible" do |ansible|
+  config.vm.define "centos6", primary: false, autostart: false do |centos6|
+    centos6.vm.box = "bento/centos-6.7"
+    centos6.vm.synced_folder ".", "/vagrant", disabled: true
+    centos6.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
 
-  config.vm.define "centos71", primary: false, autostart: false do |centos65|
-    centos65.vm.box = "bento/centos-7.1"
-
-    centos65.vm.network "forwarded_port", guest: 8080, host: 8090
-    centos65.vm.network "forwarded_port", guest: 8081, host: 8091
-
-    centos65.vm.provision "ansible" do |ansible|
+  config.vm.define "centos7", primary: false, autostart: false do |centos7|
+    # centos71.vm.box = "bento/centos-7.1"
+    centos7.vm.box = "centos/7"
+    centos7.vm.synced_folder ".", "/vagrant", disabled: true
+    centos7.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end

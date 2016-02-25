@@ -20,90 +20,11 @@
 ###################################
 # Prerequisites
 
-- name: Ensure required packages
-  when: ansible_os_family == 'Debian'
-  apt: pkg={{ item }} state=present
-  with_items:
-    - build-essential
-    - cron
-    - curl
-    - python-dev
-    - python-pip
-    - libz-dev
-    - libssl-dev
-    - libjpeg-dev
-    - libxslt1-dev
-    - poppler-utils
-    - lynx-cur
-    - unzip
-    - supervisor
-    - git
-    - wv
+- include: debian.yml
+  when: ansible_os_family == 'debian'
 
-- name: CentOS enable aditional repos
-  yum: pkg={{ item }} state=present
-  when: ansible_distribution == 'CentOS'
-  with_items:
-    - epel-release
-
-- name: CentOS 6 install GhettoForge repos
-  yum: pkg=http://mirror.symnds.com/distributions/gf/el/6/gf/x86_64/gf-release-6-8.gf.el6.noarch.rpm state=present
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
-
-- name: CentOS 6 enable GhettoForge plus repo
-  command: yum-config-manager --enable gf-plus
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
-
-- name: Ensure required packages
-  yum: pkg={{ item }} state=present
+- include: el.yml
   when: ansible_os_family == 'RedHat'
-  with_items:
-    - tar
-    - bzip2
-    - gcc-c++
-    - patch
-    - openssl-devel
-    - libjpeg-devel
-    - libxslt-devel
-    - libselinux-python
-    - readline-devel
-    - make
-    - which
-    - python-devel
-    - cronie
-    - curl
-    - python-pip
-    - python-virtualenv
-    - zlib-devel
-    - poppler-utils
-    - lynx
-    - unzip
-    - supervisor
-    - git
-
-- name: Ensure wv installed
-  when: ansible_os_family == 'RedHat'
-  shell: yum install -y wv || yum install -y http://pkgs.repoforge.org/wv/wv-1.2.4-1.el6.rf.x86_64.rpm
-    creates=/usr/bin/wvHtml
-
-- name: Ensure recent python-virtualenv
-  when: ansible_os_family == 'Debian'
-  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin"' state=latest
-  # note that this installs to /usr/local/bin
-  # which is not automatically on the path
-
-- name: Set virtualenv path
-  when: ansible_os_family == 'Debian'
-  set_fact: virtualenv_path=/usr/local/bin/
-
-- name: Set python version
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
-  set_fact: plone_python_version=2.6
-
-- name: Superlance installed
-  when: plone_client_max_memory != "0"
-  pip: name=superlance version=0.11
-
 
 ###################################
 # Users and groups
@@ -162,6 +83,7 @@
     dest="{{ instance_config.plone_target_path }}"
     owner="{{ instance_config.plone_buildout_user }}"
     group="{{ instance_config.plone_group }}"
+  register: copied_cache
 
 - name: Download buildout cache if needed
   when: instance_config.plone_buildout_cache_url and not
@@ -173,6 +95,7 @@
     owner: "{{ instance_config.plone_buildout_user }}"
     group: "{{ instance_config.plone_group }}"
   ignore_errors: yes
+  register: downloaded_cache
 
 - name: Buildout cache directory exists and is owned by plone buildout user
   file:
@@ -189,7 +112,7 @@
     group={{ instance_config.plone_group }}
 
 - name: Fix file ownership in cache
-  when: plone_buildout_cache_file or plone_buildout_cache_url
+  when: copied_cache.changed or downloaded_cache.changed
   file:
     path={{ instance_config.plone_target_path }}/buildout-cache
     owner={{ instance_config.plone_buildout_user }}
@@ -309,6 +232,7 @@
     path="{{ instance_config.plone_target_path }}/buildout-cache"
     mode="g+r"
     recurse=yes
+  when: ran_buildout.changed
 
 - name: Look for existing database
   when: instance_config.plone_create_site
@@ -319,10 +243,9 @@
 ###################################
 # Supervisor setup
 
-- name: Supervisor config dir
-  set_fact:
-    supervisor_config_dir: "/etc/supervisord.d/"
-  when: ansible_os_family == 'RedHat'
+- name: Superlance installed
+  when: instance_config.plone_use_supervisor and instance_config.plone_client_max_memory != "0"
+  pip: name=superlance version=0.11
 
 - name: Supervisor process control setup
   when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
@@ -351,12 +274,6 @@
 - name: Ensure supervisord is running
   when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
   service: name=supervisord state=running
-
-- name: Enable supervisord to start on boot - CentOS
-  when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
-  service:
-    name=supervisord
-    enabled=yes
 
 - name: Supervisor task list is updated
   when: instance_config.plone_use_supervisor and supervisor_task_conf|changed
