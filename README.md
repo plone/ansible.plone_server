@@ -24,6 +24,8 @@ This role should be able to work with Plone 4.3.x or 5.0. Just set the version v
 Requirements
 ------------
 
+Version 1.2.6 requires Ansible 2.0+.
+
 Since this role creates and uses users and groups, it must be run as part of a playbook that sets sudo to "yes".
 
 Currently working with Debian/Ubuntu and CentOS/Fedora environments. Please put in a pull request if you can help get it going in other ansible's os families (FreeBSD, Gentoo, Suse, etc.).
@@ -179,7 +181,7 @@ The default list is empty.
 
 This setting allows you to check out and include repository-based sources in your buildout.
 
-Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) sources format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*" and git_clone_depth set to "1".
+Source specifications, a list of strings in [mr.developer](https://pypi.python.org/pypi/mr.developer) sources format. If you specify plone_sources, the mr.developer extension will be used with auto-checkout set to "*".
 
 
 ### plone_extension_profiles
@@ -255,6 +257,13 @@ Extra text to add to only the first client buildout part.
     plone_autorun_buildout: (yes|no)
 
 Do you wish to automatically run buildout if any of the Plone settings change? Defaults to `yes`.
+
+
+### plone_always_run_buildout
+
+    plone_always_run_buildout: (yes|no)
+
+Do you wish to run buildout even if the buildout has not changed? Mainly useful in CI situations.
 
 
 ### plone_buildout_cache_url
@@ -360,6 +369,14 @@ How many days of blob backups do you wish to keep? This is typically set to `kee
 
 When set to `yes` (the default), the role will set up [supervisor](http://supervisord.org/) to start, stop and control the ZEO server and all the clients except the reserved client.
 
+
+### plone_restart_after_buildout
+
+    plone_restart_after_buildout: yes
+
+When set to `yes` (the default), the role will restart the clients that are running under supervisor whenever buildout runs. This may be undesirable in situations where uptime is a high priority and clients are slow to start serving requests.
+
+The full Plone Ansible Playbook has a nice alternative in such cases: a restart script that removes clients from the load-balancer cluster and doesn't return them until after priming caches.
 
 Example Playbook
 ----------------

@@ -1,7 +1,7 @@
 ---
 
 - hosts: all
-  sudo: yes
+  become: yes
   gather_facts: yes
 
 
@@ -14,12 +14,16 @@
 
         plone_zeo_port: 5100
         plone_client_base_port: 5080
+        plone_additional_eggs:
+          - collective.recaptcha
+          - pas.plugins.authomatic
         plone_sources:
-          - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git"
-        plone_buildout_extra_dir: ./meta/
+          - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git rev=tags/1.1.5"
+          - "pas.plugins.authomatic = git https://github.com/collective/pas.plugins.authomatic.git update=true depth=1"
+        # plone_buildout_cache_file: /home/steve/ssd/nui5.0/packages/buildout-cache.tar.bz2
+        # plone_buildout_extra_dir: ./meta/
 
       - plone_instance_name: p4
-
         plone_version: '4.3.7'
 
         plone_initial_password: admin
@@ -40,26 +44,22 @@
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
 
+        # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
 
-  pre_tasks:
-
-    - name: Update apt cache
-      apt: upgrade=yes update_cache=yes
-      when: ansible_os_family == 'Debian'
 
   roles:
 
-    - {
-        role: ./,
-        plone_config: "{{ servers[0] }}"
-      }
+    - role: ./
+      plone_config: "{{ servers[0] }}"
 
-    - {
-        role: ./,
-        plone_config: "{{ servers[1] }}"
-      }
+    - role: ./
+      plone_config: "{{ servers[1] }}"
 
   tasks:
+
+    # make sure plone daemons have had time to come up
+    - pause: minutes=1
+
     - pip: name=httplib2
 
     - name: Check to see if Plone 5 is running
