@@ -1,0 +1,70 @@
+---
+
+# RedHat-family dependencies.
+# Note that we really only support CentOS at this time.
+# If you want to enable another flavor, do it! Then send a pull request.
+
+- name: "CentOS: enable epel-release"
+  yum: pkg=epel-release state=present
+  when: ansible_distribution == 'CentOS'
+
+- block:
+    - name: "CentOS 6: yum-utils"
+      yum: pkg=yum-utils state=present
+    - name: "CentOS 6: install GhettoForge repos"
+      yum: pkg=http://mirror.symnds.com/distributions/gf/el/6/gf/x86_64/gf-release-6-8.gf.el6.noarch.rpm state=present
+    - name: "CentOS 6: enable GhettoForge plus repo"
+      command: yum-config-manager --enable gf-plus
+    - name: "CentOS 6: install ius repos as Python 2.7 source"
+      yum: pkg=https://centos6.iuscommunity.org/ius-release.rpm state=present
+    - name: "CentOS 6: install python2.7"
+      yum: pkg={{ item }} state=present enablerepo=ius
+      with_items:
+        - python27
+        - python27-devel
+        - python27-pip
+        - python27-setuptools
+        - python27-virtualenv
+    - name: "CentOS 6: Ensure wv installed"
+      yum: pkg=wv state=present
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
+- name: "RedHat family: Ensure required packages"
+  yum: pkg={{ item }} state=present
+  with_items:
+    - tar
+    - bzip2
+    - gcc-c++
+    - patch
+    - openssl-devel
+    - libjpeg-devel
+    - libxslt-devel
+    - readline-devel
+    - make
+    - which
+    - cronie
+    - curl
+    - zlib-devel
+    - poppler-utils
+    - lynx
+    - unzip
+    - python-devel
+    - python-pip
+    - python-setuptools
+    - python-virtualenv
+    - libselinux-python
+    - supervisor
+    - git
+
+- name: "CentOS 7: Ensure wv installed"
+  yum: pkg=http://pkgs.repoforge.org/wv/wv-1.2.4-1.el6.rf.x86_64.rpm state=present
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+
+- name: Supervisor config dir
+  set_fact:
+    supervisor_config_dir: "/etc/supervisord.d/"
+
+- name: Enable supervisord to start on boot - CentOS
+  service:
+    name=supervisord
+    enabled=yes
