@@ -1,0 +1,31 @@
+---
+
+# Debian-family dependencies
+
+- name: Ensure required packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - build-essential
+    - cron
+    - curl
+    - python-dev
+    - python-pip
+    - libz-dev
+    - libssl-dev
+    - libjpeg-dev
+    - libxslt1-dev
+    - poppler-utils
+    - lynx-cur
+    - unzip
+    - supervisor
+    - git
+    - wv
+
+- name: Ensure recent python-virtualenv
+  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin"' state=latest
+  # note that this installs to /usr/local/bin
+  # which is not automatically on the path
+
+- name: Set virtualenv path
+  set_fact: virtualenv_path=/usr/local/bin/
+
