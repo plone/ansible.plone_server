@@ -21,6 +21,7 @@
           - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git rev=tags/1.1.5"
           - "pas.plugins.authomatic = git https://github.com/collective/pas.plugins.authomatic.git update=true depth=1"
         # plone_buildout_cache_file: /home/steve/ssd/nui5.0/packages/buildout-cache.tar.bz2
+        plone_buildout_extra_dir: ./meta/
 
       - plone_instance_name: p4
         plone_version: '4.3.7'
@@ -72,3 +73,11 @@
         url: http://127.0.0.1:4081/Plone
         method: GET
         status_code: 200
+
+    - stat: path=/usr/local/plone-5.0/zeoserver/main.yml
+      register: st
+    - fail: msg="copy of extra dir failed"
+      when: not st.stat.exists
+
+    - name: Check to see if we copied the extra buildout file
+      command: "ls /usr/local/plone-5.0/zeoserver/main.yml"

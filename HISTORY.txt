@@ -20,6 +20,9 @@
 - Add missing instance_config for multi instance use
   [gomez]
 
+- Add buildout_extra_dir option for additional config files
+  [gomez]
+
 1.2.5 2016-01-24
 
 - Update supervisord enable to use ansible's service module.

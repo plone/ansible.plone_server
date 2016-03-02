@@ -218,6 +218,16 @@
   when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False
   become_user: "{{ instance_config.plone_buildout_user }}"
 
+- name: Copy files from the buildout extra dir
+  copy:
+    src="{{ instance_config.plone_buildout_extra_dir }}"
+    dest="{{ plone_instance_home }}"
+    force=yes
+    backup=yes
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+  when: instance_config.plone_buildout_extra_dir
+
 - name: Run buildout
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
