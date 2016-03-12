@@ -24,7 +24,7 @@
         plone_buildout_extra_dir: ./meta/
 
       - plone_instance_name: p4
-        plone_version: '4.3.7'
+        plone_version: '4.3.8'
 
         plone_initial_password: admin
         plone_zeo_port: 4100

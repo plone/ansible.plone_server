@@ -1,5 +1,8 @@
 1.2.6 unreleased
 
+- Run P4 tests with 4.3.8.
+  [smcmahon]
+
 - Document plone_buildout_extra_dir.
   [smcmahon]
 
