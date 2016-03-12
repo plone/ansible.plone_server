@@ -1,5 +1,8 @@
 1.2.6 unreleased
 
+- Document plone_buildout_extra_dir.
+  [smcmahon]
+
 - Add plone_restart_after_buildout option.
   [smcmahon]
 
