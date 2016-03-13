@@ -185,6 +185,8 @@ datafs = ${buildout:var-dir}/filestorage/Data.fs
 blob-storage = ${buildout:var-dir}/blobstorage
 keep = {{ instance_config.plone_keep_backups }}
 keep_blob_days = {{ instance_config.plone_keep_blob_days }}
+# Make backups readable by remote user
+rsync_options = --no-perms --chmod=g=rx
 
 
 [setpermissions]
