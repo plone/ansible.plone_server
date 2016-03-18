@@ -86,6 +86,7 @@ plone_backup_at:
 plone_keep_backups: 3
 
 plone_keep_blob_days: 21
+plone_rsync_backup_options:
 
 plone_create_site: yes
 plone_site_id: Plone
@@ -167,6 +168,7 @@ instance_config:
   plone_backup_at: "{{ plone_config.plone_backup_at|default(plone_backup_at) }}"
   plone_keep_backups: "{{ plone_config.plone_keep_backups|default(plone_keep_backups) }}"
   plone_keep_blob_days: "{{ plone_config.plone_keep_blob_days|default(plone_keep_blob_days) }}"
+  plone_rsync_backup_options: "{{ plone_config.plone_rsync_backup_options|default(plone_rsync_backup_options) }}"
   plone_create_site: "{{ plone_config.plone_create_site|default(plone_create_site) }}"
   plone_site_id: "{{ plone_config.plone_site_id|default(plone_site_id) }}"
   plone_default_language: "{{ plone_config.plone_default_language|default(plone_default_language) }}"
@@ -184,5 +186,3 @@ instance_config:
   plone_extra_find_links: "{{ plone_config.plone_extra_find_links|default(plone_extra_find_links) }}"
   plone_always_run_buildout: "{{ plone_config.plone_always_run_buildout|default(plone_always_run_buildout) }}"
   plone_restart_after_buildout: "{{ plone_config.plone_restart_after_buildout|default(plone_restart_after_buildout) }}"
-
-

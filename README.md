@@ -370,6 +370,13 @@ How many generations of full backups do you wish to keep? Defaults to `2`.
 How many days of blob backups do you wish to keep? This is typically set to `keep_backups * days_between_packs` days. Default is `14`.
 
 
+#### plone_rsync_backup_options
+
+    plone_rsync_backup_options: --perms --chmod=ug+rx
+
+Rsync options set within the backup scripts (see [collective.recipe.backup](https://pypi.python.org/pypi/collective.recipe.backup#supported-options)). This can be used (for example) to change permissions on backups so they can be downloaded more easily. Defaults to empty.
+
+
 ### Supervisor Control
 
 #### plone_use_supervisor
