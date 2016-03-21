@@ -352,21 +352,21 @@
   when: plone_pack_at
   cron:
     name="{{ instance_config.plone_instance_name }} Plone packing"
-    job="cd {{ plone_instance_home }} && bin/zeopack"
+    job="cd {{ plone_instance_home }} && bin/zeopack && echo "zeopack""success for {{ plone_instance_home }}""
     user={{ instance_config.plone_daemon_user }}
     minute={{ item.minute }}
     hour={{ item.hour }}
     weekday={{ item.weekday }}
   with_items: "{{ [instance_config.plone_pack_at] }}"
 
+
 - name: Backup cron job
   when: plone_backup_at
   cron:
     name="{{ instance_config.plone_instance_name }} Plone backup"
-    job="cd {{ plone_instance_home }} && bin/backup"
+    job="cd {{ plone_instance_home }} && bin/backup && echo "backup""success for {{ plone_instance_home }}""
     user={{ instance_config.plone_daemon_user }}
     minute={{ item.minute }}
     hour={{ item.hour }}
     weekday={{ item.weekday }}
   with_items: "{{ [instance_config.plone_backup_at] }}"
-
