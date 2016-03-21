@@ -1,5 +1,8 @@
 1.2.7 (unreleased)
 
+- Make cronjob notifications via email more useful.
+  [djowett]
+
 - Add plone_rsync_backup_options to make backup more flexible.
   [djowett]
 
