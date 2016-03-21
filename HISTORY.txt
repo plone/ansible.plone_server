@@ -1,3 +1,8 @@
+1.2.7 (unreleased)
+
+- Add plone_rsync_backup_options to make backup more flexible.
+  [djowett]
+
 1.2.6 2016-03-12
 
 - Run P4 tests with 4.3.8.
