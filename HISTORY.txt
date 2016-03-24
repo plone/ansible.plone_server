@@ -1,5 +1,8 @@
 1.2.7 (unreleased)
 
+- Eliminate needless stop of client1. This also makes the role work when plone_client_count is 0.
+  [smcmahon]
+
 - Make cronjob notifications via email more useful.
   [djowett]
 

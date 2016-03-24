@@ -321,14 +321,11 @@
 # Add Plone site
 
 - name: Install site creation run script
+  when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
   template:
     src=addPloneSite.py.j2
     dest={{ plone_instance_home }}/scripts/addPloneSite.py
     mode=0444
-
-- name: Wait for client1 end startup
-  when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
-  wait_for: port={{ instance_config.plone_client_base_port }}
 
 - name: Pause to let ZODB settle a bit
   pause: seconds=20
