@@ -290,7 +290,7 @@
   command: supervisorctl update
 
 - name: Supervisor zeoserver task is present
-  when: instance_config.plone_use_supervisor
+  when: instance_config.plone_use_supervisor and instance_config.plone_install_zeoserver
   supervisorctl:
     name='{{ supervisor_instance_discriminator }}zeoserver'
     state=present
