@@ -320,23 +320,24 @@
 ##################################
 # Add Plone site
 
-- name: Install site creation run script
-  when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
-  template:
-    src=addPloneSite.py.j2
-    dest={{ plone_instance_home }}/scripts/addPloneSite.py
-    mode=0444
+- block:
 
-- name: Pause to let ZODB settle a bit
-  pause: seconds=20
+    - name: Pause to let ZODB settle a bit
+      pause: seconds=20
+
+    - name: Install site creation run script
+      template:
+        src=addPloneSite.py.j2
+        dest={{ plone_instance_home }}/scripts/addPloneSite.py
+        mode=0444
+
+    - name: Create initial Plone site
+      become_user: "{{ instance_config.plone_daemon_user }}"
+      command: bin/client_reserved run scripts/addPloneSite.py
+      args:
+        chdir: "{{ plone_instance_home }}"
+
   when: instance_config.plone_use_supervisor and instance_config.plone_create_site and not db_status.stat.exists
-
-- name: Create initial Plone site
-  when: instance_config.plone_use_supervisor and plone_create_site and not db_status.stat.exists
-  become_user: "{{ instance_config.plone_daemon_user }}"
-  command: bin/client_reserved run scripts/addPloneSite.py
-  args:
-    chdir: "{{ plone_instance_home }}"
 
 
 ###################################

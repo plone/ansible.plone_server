@@ -3,6 +3,7 @@
 {% set plone_client_base_port = instance_config.plone_client_base_port  %}
 {% set plone_version = instance_config.plone_version %}
 {% set plone_sources = instance_config.plone_sources %}
+{% set plone_zeo_ip = instance_config.plone_zeo_ip %}
 {% set plone_zeo_port = instance_config.plone_zeo_port %}
 [buildout]
 
@@ -104,7 +105,7 @@ parts =
 {%if instance_config.plone_install_zeoserver %}
 [zeoserver]
 recipe = plone.recipe.zeoserver
-zeo-address = 127.0.0.1:{{ instance_config.plone_zeo_port }}
+zeo-address = {{ plone_zeo_ip }}:{{ plone_zeo_port }}
 effective-user = ${buildout:effective-user}
 environment-vars = ${buildout:environment-vars}
 var = ${buildout:var-dir}
@@ -140,7 +141,7 @@ products = ${buildout:directory}/products
 environment-vars = ${buildout:environment-vars}
 
 zeo-client = true
-zeo-address = {{ instance_config.plone_zeo_port }}
+zeo-address = {{ plone_zeo_ip }}:{{ plone_zeo_port }}
 {%if instance_config.plone_install_zeoserver %}
 shared-blob = on
 {% endif %}
