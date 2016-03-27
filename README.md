@@ -123,9 +123,11 @@ Defaults to "" -- which will cause the role to halt.
 
 How many ZEO clients do you want to run?
 
-Defaults to `2`
+Defaults to `2`.
 
-> The provided buildout always creates an extra client `client_reserve` that is not hooked into supervisor or the load balancer. Use it for debugging, run scripts and quick testing.
+May be set to `0` if you need no regular clients on the target server.
+
+> The provided buildout always (even if plone_client_count is 0) creates an extra client `client_reserve` that is not hooked into supervisor or the load balancer. Use it for debugging, run scripts and quick testing.
 
 
 ### plone_zodb_cache_size
@@ -143,7 +145,7 @@ Defaults to `30000`
 
     plone_zserver_threads: 2
 
-How many threads should run per server?
+How many threads should run per client?
 
 Defaults to `1`
 
@@ -207,6 +209,20 @@ List additional ZCML slugs that may be required by older packages that don't imp
       - "Products.TALESField = 1.1.3"
 
 The version pins you specify here will be added to the `[versions]` section of your buildout. The default list is empty.
+
+
+### plone_zeo_ip
+
+    plone_zeo_ip: 192.168.1.100
+
+The ip address for the Zope database server. Defaults to `127.0.0.1`. Useful if the zeoserver is not on the same machine as the clients.
+
+
+## plone_install_zeoserver
+
+    plone_install_zeoserver: no
+
+Allows you to turn on and off the creation of a zeoserver. Defaults to `yes`. Useful if the zeoserver is not on the same machine as the clients.
 
 
 ### plone_zeo_port
