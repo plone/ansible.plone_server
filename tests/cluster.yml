@@ -1,0 +1,49 @@
+---
+
+# Test our ability to handle a "cluster" configuration, where zeoserver and
+# zeoclients might be on different machines.
+#
+# Since this is all on the VM, it's not a thorough test, but should demonstrate
+# that "plone_install_zeoserver: no" and "plone_client_count: 0" act as
+# expected.
+
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+
+  vars:
+
+    plone_initial_password: admin
+    plone_zeo_ip: 127.0.0.1
+
+    servers:
+      - plone_client_count: 0
+        plone_client_base_port: 8090
+
+      - plone_instance_name: clients
+        plone_client_count: 2
+        plone_install_zeoserver: no
+        plone_create_site: no
+
+
+  roles:
+
+    - role: plone_server
+      plone_config: "{{ servers[0] }}"
+
+    - role: plone_server
+      plone_config: "{{ servers[1] }}"
+
+  tasks:
+
+    # make sure plone daemons have had time to come up
+    - pause: minutes=1
+
+    - pip: name=httplib2
+
+    - name: Check to see if Plone is running
+      uri:
+        url: http://127.0.0.1:8081/Plone
+        method: GET
+        status_code: 200
