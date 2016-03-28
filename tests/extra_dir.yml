@@ -1,0 +1,36 @@
+---
+
+# Test our ability to handle an extra directory copied to the buildout.
+
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+
+  vars:
+
+    plone_initial_password: admin
+    plone_buildout_extra_dir: extras/
+
+
+  roles:
+
+    - role: plone_server
+
+  tasks:
+
+    # make sure plone daemons have had time to come up
+    - pause: minutes=1
+
+    - pip: name=httplib2
+
+    - name: Check to see if Plone is running
+      uri:
+        url: http://127.0.0.1:8081/Plone
+        method: GET
+        status_code: 200
+
+    - stat: path=/usr/local/plone-5.0/zeoserver/something.txt
+      register: st
+    - fail: msg="copy of extra dir failed"
+      when: not st.stat.exists
