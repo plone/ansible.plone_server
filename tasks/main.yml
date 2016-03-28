@@ -210,6 +210,7 @@
     backup=yes
     owner={{ instance_config.plone_buildout_user }}
     group={{ instance_config.plone_group }}
+  register: extra_dir_copy_result
   when: instance_config.plone_buildout_extra_dir
 
 # Plone 5.0+; avoid bootstrap.py
@@ -231,7 +232,7 @@
 - name: Run buildout
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
-        (instance_status.changed or not buildout_status.stat.exists)
+        (instance_status.changed or extra_dir_copy_result.changed or not buildout_status.stat.exists)
   command: bin/buildout
     chdir={{ plone_instance_home }}
   become_user: "{{ instance_config.plone_buildout_user }}"
