@@ -1,5 +1,8 @@
 1.2.7 (unreleased)
 
+- Add plone_install_zeoserver and plone_zeo_ip. Together, these make it possible to use the role for cluster configurations.
+  [smcmahon]
+
 - Eliminate needless stop of client1. This also makes the role work when plone_client_count is 0.
   [smcmahon]
 
