@@ -41,7 +41,6 @@ You should not need to. But if you do, you should know:
 2) Run buildout as plone_buildout.
 
 
-
 Role Variables
 --------------
 
@@ -53,6 +52,7 @@ Sets the name that discriminates this install from others. This name should be g
 
 Defaults to `zeoserver`.
 
+
 ### plone_target_path
 
     plone_target_path: /opt/plone
@@ -62,6 +62,7 @@ Sets the Plone installation directory.
 Defaults to `/usr/local/plone-{{ plone_major_version }}`
 
 Your install's buildout directory will be {{ plone_target_path }}/{{ plone_instance_name }}.
+
 
 ### plone_var_path
 
@@ -73,6 +74,7 @@ Defaults to `/var/local/plone-{{ plone_major_version }}`
 
 Your install's var directory will be {{ plone_var_path }}/{{ plone_instance_name }}.
 
+
 #### plone_backup_path
 
     plone_backup_path: /mnt/backup/plone
@@ -82,6 +84,7 @@ Where do you want to put your backups? The destination must be writable by the `
 Defaults to your instance's var directory.
 
 Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instance_name }}.
+
 
 ### plone_buildout_git_repo
 
@@ -98,15 +101,18 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 >
 > If you use your own buildout, all Plone settings except `plone_client_count`, `plone_client_base_port`, and `plone_client_max_memory` are ignored.
 
+
 ### plone_major_version
 
     plone_major_version: '5.0'
+
 
 ### plone_version
 
     plone_version: '5.0'
 
 Which Plone version do you wish to install? This defaults to the current stable version at the time you copy or clone the playbook. Make sure plone_major_version and plone_version are string variables or they won't compare correctly.
+
 
 ### plone_initial_password
 
@@ -193,6 +199,7 @@ Source specifications, a list of strings in [mr.developer](https://pypi.python.o
 
 List additional Plone profiles which should be activated in the new Plone site.  These are only activated if the plone_create_site variable is set.
 
+
 ### plone_zcml_slugs
 
     plone_zcml_slugs:
@@ -237,6 +244,7 @@ The port number for the Zope database server. Defaults to `8100`.
     plone_client_base_port: 6080
 
 The port number for your first Zope client. Subsequent client ports will be added in increments of 1. Defaults to `8081`.
+
 
 ### plone_environment_vars
 
@@ -410,6 +418,7 @@ When set to `yes` (the default), the role will restart the clients that are runn
 
 The full Plone Ansible Playbook has a nice alternative in such cases: a restart script that removes clients from the load-balancer cluster and doesn't return them until after priming caches.
 
+
 Example Playbook
 ----------------
 
@@ -428,6 +437,7 @@ Including an example of how to use your role (for instance, with variables passe
 
         - role: plone.plone_server
           plone_initial_password: super_secret
+
 
 Multiple Server Example
 -----------------------
