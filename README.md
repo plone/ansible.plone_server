@@ -211,18 +211,18 @@ List additional ZCML slugs that may be required by older packages that don't imp
 The version pins you specify here will be added to the `[versions]` section of your buildout. The default list is empty.
 
 
-### plone_zeo_ip
-
-    plone_zeo_ip: 192.168.1.100
-
-The ip address for the Zope database server. Defaults to `127.0.0.1`. Useful if the zeoserver is not on the same machine as the clients.
-
-
 ## plone_install_zeoserver
 
     plone_install_zeoserver: no
 
 Allows you to turn on and off the creation of a zeoserver. Defaults to `yes`. Useful if the zeoserver is not on the same machine as the clients.
+
+
+### plone_zeo_ip
+
+    plone_zeo_ip: 192.168.1.100
+
+The ip address for the Zope database server. Defaults to `127.0.0.1`. Useful if the zeoserver is not on the same machine as the clients.
 
 
 ### plone_zeo_port
