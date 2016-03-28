@@ -1,5 +1,8 @@
 1.2.7 (unreleased)
 
+- Do our best to detect changes in files copied via plone_buildout_extra_dir. Fixes #70.
+  [smcmahon]
+
 - Add plone_install_zeoserver and plone_zeo_ip. Together, these make it possible to use the role for cluster configurations.
   [smcmahon]
 
