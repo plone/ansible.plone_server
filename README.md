@@ -336,7 +336,7 @@ Use this variable to add or override controlling settings to buildout. If you ne
 
 Copies a local directory or the *contents* of a directory into the buildout directory on the remote server.
 
-Use this variable to drop extra files (or even subdirectories) into the buildout directory. Local path may be absolute or relative to the playbook directory. Put a "/" on the end of the local path if you wish to copy the contents of the directory. Leave of the trailing "/" to copy the directory itself.
+Use this variable to drop extra files (or even subdirectories) into the buildout directory. Local path may be absolute or relative to the playbook directory. Put a "/" on the end of the local path if you wish to copy the contents of the directory. Leave off the trailing "/" to copy the directory itself.
 
 If the copied files change, buildout will be run if plone_autorun_buildout is true (the default). However, the autorun mechanism is not able to detect any other kind of change. For example, if you've used this setting, then remove it, the autorun will not be triggered.
 
