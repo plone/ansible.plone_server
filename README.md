@@ -351,6 +351,35 @@ If the copied files change, buildout will be run if plone_autorun_buildout is tr
 Allows you to add to the list of locations to search for distributions.
 
 
+### plone_create_site
+
+    plone_create_site: no
+
+Should we create a Plone site in the ZODB when it's first initialized? Defaults to 'yes'.
+
+
+### plone_site_id
+
+    plone_site_id: client55
+
+If we're creating a Plone site, what should the id be? Defaults to 'Plone'.
+
+
+### plone_extension_profiles
+
+    plone_extension_profiles:
+        - jarn.jsi18n:default
+
+List additional Plone profiles which should be activated in the new Plone site.  These are only activated if the plone_create_site variable is set. Defaults to empty.
+
+
+### plone_default_language
+
+    plone_default_language: es
+
+If we're creating a Plone site, what should be the default language? Defaults to 'en'.
+
+
 ### Cron jobs
 
 #### plone_pack_at
