@@ -1,6 +1,6 @@
 ---
 
-plone_version: '5.0.2'
+plone_version: '5.0.4'
 
 plone_major_version: "{{ plone_version|truncate(3, killwords=true, end='') }}"
 
