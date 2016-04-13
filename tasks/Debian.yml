@@ -8,8 +8,9 @@
     - build-essential
     - cron
     - curl
-    - python-dev
+    - python-setuptools
     - python-pip
+    - python-dev
     - libz-dev
     - libssl-dev
     - libjpeg-dev
@@ -28,4 +29,13 @@
 
 - name: Set virtualenv path
   set_fact: virtualenv_path=/usr/local/bin/
+
+- name: Ensure supervisor is started
+  when: instance_config.plone_use_supervisor
+  service: name=supervisor state=started enabled=yes
+
+# As of 2016-04-12, Xenial is not getting enabled by service play above
+- name: Set supervisor to start on boot in Xenial
+  when: instance_config.plone_use_supervisor and ansible_distribution_release == 'xenial'
+  shell: systemctl enable supervisor.service
 

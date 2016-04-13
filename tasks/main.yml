@@ -20,11 +20,7 @@
 ###################################
 # Prerequisites
 
-- include: debian.yml
-  when: ansible_os_family == 'Debian'
-
-- include: el.yml
-  when: ansible_os_family == 'RedHat'
+- include: "{{ ansible_os_family }}.yml"
 
 ###################################
 # Users and groups
