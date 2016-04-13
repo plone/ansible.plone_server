@@ -50,6 +50,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  config.vm.define "xenial", autostart: false do |myhost|
+      myhost.vm.box = "ubuntu/xenial64"
+      myhost.vm.provision "shell", inline: "apt-get install -y python"
+      myhost.vm.provision "ansible" do |ansible|
+        ansible.playbook = "test.yml"
+      end
+  end
+
   config.vm.define "centos6", primary: false, autostart: false do |centos6|
     centos6.vm.box = "bento/centos-6.7"
     centos6.vm.synced_folder ".", "/vagrant", disabled: true
