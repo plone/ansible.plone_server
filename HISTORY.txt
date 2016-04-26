@@ -1,3 +1,8 @@
+1.2.9 (unreleased)
+
+- Add support for Xenial Xerus (Ubuntu 16.04).
+  [smcmahon]
+
 1.2.8 2016-04-25
 
 - Include Products.PloneHotfix20160419.
