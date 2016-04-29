@@ -146,6 +146,7 @@
     version={{ instance_config.plone_buildout_git_version | default('HEAD') }}
     depth=1
     accept_hostkey=yes
+    key_file = {{ instance_config.plone_buildout_git_repo_ssh_key_file | default(None) }}
   become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Instance var directory
