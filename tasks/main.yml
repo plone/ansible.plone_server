@@ -274,12 +274,12 @@
   register: supervisor_task_conf
 
 - name: Ensure supervisord is running
-  when: instance_config.plone_use_supervisor and ansible_pkg_mgr == 'Debian'
-  service: name=supervisor state=running
+  when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
+  service: name=supervisor state=started
 
 - name: Ensure supervisord is running
   when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
-  service: name=supervisord state=running
+  service: name=supervisord state=started
 
 - name: Supervisor task list is updated
   when: instance_config.plone_use_supervisor and supervisor_task_conf|changed
