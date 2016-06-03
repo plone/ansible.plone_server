@@ -52,6 +52,11 @@ Sets the name that discriminates this install from others. This name should be g
 
 Defaults to `zeoserver`.
 
+.. warning::
+
+    Choose plone_instance_name carefully - as changing it later will leave directories, supervisor jobs, 
+    cron jobs etc relating to the old name, that can only be tidied up *manually* if you want to 
+    do so (and you probably will).
 
 ### plone_target_path
 
