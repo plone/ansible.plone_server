@@ -93,12 +93,12 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 
 ### plone_buildout_git_repo
 
-    buildout_git_repo: https://github.com/plone/plone.com.ansible.git
-    buildout_git_version: master
+    plone_buildout_git_repo: https://github.com/plone/plone.com.ansible.git
+    plone_buildout_git_version: master
 
-`buildout_git_repo` defaults to none (uses built-in buildout).
+`plone_buildout_git_repo` defaults to none (uses built-in buildout).
 
-`buildout_git_version` is the tag or branch. Defaults to `master`.
+`plone_buildout_git_version` is the tag or branch. Defaults to `master`.
 
 > If you use your own buildout from a repository, you still need to specify your client count so that the playbook can 1) set up the supervisor specifications to start/stop and monitor clients, and 2) set up the load balancer.
 >
