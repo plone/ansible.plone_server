@@ -5,6 +5,9 @@
 
 - Drop shallow clone for Instance directory
   [gomez]
+  
+- Allow custom Python path
+  [MrTango]
 
 1.2.8 2016-04-25
 
