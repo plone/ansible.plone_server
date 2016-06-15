@@ -50,10 +50,10 @@
 
   roles:
 
-    - role: ./
+    - role: ./plone.plone_server
       plone_config: "{{ servers[0] }}"
 
-    - role: ./
+    - role: ./plone.plone_server
       plone_config: "{{ servers[1] }}"
 
   tasks:
