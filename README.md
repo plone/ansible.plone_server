@@ -54,8 +54,8 @@ Defaults to `zeoserver`.
 
 .. warning::
 
-    Choose plone_instance_name carefully - as changing it later will leave directories, supervisor jobs, 
-    cron jobs etc relating to the old name, that can only be tidied up *manually* if you want to 
+    Choose plone_instance_name carefully - as changing it later will leave directories, supervisor jobs,
+    cron jobs etc relating to the old name, that can only be tidied up *manually* if you want to
     do so (and you probably will).
 
 ### plone_target_path
@@ -256,12 +256,14 @@ The port number for your first Zope client. Subsequent client ports will be adde
     plone_environment_vars:
         - "TZ US/Eastern"
         - "zope_i18n_allowed_languages en"
+        - "zope_i18n_compile_mo_files true"
+        - "PYTHONHASHSEED random"
 
 A list of environment variables you wish to set for running Plone instances.
 
 Defaults to:
 
-    - "PYTHON_EGG_CACHE ${buildout:directory}/var/.python-eggs"
+    - "zope_i18n_compile_mo_files true"
 
 
 ### plone_client_extras

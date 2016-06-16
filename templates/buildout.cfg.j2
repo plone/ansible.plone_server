@@ -72,6 +72,7 @@ user=admin:{{ instance_config.plone_initial_password }}
 
 {% if instance_config.plone_environment_vars %}
 environment-vars =
+    PYTHON_EGG_CACHE ${buildout:var-dir}/.python-eggs
 {% for evar in instance_config.plone_environment_vars %}
     {{ evar }}
 {% endfor %}
