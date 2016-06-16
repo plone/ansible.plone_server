@@ -6,6 +6,8 @@ plone_major_version: "{{ plone_version|truncate(3, killwords=true, end='') }}"
 
 plone_python_version: 2.7
 
+plone_python_path: "/usr/bin/python{{ plone_python_version }}"
+
 plone_target_path: /usr/local/plone-{{ plone_major_version }}
 
 plone_var_path: /var/local/plone-{{ plone_major_version }}
