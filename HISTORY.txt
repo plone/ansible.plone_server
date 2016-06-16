@@ -1,5 +1,9 @@
 1.2.9 (unreleased)
 
+- Always include PYTHON_EGG_CACHE environment variable; simplify handling; update docs.
+  Fixes #78.
+  [smcmahon]
+
 - Add support for Xenial Xerus (Ubuntu 16.04).
   [smcmahon]
 

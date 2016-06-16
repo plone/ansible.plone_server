@@ -51,7 +51,6 @@ plone_client_base_port: 8081
 
 plone_environment_vars:
   - "zope_i18n_compile_mo_files true"
-  - "PYTHON_EGG_CACHE {{ plone_var_path }}/{{ plone_instance_name }}/.python-eggs"
 
 plone_extra_parts: {}
 
@@ -134,7 +133,6 @@ work_version: "{{ plone_config.plone_version|default(plone_version) }}"
 work_major_version: "{{ work_version|truncate(length=3, killwords=true, end='') }}"
 work_var_path: "{{ plone_config.plone_var_path|default('/var/local/plone-' + work_major_version) }}"
 work_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
-work_environment_vars: "{{ plone_config.plone_environment_vars|default(['zope_i18n_compile_mo_files true', 'PYTHON_EGG_CACHE ' + work_var_path + '/' + work_instance_name]) }}"
 work_buildout_cache_url: "{{ plone_config.plone_buildout_cache_url|default('http://dist.plone.org/release/' +  work_version + '/buildout-cache.tar.bz2') }}"
 
 instance_config:
@@ -160,7 +158,7 @@ instance_config:
   plone_zeo_ip: "{{ plone_config.plone_zeo_ip|default(plone_zeo_ip) }}"
   plone_zeo_port: "{{ plone_config.plone_zeo_port|default(plone_zeo_port) }}"
   plone_client_base_port: "{{ plone_config.plone_client_base_port|default(plone_client_base_port) }}"
-  plone_environment_vars: "{{ work_environment_vars }}"
+  plone_environment_vars: "{{ plone_config.plone_environment_vars|default(plone_environment_vars) }}"
   plone_extra_parts: "{{ plone_config.plone_extra_parts|default(plone_extra_parts) }}"
   plone_buildout_extra: "{{ plone_config.plone_buildout_extra|default(plone_buildout_extra) }}"
   plone_autorun_buildout: "{{ plone_config.plone_autorun_buildout|default(plone_autorun_buildout) }}"
