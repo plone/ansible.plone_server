@@ -79,6 +79,7 @@ galaxy_info:
       - trusty
       - vivid
       - wily
+      - xenial
   #- name: SLES
   #  versions:
   #  - all
