@@ -261,7 +261,7 @@
     owner=root
     group=root
     mode=644
-  register: supervisor_task_conf
+  register: supervisor_task_conf_debian
 
 - name: Supervisor process control setup
   when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
@@ -271,7 +271,7 @@
     owner=root
     group=root
     mode=644
-  register: supervisor_task_conf
+  register: supervisor_task_conf_redhat
 
 - name: Ensure supervisord is running
   when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
@@ -282,8 +282,13 @@
   service: name=supervisord state=started
 
 - name: Supervisor task list is updated
-  when: instance_config.plone_use_supervisor and supervisor_task_conf|changed
-  command: supervisorctl update
+  when: instance_config.plone_use_supervisor and supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
+  shell: '/bin/kill -HUP `supervisorctl pid`'
+  register: supervisord_bounced
+
+- name: Pause if supervisord was restarted
+  when: supervisord_bounced.changed
+  pause: minutes=1
 
 - name: Supervisor zeoserver task is present
   when: instance_config.plone_use_supervisor and instance_config.plone_install_zeoserver
@@ -301,7 +306,8 @@
 - name: Supervisor zeoclients tasks are restarted
   when: instance_config.plone_use_supervisor and
         instance_config.plone_restart_after_buildout and
-        ran_buildout.changed
+        ran_buildout.changed and
+        not supervisord_bounced.changed
   supervisorctl:
     name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted

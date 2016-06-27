@@ -22,6 +22,7 @@
           - "pas.plugins.authomatic = git https://github.com/collective/pas.plugins.authomatic.git update=true depth=1"
         # plone_buildout_cache_file: /home/steve/ssd/nui5.0/packages/buildout-cache.tar.bz2
         plone_buildout_extra_dir: ./meta/
+        plone_client_max_memory: 600MB
 
       - plone_instance_name: p4
         plone_version: '4.3.8'
@@ -44,6 +45,8 @@
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
           - "Products.PloneHotfix20160419 = 1.0"
+
+        plone_client_max_memory: 600MB
 
         # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
 

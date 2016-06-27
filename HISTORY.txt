@@ -1,5 +1,9 @@
 1.2.9 (unreleased)
 
+- Make sure supervisord reloads config file and restarts processes if the conf file
+  changes. The surest way to do this seems to be to send supervisord an HUP signal.
+  [smcmahon]
+
 - Add Ubuntu Xenial to meta/main.yml
   [svx]
 
@@ -12,7 +16,7 @@
 
 - Drop shallow clone for Instance directory
   [gomez]
-  
+
 - Allow custom Python path
   [MrTango]
 
