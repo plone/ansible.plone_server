@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "precise", autostart: false do |precise|
-    precise.vm.box = "ubuntu/precise64"
+    precise.vm.box = "bento/ubuntu-12.04"
     precise.vm.synced_folder ".", "/vagrant", disabled: true
     precise.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
