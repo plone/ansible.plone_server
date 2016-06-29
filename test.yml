@@ -10,7 +10,7 @@
     plone_initial_password: admin
 
     servers:
-      - plone_version: '5.0.2'
+      - plone_version: '5.0.4'
 
         plone_zeo_port: 5100
         plone_client_base_port: 5080
@@ -25,7 +25,7 @@
         plone_client_max_memory: 600MB
 
       - plone_instance_name: p4
-        plone_version: '4.3.8'
+        plone_version: '4.3.9'
 
         plone_initial_password: admin
         plone_zeo_port: 4100
@@ -46,7 +46,7 @@
           - "cssselect = 0.9.1"
           - "Products.PloneHotfix20160419 = 1.0"
 
-        plone_client_max_memory: 600MB
+        plone_client_max_memory: 500MB
 
         # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
 

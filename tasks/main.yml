@@ -281,14 +281,20 @@
   when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
   service: name=supervisord state=started
 
-- name: Supervisor task list is updated
-  when: instance_config.plone_use_supervisor and supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
-  shell: '/bin/kill -HUP `supervisorctl pid`'
-  register: supervisord_bounced
+# memmon processes have a special problem: the memory setting may have changed in the config file
+# without the addition/deletion of a part. 'reread' and 'restart' don't update the memory configuration.
+# Stopping, removing the part and updating does the trick.
+- name: Supervisor task list is updated and we have a memmon
+  when: instance_config.plone_use_supervisor and
+        instance_config.plone_client_max_memory != "0" and
+        supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
+  shell: 'supervisorctl stop {{ supervisor_instance_discriminator }}memmon; supervisorctl remove {{ supervisor_instance_discriminator }}memmon'
+  register: stop_remove
 
-- name: Pause if supervisord was restarted
-  when: supervisord_bounced.changed
-  pause: minutes=1
+- name: Supervisor task list is updated
+  when: instance_config.plone_use_supervisor and
+        supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
+  shell: 'supervisorctl update'
 
 - name: Supervisor zeoserver task is present
   when: instance_config.plone_use_supervisor and instance_config.plone_install_zeoserver
@@ -306,8 +312,7 @@
 - name: Supervisor zeoclients tasks are restarted
   when: instance_config.plone_use_supervisor and
         instance_config.plone_restart_after_buildout and
-        ran_buildout.changed and
-        not supervisord_bounced.changed
+        ran_buildout.changed
   supervisorctl:
     name={{ supervisor_instance_discriminator }}zeoclient{{ item }}
     state=restarted
