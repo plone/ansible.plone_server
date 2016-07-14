@@ -17,10 +17,6 @@ install:
   - echo "localhost" > inventory
 
 script:
-  # We have a different canonical role name from our github repo
-  # in order to accommodate galaxy's naming conventions.
-  - "ln -s ../ansible.plone_server ../plone.plone_server"
-
   # Check the role/playbook's syntax.
   - "ansible-playbook -i inventory $SITE --syntax-check"
 
