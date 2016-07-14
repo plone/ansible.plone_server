@@ -53,10 +53,10 @@
 
   roles:
 
-    - role: ./plone.plone_server
+    - role: plone.plone_server
       plone_config: "{{ servers[0] }}"
 
-    - role: ./plone.plone_server
+    - role: plone.plone_server
       plone_config: "{{ servers[1] }}"
 
   tasks:
