@@ -1,9 +1,16 @@
-Unreleased
+1.2.10 (unreleased)
+
+- Use the same alias for Python in both 4.x and 5.x, python2.7.
+  This only matters for tests.
+  [smcmahon]
+
+- The way we use become_user is problematic for Ansible 2.1 unless pipelining is in use.
+  Set pipelining on in defaults.
+  [smcmahon]
 
 - Symbolic link to self for testing fouled up vagrant on platforms without client extensions.
   Change strategy to use ansible.cfg specification for roles.
   [smcmahon]
-
 
 1.2.9 2016-07-08
 
