@@ -1,4 +1,4 @@
-1.2.10 (unreleased)
+1.2.10 2016-07-18
 
 - Use the same alias for Python in both 4.x and 5.x, python2.7.
   This only matters for tests.
