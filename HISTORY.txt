@@ -1,3 +1,8 @@
+1.2.11 unreleased
+
+- Fix Bootstrap for 4.3 play, which was using the old path to Python.
+  [djowett]
+
 1.2.10 2016-07-18
 
 - Use the same alias for Python in both 4.x and 5.x, python2.7.
