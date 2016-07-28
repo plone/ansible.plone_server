@@ -19,6 +19,10 @@ plone_backup_path: no
 
 plone_instance_name: zeoserver
 
+plone_buildout_version:
+
+plone_setuptools_version: 8.0.4
+
 plone_buildout_git_repo:
 
 plone_buildout_git_version: master
@@ -145,6 +149,8 @@ instance_config:
   plone_var_path: "{{ work_var_path }}"
   plone_backup_path: "{{ plone_config.plone_backup_path|default(plone_backup_path) }}"
   plone_instance_name: "{{ work_instance_name }}"
+  plone_buildout_version: "{{ plone_config.plone_buildout_version|default(plone_buildout_version) }}"
+  plone_setuptools_version: "{{ plone_config.plone_setuptools_version|default(plone_setuptools_version) }}"
   plone_buildout_git_repo: "{{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}"
   plone_buildout_git_version: "{{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) }}"
   plone_initial_password: "{{ plone_config.plone_initial_password|default(plone_initial_password) }}"
