@@ -103,7 +103,7 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 
 ### plone_buildout_version
 
-    plone_buildout_version: 1.7.1
+    plone_buildout_version: '1.7.1'
 
 Which version of zc.buildout do you want to use?  You do not usually need to set this, unless you are using older versions of Python or Plone.
 
@@ -111,7 +111,7 @@ Defaults to ''.
 
 ### plone_setuptools_version
 
-    plone_setuptools_version: 0.6c11
+    plone_setuptools_version: '0.6c11'
 
 Which version of Python setuptools do you want to use?  Only rarely needed.
 

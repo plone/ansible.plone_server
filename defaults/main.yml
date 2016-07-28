@@ -21,7 +21,7 @@ plone_instance_name: zeoserver
 
 plone_buildout_version:
 
-plone_setuptools_version: 8.0.4
+plone_setuptools_version: '8.0.4'
 
 plone_buildout_git_repo:
 
