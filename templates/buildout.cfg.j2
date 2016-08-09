@@ -203,11 +203,9 @@ command =
     # Dummy references to force this to execute after referenced parts
     echo ${backup:location} > /dev/null
     chmod 600 .installed.cfg
-    # Make sure anything we've created in var is r/w by our group
-    find ${buildout:var-dir} -type d -exec chmod 770 {} \; 2> /dev/null
-    find ${buildout:var-dir} -type f -exec chmod 660 {} \; 2> /dev/null
-    find ${buildout:backups-dir} -type d -exec chmod 770 {} \; 2> /dev/null
-    find ${buildout:backups-dir} -type f -exec chmod 660 {} \; 2> /dev/null
+    # Make sure anything we've created in var is r/w by our group, but no-one else
+    chmod -R ug+rwX,o-rwx ${buildout:var-dir}
+    chmod -R ug+rwX,o-rwx ${buildout:backups-dir}
     chmod 754 ${buildout:directory}/bin/*
 update-command = ${:command}
 
