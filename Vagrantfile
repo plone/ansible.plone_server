@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "trusty", primary: true, autostart: true do |trusty|
+  config.vm.define "trusty", primary: true, autostart: false do |trusty|
     trusty.vm.box = "ubuntu/trusty64"
     trusty.vm.synced_folder ".", "/vagrant", disabled: true
     trusty.vm.provision "ansible" do |ansible|
@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "xenial", autostart: false do |myhost|
+  config.vm.define "xenial", autostart: true do |myhost|
       myhost.vm.box = "ubuntu/xenial64"
       myhost.vm.provision "shell", inline: "apt-get install -y python"
       myhost.vm.provision "ansible" do |ansible|

@@ -1,3 +1,9 @@
+1.2.12 unreleased
+
+- Default Vagrant box: trusty -> xenial.
+
+- Disable Vagrant's replacement of default insecure key, as it makes use with Windows very difficult.
+
 1.2.11 2016-07-18
 
 - Fix Bootstrap for 4.3 play, which was using the old path to Python.
