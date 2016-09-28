@@ -48,7 +48,7 @@ eggs =
     Plone
     Pillow
     Products.PloneHotfix20160419
-{% if instance_config.plone_version < '4.3.8' %}
+{% if instance_config.plone_version | version_compare('4.3.8', '<') %}
     plone4.csrffixes
 {% endif %}
 {% if instance_config.plone_additional_eggs %}
@@ -239,7 +239,7 @@ plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
 {% if instance_config.plone_version < '5.0' %}
 setuptools = 7.0
-{% if instance_config.plone_version < '4.3.8' %}
+{% if instance_config.plone_version | version_compare('4.3.8', '<') %}
 plone4.csrffixes = 1.0.8
 plone.protect = 3.0.17
 plone.keyring = 3.0.1
