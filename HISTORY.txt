@@ -1,5 +1,7 @@
 1.2.12 unreleased
 
+- Use jinja2's version_compare when comparing complex version numbers. Fixes #95.
+
 - Default Vagrant box: trusty -> xenial.
 
 - Disable Vagrant's replacement of default insecure key, as it makes use with Windows very difficult.
