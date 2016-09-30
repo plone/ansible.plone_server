@@ -1,13 +1,20 @@
 1.2.12 unreleased
 
+- Switch to use Posix xX distinction in chmod rather than find/exec strategy.
+  [djowett]
+
 - Update default version to 5.0.6. Add 20160830 hotfix.
+  [smcmahon]
 
 - Use jinja2's version_compare when comparing complex version numbers. Fixes #95.
+  [smcmahon]
 
 - Default Vagrant box: trusty -> xenial.
+  [smcmahon]
 
 - Add a provisioning mechanism that creates vbox_host.cfg during vagrant provisioning.
   This makes it easier to use Ansible directly against the newer generation of Vagrant boxes that don't have insecure keys.
+  [smcmahon]
 
 1.2.11 2016-07-18
 
