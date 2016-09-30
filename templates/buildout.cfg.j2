@@ -47,7 +47,22 @@ buildout-user = {{ instance_config.plone_buildout_user }}
 eggs =
     Plone
     Pillow
+{% if instance_config.plone_version >= '5.0' %}
+{% if instance_config.plone_version | version_compare('5.0.6', '<=') %}
+    Products.PloneHotfix20160830
+{% endif %}
+{% if instance_config.plone_version | version_compare('5.0.5', '<=') %}
     Products.PloneHotfix20160419
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version < '5.0' %}
+{% if instance_config.plone_version | version_compare('4.3.11', '<=') %}
+    Products.PloneHotfix20160830
+{% endif %}
+{% if instance_config.plone_version | version_compare('4.3.10', '<=') %}
+    Products.PloneHotfix20160419
+{% endif %}
+{% endif %}
 {% if instance_config.plone_version | version_compare('4.3.8', '<') %}
     plone4.csrffixes
 {% endif %}
@@ -237,6 +252,8 @@ buildout.sanitycheck = 1.0.2
 collective.recipe.backup = 2.20
 plone.recipe.command = 1.1
 plone.recipe.precompiler = 0.6
+Products.PloneHotfix20160830 = 1.3
+Products.PloneHotfix20160419 = 1.0
 {% if instance_config.plone_version < '5.0' %}
 setuptools = 7.0
 {% if instance_config.plone_version | version_compare('4.3.8', '<') %}
