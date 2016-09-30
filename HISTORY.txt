@@ -1,4 +1,4 @@
-1.2.12 unreleased
+1.2.12 2016-09-30
 
 - Switch to use Posix xX distinction in chmod rather than find/exec strategy.
   [djowett]
