@@ -15,6 +15,7 @@
     plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
     supervisor_instance_discriminator: "{{ '%s_' % instance_config.plone_instance_name }}"
     plone_python_version: "{{ instance_config.plone_python_version }}"
+    buildout_version_arg_str: "--version={{ instance_config.plone_buildout_version }}"
 
 
 ###################################
@@ -218,7 +219,7 @@
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
-  command: ../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py --setuptools-version=8.0.4
+  command: ../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py {{ buildout_version_arg_str }} --setuptools-version={{ instance_config.plone_setuptools_version }}
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
   when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False

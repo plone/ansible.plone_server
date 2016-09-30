@@ -101,6 +101,23 @@ Defaults to your instance's var directory.
 Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instance_name }}.
 
 
+### plone_buildout_version
+
+    plone_buildout_version: '1.7.1'
+
+Which version of zc.buildout do you want to use?  You do not usually need to set this, unless you are using older versions of Python or Plone.
+
+Defaults to ''.
+
+### plone_setuptools_version
+
+    plone_setuptools_version: '0.6c11'
+
+Which version of Python setuptools do you want to use?  Only rarely needed.
+
+Defaults to `8.0.4`, which should be fine for most situations.
+
+
 ### plone_buildout_git_repo
 
     plone_buildout_git_repo: https://github.com/plone/plone.com.ansible.git
