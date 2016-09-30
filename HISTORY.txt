@@ -1,10 +1,13 @@
 1.2.12 unreleased
 
+- Update default version to 5.0.6. Add 20160830 hotfix.
+
 - Use jinja2's version_compare when comparing complex version numbers. Fixes #95.
 
 - Default Vagrant box: trusty -> xenial.
 
-- Disable Vagrant's replacement of default insecure key, as it makes use with Windows very difficult.
+- Add a provisioning mechanism that creates vbox_host.cfg during vagrant provisioning.
+  This makes it easier to use Ansible directly against the newer generation of Vagrant boxes that don't have insecure keys.
 
 1.2.11 2016-07-18
 
