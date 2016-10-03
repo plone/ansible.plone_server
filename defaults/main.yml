@@ -10,9 +10,9 @@ plone_python_version: 2.7
 
 plone_python_path: "/usr/bin/python{{ plone_python_version }}"
 
-plone_target_path: /usr/local/plone-{{ plone_major_version }}
+plone_target_path: "/usr/local/plone-{{ plone_major_version }}"
 
-plone_var_path: /var/local/plone-{{ plone_major_version }}
+plone_var_path: "/var/local/plone-{{ plone_major_version }}"
 
 # backup patch defaults to var path unless you set this variable
 plone_backup_path: no
@@ -66,7 +66,7 @@ plone_always_run_buildout: no
 
 plone_restart_after_buildout: yes
 
-plone_buildout_cache_url: http://dist.plone.org/release/{{ plone_version }}/buildout-cache.tar.bz2
+plone_buildout_cache_url: https://dist.plone.org/release/{{ plone_version }}/buildout-cache.tar.bz2
 
 plone_buildout_cache_file:
 
@@ -130,21 +130,25 @@ plone_config: "{{ playbook_plones[0] }}"
 # but Ansible/Jinja2 doesn't quite give us enough tools to automate it.
 # This would be a good candidate for a custom module.
 
-# working variables; these make creating instance_config a bit easier.
+
+# we'll use the version, which may be direct or from plone_config, in multiple spots below.
 work_version: "{{ plone_config.plone_version|default(plone_version) }}"
 work_major_version: "{{ work_version|truncate(length=3, killwords=true, end='') }}"
-work_var_path: "{{ plone_config.plone_var_path|default('/var/local/plone-' + work_major_version) }}"
-work_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
-work_buildout_cache_url: "{{ plone_config.plone_buildout_cache_url|default('http://dist.plone.org/release/' +  work_version + '/buildout-cache.tar.bz2') }}"
 
 instance_config:
   plone_version: "{{ work_version }}"
   plone_major_version: "{{ work_major_version }}"
+
+  # These are a bit tricky because the paths may be given directly, via plone_config, or computed from the version --
+  # which may itself be specified directly or via plone_config.
+  # Fortunately, j2 templates let us do some if/then logic.
+  plone_target_path: "{% if plone_config.plone_target_path is defined %}{{ plone_config.plone_target_path }}{% elif plone_config.plone_version is defined %}/usr/local/plone-{{ work_major_version }}{% else %}{{ plone_target_path }}{% endif %}"
+  plone_var_path: "{% if plone_config.plone_var_path is defined %}{{ plone_config.plone_var_path }}{% elif plone_config.plone_version is defined %}/var/local/plone-{{ work_major_version }}{% else %}{{ plone_var_path }}{% endif %}"
+  plone_buildout_cache_url: "{% if plone_config.plone_buildout_cache_url is defined %}{{ plone_config.plone_buildout_cache_url }}{% elif plone_config.plone_version is defined %}https://dist.plone.org/release/{{ work_version }}/buildout-cache.tar.bz2{% else %}{{ plone_buildout_cache_url }}{% endif %}"
+
   plone_python_version: "{{ plone_config.plone_python_version|default(plone_python_version) }}"
-  plone_target_path: "{{ plone_config.plone_target_path|default('/usr/local/plone-' + work_major_version) }}"
-  plone_var_path: "{{ work_var_path }}"
   plone_backup_path: "{{ plone_config.plone_backup_path|default(plone_backup_path) }}"
-  plone_instance_name: "{{ work_instance_name }}"
+  plone_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
   plone_buildout_git_repo: "{{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}"
   plone_buildout_git_version: "{{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) }}"
   plone_initial_password: "{{ plone_config.plone_initial_password|default(plone_initial_password) }}"
@@ -164,7 +168,6 @@ instance_config:
   plone_extra_parts: "{{ plone_config.plone_extra_parts|default(plone_extra_parts) }}"
   plone_buildout_extra: "{{ plone_config.plone_buildout_extra|default(plone_buildout_extra) }}"
   plone_autorun_buildout: "{{ plone_config.plone_autorun_buildout|default(plone_autorun_buildout) }}"
-  plone_buildout_cache_url: "{{ work_buildout_cache_url }}"
   plone_buildout_cache_file: "{{ plone_config.plone_buildout_cache_file|default(plone_buildout_cache_file) }}"
   plone_sources: "{{ plone_config.plone_sources|default(plone_sources) }}"
   plone_group: "{{ plone_config.plone_group|default(plone_group) }}"

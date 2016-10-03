@@ -1,3 +1,11 @@
+1.2.13 unreleased
+
+- Fix "Problem with host_vars overriding" from playbook repo https://github.com/plone/ansible-playbook/issues/51.
+  [smcmahon]
+
+- Switch to https urls for dist.plone.org.
+  [smcmahon]
+
 1.2.12 2016-09-30
 
 - Switch to use Posix xX distinction in chmod rather than find/exec strategy.
