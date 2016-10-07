@@ -1,4 +1,4 @@
-1.2.13 unreleased
+1.2.13 2016-10-07
 
 - Turn of ssh strict host checking by Ansible in generated Vagrant vbox_host.cfg.
   [smcmahon]
