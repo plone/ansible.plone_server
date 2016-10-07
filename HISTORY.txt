@@ -1,5 +1,8 @@
 1.2.13 unreleased
 
+- Turn of ssh strict host checking by Ansible in generated Vagrant vbox_host.cfg.
+  [smcmahon]
+
 - Fix "Problem with host_vars overriding" from playbook repo https://github.com/plone/ansible-playbook/issues/51.
   [smcmahon]
 

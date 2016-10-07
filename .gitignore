@@ -6,3 +6,4 @@ lib/
 local/
 *.retry
 *.log
+vbox_host.cfg
