@@ -1,3 +1,8 @@
+1.2.14 (unreleased)
+
+- Remove uses of jinja2 "truncate", which has stopped working as advertised.
+  [smcmahon]
+
 1.2.13 2016-10-07
 
 - Turn of ssh strict host checking by Ansible in generated Vagrant vbox_host.cfg.

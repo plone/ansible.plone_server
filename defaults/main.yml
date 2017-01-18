@@ -4,7 +4,7 @@ ansible_ssh_pipelining: true
 
 plone_version: '5.0.6'
 
-plone_major_version: "{{ plone_version|truncate(3, killwords=true, end='') }}"
+plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
 plone_python_version: 2.7
 
@@ -133,7 +133,7 @@ plone_config: "{{ playbook_plones[0] }}"
 
 # we'll use the version, which may be direct or from plone_config, in multiple spots below.
 work_version: "{{ plone_config.plone_version|default(plone_version) }}"
-work_major_version: "{{ work_version|truncate(length=3, killwords=true, end='') }}"
+work_major_version: "{{ '.'.join(work_version.split('.')[0:2]) }}"
 
 instance_config:
   plone_version: "{{ work_version }}"
