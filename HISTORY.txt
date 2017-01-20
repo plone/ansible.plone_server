@@ -1,4 +1,4 @@
-1.2.14 (unreleased)
+1.2.14 2017-01-20
 
 - Remove uses of jinja2 "truncate", which has stopped working as advertised.
   [smcmahon]
