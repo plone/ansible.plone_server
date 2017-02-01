@@ -1,3 +1,11 @@
+1.2.15 (unreleased)
+
+- Redirect stdout and stderr for buildout into a log file.
+  This works around an Ansible bug that caused errors with misleading error messages if buildout output was long.
+  Workaround: if you don't have this fix, just run the playbook again.
+  The error resolves itself as soon as buildout output is smaller.
+  [smcmahon]
+
 1.2.14 2017-01-20
 
 - Remove uses of jinja2 "truncate", which has stopped working as advertised.
