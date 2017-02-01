@@ -224,12 +224,13 @@
   when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False
   become_user: "{{ instance_config.plone_buildout_user }}"
 
-- name: Run buildout
+- name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
         (instance_status.changed or extra_dir_copy_result.changed or not buildout_status.stat.exists)
-  command: bin/buildout
-    chdir={{ plone_instance_home }}
+  shell: "bin/buildout > buildout.log 2>&1"
+  args:
+    chdir: "{{ plone_instance_home }}"
   become_user: "{{ instance_config.plone_buildout_user }}"
   register: ran_buildout
 
@@ -242,7 +243,7 @@
 
 - name: Look for existing database
   when: instance_config.plone_create_site
-  stat: path={{ plone_instance_var_path }}/filestorage/Data.fs
+  stat: path="{{ plone_instance_var_path }}/filestorage/Data.fs"
   register: db_status
 
 
