@@ -56,8 +56,17 @@
     - supervisor
     - git
 
-- name: "CentOS 7: Ensure wv installed"
-  yum: pkg=http://pkgs.repoforge.org/wv/wv-1.2.4-1.el6.rf.x86_64.rpm state=present
+- name: Update setuptools/pip/python-virtualenv
+  pip:
+    name={{ item }}
+    state=latest
+  with_items:
+    - setuptools
+    - pip
+    - virtualenv
+
+- name: "CentOS 7: install wv from EPEL6"
+  yum: pkg=http://dl.fedoraproject.org/pub/epel/6/x86_64/wv-1.2.7-2.el6.x86_64.rpm state=present
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
 
 - name: Supervisor config dir
