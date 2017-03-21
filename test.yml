@@ -10,7 +10,7 @@
     plone_initial_password: admin
 
     servers:
-      - plone_version: '5.0.5'
+      - plone_version: '5.0.7'
 
         plone_zeo_port: 5100
         plone_client_base_port: 5080
@@ -25,7 +25,7 @@
         plone_client_max_memory: 600MB
 
       - plone_instance_name: p4
-        plone_version: '4.3.10'
+        plone_version: '4.3.12'
 
         plone_initial_password: admin
         plone_zeo_port: 4100
@@ -85,3 +85,27 @@
 
     - name: Check to see if we copied the extra buildout file
       command: "ls /usr/local/plone-5.0/zeoserver/main.yml"
+
+    - name: Attempt a backup for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/backup"
+      become_user: plone_daemon
+
+    - name: Attempt a backup for the P4 install
+      command: "/usr/local/plone-4.3/p4/bin/backup"
+      become_user: plone_daemon
+
+    - name: Attempt a restore for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/restore -n"
+      become_user: plone_daemon
+
+    - name: Attempt a restore for the P4 install
+      command: "/usr/local/plone-4.3/p4/bin/restore -n"
+      become_user: plone_daemon
+
+    - name: Attempt a pack for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/zeopack"
+      become_user: plone_daemon
+
+    - name: Attempt a pack for the P4 install
+      command: "/usr/local/plone-4.3/p4/bin/zeopack"
+      become_user: plone_daemon
