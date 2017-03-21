@@ -1,5 +1,8 @@
 1.2.16 (unreleased)
 
+- Make default Plone 5.0.7.
+  [smcmahon]
+
 - Set backup directory correctly when building multiple Plones. Fixes #103.
   [smcmahon]
 
