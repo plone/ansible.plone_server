@@ -12,7 +12,7 @@
   set_fact:
     plone_instance_home: "{{ instance_config.plone_target_path }}/{{ instance_config.plone_instance_name }}"
     plone_instance_var_path: "{{ instance_config.plone_var_path }}/{{ instance_config.plone_instance_name }}"
-    plone_instance_backup_path: "{{ plone_backup_path|default(plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
+    plone_instance_backup_path: "{{ instance_config.plone_backup_path|default(instance_config.plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
     supervisor_instance_discriminator: "{{ '%s_' % instance_config.plone_instance_name }}"
     plone_python_version: "{{ instance_config.plone_python_version }}"
 
