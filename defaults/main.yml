@@ -72,6 +72,8 @@ plone_buildout_cache_file:
 
 plone_sources:
 
+plone_timezone: "{{ timezone | default('UTC') }}"
+
 plone_group: plone_group
 
 plone_buildout_user: plone_buildout
@@ -170,6 +172,7 @@ instance_config:
   plone_autorun_buildout: "{{ plone_config.plone_autorun_buildout|default(plone_autorun_buildout) }}"
   plone_buildout_cache_file: "{{ plone_config.plone_buildout_cache_file|default(plone_buildout_cache_file) }}"
   plone_sources: "{{ plone_config.plone_sources|default(plone_sources) }}"
+  plone_timezone: "{{ plone_config.plone_timezone|default(plone_timezone) }}"
   plone_group: "{{ plone_config.plone_group|default(plone_group) }}"
   plone_buildout_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
   plone_daemon_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
