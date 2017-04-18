@@ -62,10 +62,10 @@
     state=directory
     mode=0755
 
-- name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ instance_config.plone_target_path }}/python{{ plone_python_version }} \
-    creates={{ instance_config.plone_target_path }}/python{{ plone_python_version }}"
+- name: Python virtualenv for Plone < 5.0
+  command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ plone_instance_home }}"
   when: instance_config.plone_version < '5.0'
+  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: Check for existence of buildout cache
   stat: path="{{ instance_config.plone_target_path }}/buildout-cache"
@@ -182,7 +182,7 @@
     backup=yes
   register: instance_status
 
-- name: Python virtualenv
+- name: Python virtualenv for Plone > 5.0
   command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ plone_instance_home }}"
   args:
     creates: "{{ plone_instance_home }}/bin/python"
@@ -218,7 +218,7 @@
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
-  command: ../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py --setuptools-version=8.0.4
+  command: ./bin/python{{ plone_python_version }} bootstrap.py --setuptools-version=8.0.4
     creates={{ plone_instance_home }}/bin/buildout
     chdir={{ plone_instance_home }}
   when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False

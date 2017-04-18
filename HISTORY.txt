@@ -12,6 +12,9 @@
 - Update source for wv for CentOS7.
   [smcmahon]
 
+- Fix venv path for Plone 4 buildouts
+  [gomez] 
+
 1.2.15 2017-02-01
 
 - Redirect stdout and stderr for buildout into a log file.
