@@ -1,6 +1,9 @@
 1.2.16 (unreleased)
 
 - Add a "plone_timezone" variable that may be used to set a timezone (via TZ environment variable) that may be different from the server or other plones.
+
+- Timezone-setting mechanism wasn't working in Xenial.
+  Fixed with a mechanism that should work on any system with timedatectl.
   [smcmahon]
 
 - Make default Plone 5.0.7.
