@@ -67,6 +67,10 @@
     creates={{ instance_config.plone_target_path }}/python{{ plone_python_version }}"
   when: instance_config.plone_version < '5.0'
 
+- name: Fix setuptools version
+  command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install -U setuptools==7.0"
+  when: instance_config.plone_version < '5.0'
+
 - name: Check for existence of buildout cache
   stat: path="{{ instance_config.plone_target_path }}/buildout-cache"
   register: cache_stat
@@ -189,6 +193,11 @@
   when: instance_config.plone_version >= '5.0'
   become_user: "{{ instance_config.plone_buildout_user }}"
 
+- name: Fix setuptools version
+  command: "{{ plone_instance_home }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
+  when: instance_config.plone_version >= '5.0'
+  become_user: "{{ instance_config.plone_buildout_user }}"
+
 - name: Check to see if buildout has already run
   stat: path={{ plone_instance_home }}/bin/client_reserved
   register: buildout_status
@@ -210,7 +219,7 @@
 
 # Plone 5.0+; avoid bootstrap.py
 - name: pip install zc.buildout
-  command: "{{ plone_instance_home }}/bin/pip install zc.buildout"
+  command: "{{ plone_instance_home }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
   args:
     creates: "{{ plone_instance_home }}/bin/buildout"
   when: instance_config.plone_version >= '5.0' and buildout_status.stat.exists == False
@@ -218,9 +227,10 @@
 
 # Plone < 5.0; use bootstrap
 - name: Bootstrap buildout
-  command: ../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py --setuptools-version=8.0.4
-    creates={{ plone_instance_home }}/bin/buildout
-    chdir={{ plone_instance_home }}
+  command: "../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py"
+  args:
+    creates: "{{ plone_instance_home }}/bin/buildout"
+    chdir: "{{ plone_instance_home }}"
   when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False
   become_user: "{{ instance_config.plone_buildout_user }}"
 

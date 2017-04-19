@@ -1,6 +1,13 @@
 1.2.16 (unreleased)
 
+- setuptools 35.0.0 changes the way manifests are handled, causing .xml files to be lost in installation of several packages.
+  Introduced a mechanism to set the setuptools and zc.buildout versions. Set working defaults.
+  Version variables work globally or in particular instances.
+  New variables and their defaults are plone_setuptools_version: '26.1.1' and plone_zc_buildout_version: '2.5.3'.
+  [smcmahon]
+
 - Add a "plone_timezone" variable that may be used to set a timezone (via TZ environment variable) that may be different from the server or other plones.
+  [smcmahon]
 
 - Timezone-setting mechanism wasn't working in Xenial.
   Fixed with a mechanism that should work on any system with timedatectl.
