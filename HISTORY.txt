@@ -1,4 +1,4 @@
-1.2.16 (unreleased)
+1.2.16 2017-04-19
 
 - setuptools 35.0.0 changes the way manifests are handled, causing .xml files to be lost in installation of several packages.
   Introduced a mechanism to set the setuptools and zc.buildout versions. Set working defaults.
