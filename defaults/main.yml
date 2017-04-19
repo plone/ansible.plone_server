@@ -6,7 +6,11 @@ plone_version: '5.0.7'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
-plone_python_version: 2.7
+plone_python_version: '2.7'
+
+plone_setuptools_version: '26.1.1'
+
+plone_zc_buildout_version: '2.5.3'
 
 plone_python_path: "/usr/bin/python{{ plone_python_version }}"
 
@@ -149,6 +153,8 @@ instance_config:
   plone_buildout_cache_url: "{% if plone_config.plone_buildout_cache_url is defined %}{{ plone_config.plone_buildout_cache_url }}{% elif plone_config.plone_version is defined %}https://dist.plone.org/release/{{ work_version }}/buildout-cache.tar.bz2{% else %}{{ plone_buildout_cache_url }}{% endif %}"
 
   plone_python_version: "{{ plone_config.plone_python_version|default(plone_python_version) }}"
+  plone_setuptools_version: "{{ plone_config.plone_setuptools_version|default(plone_setuptools_version) }}"
+  plone_zc_buildout_version: "{{ plone_config.plone_zc_buildout_version|default(plone_zc_buildout_version) }}"
   plone_backup_path: "{{ plone_config.plone_backup_path|default(plone_backup_path) }}"
   plone_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
   plone_buildout_git_repo: "{{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}"
