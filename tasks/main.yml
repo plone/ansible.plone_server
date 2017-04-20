@@ -217,6 +217,18 @@
   register: extra_dir_copy_result
   when: instance_config.plone_buildout_extra_dir
 
+# Plone 5.0+; avoid bootstrap.py CentOS7
+- name: pip install requirements missing on CentOS7
+  become_user: "{{ instance_config.plone_buildout_user }}"
+  command: "{{ plone_instance_home }}/bin/pip install {{ item }}"
+  args:
+    creates: "{{ plone_instance_home }}/bin/buildout"
+  when: instance_config.plone_version >= '5.0' and ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+  with_items: 
+    - appdirs
+    - packaging
+    - six
+
 # Plone 5.0+; avoid bootstrap.py
 - name: pip install zc.buildout
   command: "{{ plone_instance_home }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
