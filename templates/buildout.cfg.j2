@@ -211,7 +211,10 @@ blob-storage = ${buildout:var-dir}/blobstorage
 keep = {{ instance_config.plone_keep_backups }}
 keep_blob_days = {{ instance_config.plone_keep_blob_days }}
 rsync_options = {{ instance_config.plone_rsync_backup_options }}
-
+{% if instance_config.plone_backup_post_command|length() > 0 %}
+post_command =
+    {{ instance_config.plone_backup_post_command|indent(width=4, indentfirst=False) }}
+{% endif %}
 
 [setpermissions]
 recipe = plone.recipe.command
