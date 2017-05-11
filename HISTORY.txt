@@ -18,6 +18,9 @@
   Fixed with a mechanism that should work on any system with timedatectl.
   [smcmahon]
 
+- Add plone_hot_monitor variable to control use of superlance.
+  [smcmahon]
+
 - Make default Plone 5.0.7.
   [smcmahon]
 
