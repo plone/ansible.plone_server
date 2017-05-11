@@ -181,6 +181,9 @@ Defaults to `0` (turned off)
 
 > This setting is used in configuration of the `memmon` monitor in supervisor: [superlance](http://superlance.readthedocs.org/en/latest) plugin.
 
+If you want to set plone_client_max_memory to a non-zero value, but do not wish to use superlance, set `plone_hot_monitor` to something other than `superlance`.
+This option was added to allow use of an alternative memory check mechanism in the Plone Playbook.
+
 
 ### plone_additional_eggs
 

@@ -113,6 +113,7 @@ plone_startsecs: 1
 plone_stopwaitsecs: 10
 plone_autostart: "true"
 plone_task_env_vars: {}
+plone_hot_monitor: superlance
 
 webserver_virtualhosts:
   - hostname: "{{ inventory_hostname }}"
@@ -191,6 +192,7 @@ instance_config:
   plone_stopwaitsecs: "{{ plone_config.plone_stopwaitsecs|default(plone_stopwaitsecs) }}"
   plone_autostart: "{{ plone_config.plone_autostart|default(plone_autostart) }}"
   plone_task_env_vars: "{{ plone_config.plone_task_env_vars|default(plone_task_env_vars) }}"
+  plone_hot_monitor: "{{ plone_config.plone_hot_monitor|default(plone_hot_monitor) }}"
   webserver_virtualhosts: "{{ plone_config.webserver_virtualhosts|default(webserver_virtualhosts) }}"
   plone_buildout_extra_dir: "{{ plone_config.plone_buildout_extra_dir|default(plone_buildout_extra_dir) }}"
   plone_extra_find_links: "{{ plone_config.plone_extra_find_links|default(plone_extra_find_links) }}"

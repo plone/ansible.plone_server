@@ -48,6 +48,8 @@
 
         plone_client_max_memory: 500MB
 
+        plone_hot_monitor: no
+
         # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
 
 
@@ -109,3 +111,9 @@
     - name: Attempt a pack for the P4 install
       command: "/usr/local/plone-4.3/p4/bin/zeopack"
       become_user: plone_daemon
+
+    - name: Check that we're using superlance in the p5 install
+      shell: "grep eventlistener /etc/supervisor/conf.d/zeoserver_zeo.conf"
+
+    - name: Check that we're not using superlance in the p4 install
+      shell: "[ ! `grep eventlistener /etc/supervisor/conf.d/p4_zeo.conf` ]"
