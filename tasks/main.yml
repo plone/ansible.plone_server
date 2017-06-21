@@ -62,15 +62,6 @@
     state=directory
     mode=0755
 
-- name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ instance_config.plone_target_path }}/python{{ plone_python_version }} \
-    creates={{ instance_config.plone_target_path }}/python{{ plone_python_version }}"
-  when: instance_config.plone_version < '5.0'
-
-- name: Fix setuptools version
-  command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install -U setuptools==7.0"
-  when: instance_config.plone_version < '5.0'
-
 - name: Check for existence of buildout cache
   stat: path="{{ instance_config.plone_target_path }}/buildout-cache"
   register: cache_stat
@@ -186,17 +177,58 @@
     backup=yes
   register: instance_status
 
-- name: Python virtualenv
-  command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ plone_instance_home }}"
-  args:
-    creates: "{{ plone_instance_home }}/bin/python"
-  when: instance_config.plone_version >= '5.0'
-  become_user: "{{ instance_config.plone_buildout_user }}"
+- name: Instance bin directory
+  file:
+    path={{ plone_instance_home }}/bin
+    state=directory
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+    mode=0755
 
-- name: Fix setuptools version
-  command: "{{ plone_instance_home }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
-  when: instance_config.plone_version >= '5.0'
-  become_user: "{{ instance_config.plone_buildout_user }}"
+- name: Determine if we already have bin/buildout
+  stat:
+    path: "{{ plone_instance_home }}/bin/buildout"
+  register: bin_buildout
+
+- block: # Plone < 5
+  - name: Python virtualenv (Plone < 5)
+    command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ instance_config.plone_target_path }}/python{{ plone_python_version }} \
+      creates={{ instance_config.plone_target_path }}/python{{ plone_python_version }}"
+
+  - name: Fix setuptools version (Plone < 5)
+    command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
+
+  - name: pip install zc.buildout (Plone < 5)
+    command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
+    args:
+      creates: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/buildout"
+
+  - name: symlink Python buildout to bin/buildout (Plone < 5)
+    file:
+      src: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/buildout"
+      dest: "{{ plone_instance_home }}/bin/buildout"
+      owner: "{{ instance_config.plone_buildout_user }}"
+      group: "{{ instance_config.plone_group }}"
+      state: link
+  when: instance_config.plone_version < '5.0' and not bin_buildout.stat.exists
+
+- block: # Plone >= 5
+  - name: Python virtualenv (Plone >= 5)
+    command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ plone_instance_home }}"
+    args:
+      creates: "{{ plone_instance_home }}/bin/python"
+    become_user: "{{ instance_config.plone_buildout_user }}"
+
+  - name: Fix setuptools version (Plone >= 5)
+    command: "{{ plone_instance_home }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
+    become_user: "{{ instance_config.plone_buildout_user }}"
+
+  - name: pip install zc.buildout (Plone >= 5)
+    command: "{{ plone_instance_home }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
+    args:
+      creates: "{{ plone_instance_home }}/bin/buildout"
+    become_user: "{{ instance_config.plone_buildout_user }}"
+  when: instance_config.plone_version >= '5.0' and bin_buildout.stat.exists == False
 
 - name: Check to see if buildout has already run
   stat: path={{ plone_instance_home }}/bin/client_reserved
@@ -216,23 +248,6 @@
     group={{ instance_config.plone_group }}
   register: extra_dir_copy_result
   when: instance_config.plone_buildout_extra_dir
-
-# Plone 5.0+; avoid bootstrap.py
-- name: pip install zc.buildout
-  command: "{{ plone_instance_home }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
-  args:
-    creates: "{{ plone_instance_home }}/bin/buildout"
-  when: instance_config.plone_version >= '5.0' and buildout_status.stat.exists == False
-  become_user: "{{ instance_config.plone_buildout_user }}"
-
-# Plone < 5.0; use bootstrap
-- name: Bootstrap buildout
-  command: "../python{{ plone_python_version }}/bin/python{{ plone_python_version }} bootstrap.py"
-  args:
-    creates: "{{ plone_instance_home }}/bin/buildout"
-    chdir: "{{ plone_instance_home }}"
-  when: instance_config.plone_version < '5.0' and buildout_status.stat.exists == False
-  become_user: "{{ instance_config.plone_buildout_user }}"
 
 - name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
   when: instance_config.plone_always_run_buildout or
