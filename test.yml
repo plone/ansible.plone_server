@@ -24,16 +24,16 @@
         plone_buildout_extra_dir: ./meta/
         plone_client_max_memory: 600MB
         plone_backup_post_command: |
-          for fn in ${buildout:backups-dir}/snapshotbackups/20*.fs; do
+          for fn in ${buildout:backups-dir}/snapshotbackups/20*.fsz; do
              if [ ! -h $fn ]; then
                  # $fn is not a symlink yet
-                 mv $fn ${buildout:backups-dir}/snapshotbackups/backup.Data.fs
+                 mv $fn ${buildout:backups-dir}/snapshotbackups/backup.Data.fsz
                  ln -s ${buildout:backups-dir}/snapshotbackups/backup.Data.fs $fn
              fi
           done
 
       - plone_instance_name: p4
-        plone_version: '4.3.12'
+        plone_version: '4.3.14'
 
         plone_initial_password: admin
         plone_zeo_port: 4100
