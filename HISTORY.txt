@@ -1,5 +1,8 @@
 1.2.18 unreleased
 
+- Fix superlance use tests for RedHat.
+  [smcmahon]
+
 - Fix test "post" backup command.
   [smcmahon]
 
