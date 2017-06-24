@@ -119,8 +119,18 @@
       command: "/usr/local/plone-4.3/p4/bin/zeopack"
       become_user: plone_daemon
 
-    - name: Check that we're using superlance in the p5 install
+    - name: Check that we're using superlance in the p5 install (Debian)
       shell: "grep eventlistener /etc/supervisor/conf.d/zeoserver_zeo.conf"
+      when: ansible_os_family == 'Debian'
 
-    - name: Check that we're not using superlance in the p4 install
+    - name: Check that we're using superlance in the p5 install (RedHat)
+      shell: "grep eventlistener /etc/supervisord.d/zeoserver_zeo.ini"
+      when: ansible_os_family == 'RedHat'
+
+    - name: Check that we're not using superlance in the p4 install (Debian)
       shell: "[ ! `grep eventlistener /etc/supervisor/conf.d/p4_zeo.conf` ]"
+      when: ansible_os_family == 'Debian'
+
+    - name: Check that we're not using superlance in the p4 install (RedHat)
+      shell: "[ ! `grep eventlistener /etc/supervisord.d/p4_zeo.ini` ]"
+      when: ansible_os_family == 'RedHat'
