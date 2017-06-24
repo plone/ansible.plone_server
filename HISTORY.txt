@@ -1,5 +1,8 @@
 1.2.18 unreleased
 
+- Fix test "post" backup command.
+  [smcmahon]
+
 - Remove bootstrap.py in the Plone 4.x install and instead use a buildout created by installing zc.buildout in the virtualenv.
   bootstrap.py was already unused in the Plone 5.x install.
   This should not affect existing Plone 4.x installs.

@@ -24,13 +24,7 @@
         plone_buildout_extra_dir: ./meta/
         plone_client_max_memory: 600MB
         plone_backup_post_command: |
-          for fn in ${buildout:backups-dir}/snapshotbackups/20*.fsz; do
-             if [ ! -h $fn ]; then
-                 # $fn is not a symlink yet
-                 mv $fn ${buildout:backups-dir}/snapshotbackups/backup.Data.fsz
-                 ln -s ${buildout:backups-dir}/snapshotbackups/backup.Data.fs $fn
-             fi
-          done
+          touch ${buildout:backups-dir}/backups/done
 
       - plone_instance_name: p4
         plone_version: '4.3.14'
@@ -103,6 +97,11 @@
     - name: Attempt a backup for the P4 install
       command: "/usr/local/plone-4.3/p4/bin/backup"
       become_user: plone_daemon
+
+    - stat: path=/var/local/plone-5.0/zeoserver/backups/done
+      register: st
+    - fail: msg="Backup 'post' command not executed"
+      when: not st.stat.exists
 
     - name: Attempt a restore for the P5 install
       command: "/usr/local/plone-5.0/zeoserver/bin/restore -n"
