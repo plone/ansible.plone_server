@@ -55,13 +55,6 @@
     state=directory
     mode=0755
 
-- name: Instance backup base directory
-  when: plone_backup_path
-  file:
-    path={{ instance_config.plone_backup_path }}
-    state=directory
-    mode=0755
-
 - name: Check for existence of buildout cache
   stat: path="{{ instance_config.plone_target_path }}/buildout-cache"
   register: cache_stat
@@ -151,13 +144,13 @@
     mode=02770
 
 - name: Instance backup directory
-  when: plone_backup_path
+  when: plone_instance_var_path != plone_instance_backup_path
   file:
     path="{{ plone_instance_backup_path }}"
     state=directory
     owner={{ instance_config.plone_daemon_user }}
     group={{ instance_config.plone_group }}
-    mode=0750
+    mode=02770
 
 - name: Python eggs directory
   file:

@@ -52,16 +52,31 @@
 
         plone_hot_monitor: no
 
-        # plone_buildout_cache_file: /home/steve/ssd/nui4.3/packages/buildout-cache.tar.bz2
+      - plone_instance_name: no_clients_custom_backup
+        plone_zeo_port: 6100
+        plone_client_base_port: 6080
+        plone_client_count: 0
+        plone_backup_path: /var/local/custom_backup_path
 
 
   roles:
 
     - role: ansible.plone_server
       plone_config: "{{ servers[0] }}"
+      tags:
+        - plone1
 
     - role: ansible.plone_server
       plone_config: "{{ servers[1] }}"
+      tags:
+        - plone2
+
+    - role: ansible.plone_server
+      plone_config: "{{ servers[2] }}"
+      plone_backup_post_command: |
+        touch ${buildout:backups-dir}/backups/done
+      tags:
+        - plone3
 
   tasks:
 
@@ -75,62 +90,115 @@
         url: http://127.0.0.1:5081/Plone
         method: GET
         status_code: 200
+      tags:
+        - plone1
+
+    - stat: path=/usr/local/plone-5.0/zeoserver/main.yml
+      register: st
+    - fail: msg="copy of extra dir failed"
+      when: not st.stat.exists
+      tags:
+        - plone1
+
+    - name: Check to see if we copied the extra buildout file
+      command: "ls /usr/local/plone-5.0/zeoserver/main.yml"
+      tags:
+        - plone1
+
+    - name: Attempt a backup for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/backup"
+      become_user: plone_daemon
+      tags:
+        - plone1
+
+    - stat: path=/var/local/plone-5.0/zeoserver/backups/done
+      register: st
+      tags:
+        - plone1
+    - fail: msg="Backup 'post' command not executed"
+      when: not st.stat.exists
+      tags:
+        - plone1
+
+    - name: Attempt a restore for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/restore -n"
+      become_user: plone_daemon
+      tags:
+        - plone1
+
+    - name: Attempt a pack for the P5 install
+      command: "/usr/local/plone-5.0/zeoserver/bin/zeopack"
+      become_user: plone_daemon
+      tags:
+        - plone1
+
+    - name: Check that we're using superlance in the p5 install (Debian)
+      shell: "grep eventlistener /etc/supervisor/conf.d/zeoserver_zeo.conf"
+      when: ansible_os_family == 'Debian'
+      tags:
+        - plone1
+
+    - name: Check that we're using superlance in the p5 install (RedHat)
+      shell: "grep eventlistener /etc/supervisord.d/zeoserver_zeo.ini"
+      when: ansible_os_family == 'RedHat'
+      tags:
+        - plone1
 
     - name: Check to see if Plone 4.3.x is running
       uri:
         url: http://127.0.0.1:4081/Plone
         method: GET
         status_code: 200
-
-    - stat: path=/usr/local/plone-5.0/zeoserver/main.yml
-      register: st
-    - fail: msg="copy of extra dir failed"
-      when: not st.stat.exists
-
-    - name: Check to see if we copied the extra buildout file
-      command: "ls /usr/local/plone-5.0/zeoserver/main.yml"
-
-    - name: Attempt a backup for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/backup"
-      become_user: plone_daemon
+      tags:
+        - plone2
 
     - name: Attempt a backup for the P4 install
       command: "/usr/local/plone-4.3/p4/bin/backup"
       become_user: plone_daemon
-
-    - stat: path=/var/local/plone-5.0/zeoserver/backups/done
-      register: st
-    - fail: msg="Backup 'post' command not executed"
-      when: not st.stat.exists
-
-    - name: Attempt a restore for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/restore -n"
-      become_user: plone_daemon
+      tags:
+        - plone2
 
     - name: Attempt a restore for the P4 install
       command: "/usr/local/plone-4.3/p4/bin/restore -n"
       become_user: plone_daemon
-
-    - name: Attempt a pack for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/zeopack"
-      become_user: plone_daemon
+      tags:
+        - plone2
 
     - name: Attempt a pack for the P4 install
       command: "/usr/local/plone-4.3/p4/bin/zeopack"
       become_user: plone_daemon
-
-    - name: Check that we're using superlance in the p5 install (Debian)
-      shell: "grep eventlistener /etc/supervisor/conf.d/zeoserver_zeo.conf"
-      when: ansible_os_family == 'Debian'
-
-    - name: Check that we're using superlance in the p5 install (RedHat)
-      shell: "grep eventlistener /etc/supervisord.d/zeoserver_zeo.ini"
-      when: ansible_os_family == 'RedHat'
+      tags:
+        - plone2
 
     - name: Check that we're not using superlance in the p4 install (Debian)
       shell: "[ ! `grep eventlistener /etc/supervisor/conf.d/p4_zeo.conf` ]"
       when: ansible_os_family == 'Debian'
+      tags:
+        - plone2
 
     - name: Check that we're not using superlance in the p4 install (RedHat)
       shell: "[ ! `grep eventlistener /etc/supervisord.d/p4_zeo.ini` ]"
       when: ansible_os_family == 'RedHat'
+      tags:
+        - plone2
+
+    - name: Attempt a backup for the client-less install
+      command: "/usr/local/plone-5.0/no_clients_custom_backup/bin/backup"
+      become_user: plone_daemon
+      tags:
+        - plone3
+
+    - stat: path=/var/local/custom_backup_path/no_clients_custom_backup/backups/done
+      register: st
+      tags:
+        - plone3
+    - fail: msg="Backup 'post' command not executed"
+      when: not st.stat.exists
+      tags:
+        - plone3
+
+    - name: Attempt a restore for the client-less install
+      command: "/usr/local/plone-5.0/no_clients_custom_backup/bin/restore -n"
+      become_user: plone_daemon
+      tags:
+        - plone3

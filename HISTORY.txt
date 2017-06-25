@@ -1,5 +1,8 @@
 1.2.18 unreleased
 
+- Custom backup paths were not working. Fix that and add some test coverage.
+  [smcmahon]
+
 - Fix superlance use tests for RedHat.
   [smcmahon]
 
