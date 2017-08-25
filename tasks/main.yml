@@ -160,8 +160,18 @@
     group={{ instance_config.plone_group }}
     mode=0700
 
+- name: Copy custom buildout template
+  when: instance_config.plone_use_custom_buildout_template
+  template:
+    src='buildout_custom.cfg.j2'
+    dest={{ plone_instance_home }}/buildout.cfg
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+    backup=yes
+  register: instance_status
+
 - name: Copy buildout template
-  when: not instance_config.plone_buildout_git_repo
+  when: not instance_config.plone_buildout_git_repo and not instance_config.plone_use_custom_buildout_template
   template:
     src=buildout.cfg.j2
     dest={{ plone_instance_home }}/buildout.cfg

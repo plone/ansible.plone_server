@@ -7,3 +7,4 @@ local/
 *.retry
 *.log
 vbox_host.cfg
+/meta/.galaxy_install_info

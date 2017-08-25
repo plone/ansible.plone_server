@@ -27,6 +27,8 @@ plone_buildout_git_repo:
 
 plone_buildout_git_version: master
 
+plone_use_custom_buildout_template: no
+
 plone_initial_password:
 
 plone_install_zeoserver: yes
@@ -159,6 +161,7 @@ instance_config:
   plone_instance_name: "{{ plone_config.plone_instance_name|default(plone_instance_name) }}"
   plone_buildout_git_repo: "{{ plone_config.plone_buildout_git_repo|default(plone_buildout_git_repo) }}"
   plone_buildout_git_version: "{{ plone_config.plone_buildout_git_version|default(plone_buildout_git_version) }}"
+  plone_use_custom_buildout_template: "{{ plone_config.plone_use_custom_buildout_template|default(plone_use_custom_buildout_template) }}"
   plone_initial_password: "{{ plone_config.plone_initial_password|default(plone_initial_password) }}"
   plone_client_count: "{{ plone_config.plone_client_count|default(plone_client_count) }}"
   plone_zodb_cache_size: "{{ plone_config.plone_zodb_cache_size|default(plone_zodb_cache_size) }}"

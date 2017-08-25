@@ -117,6 +117,17 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 > If you use your own buildout, all Plone settings except `plone_client_count`, `plone_client_base_port`, and `plone_client_max_memory` are ignored.
 
 
+### plone_use_custom_buildout_template
+
+To use your own custom buildout template for this ansible role, set:
+
+    plone_use_custom_buildout_template: yes
+
+it defaults to `no` (uses built-in buildout template).
+
+Then provide a custom buildout template in your templates folder, which has the name: `buildout_custom.cfg.j2`
+
+
 ### plone_major_version
 
     plone_major_version: '5.0'
