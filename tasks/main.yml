@@ -168,7 +168,7 @@
     owner={{ instance_config.plone_buildout_user }}
     group={{ instance_config.plone_group }}
     backup=yes
-  register: instance_status
+  register: custom_buildout_status
 
 - name: Copy buildout template
   when: not instance_config.plone_buildout_git_repo and not instance_config.plone_use_custom_buildout_template
@@ -234,7 +234,7 @@
   when: instance_config.plone_version >= '5.0' and bin_buildout.stat.exists == False
 
 - name: Check to see if buildout has already run
-  stat: path={{ plone_instance_home }}/bin/client_reserved
+  stat: path={{ plone_instance_home }}/bin/backup
   register: buildout_status
 
 
@@ -255,7 +255,9 @@
 - name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
-        (instance_status.changed or extra_dir_copy_result.changed or not buildout_status.stat.exists)
+        (instance_status.changed or custom_buildout_status.changed or
+        extra_dir_copy_result.changed or
+        not buildout_status.stat.exists)
   shell: "bin/buildout > buildout.log 2>&1"
   args:
     chdir: "{{ plone_instance_home }}"
