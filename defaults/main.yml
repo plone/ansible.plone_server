@@ -23,6 +23,8 @@ plone_backup_path: no
 
 plone_instance_name: zeoserver
 
+plone_buildout_cfg: live.cfg
+
 plone_buildout_git_repo:
 
 plone_buildout_git_version: master

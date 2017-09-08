@@ -46,6 +46,11 @@
 - Update source for wv for CentOS7.
   [smcmahon]
 
+- Add plone_buildout_cfg variable to generate buildoutfiles other than
+  buildout.cfg on the server. Alos change the default to live.cfg,
+  to avoid conflicts with local buildout.cfg files.
+  [MrTango]
+
 1.2.15 2017-02-01
 
 - Redirect stdout and stderr for buildout into a log file.

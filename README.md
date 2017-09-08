@@ -309,6 +309,12 @@ Do you wish to automatically run buildout if any of the Plone settings change? D
 
 Do you wish to run buildout even if the buildout has not changed? Mainly useful in CI situations.
 
+### plone_buildout_cfg
+
+    plone_buildout_cfg: live.cfg
+
+This avoits conflicts with local buildout.cfg for development and the generated file on the server used for production/staging. Default to `live.cfg`.
+
 
 ### plone_buildout_cache_url
 
