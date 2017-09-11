@@ -1,3 +1,8 @@
+1.2.19 unreleased
+
+- Add missing instance_config for multi instance use (plone_pack_at & plone_backup_at)
+  [gomez]
+
 1.2.18 2017-06-25
 
 - Custom backup paths were not working. Fix that and add some test coverage.
