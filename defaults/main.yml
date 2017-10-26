@@ -183,6 +183,7 @@ instance_config:
   plone_timezone: "{{ plone_config.plone_timezone|default(plone_timezone) }}"
   plone_group: "{{ plone_config.plone_group|default(plone_group) }}"
   plone_buildout_user: "{{ plone_config.plone_buildout_user|default(plone_buildout_user) }}"
+  plone_buildout_cfg: "{{ plone_config.plone_buildout_cfg|default(plone_buildout_cfg) }}"
   plone_daemon_user: "{{ plone_config.plone_daemon_user|default(plone_daemon_user) }}"
   plone_pack_at: "{{ plone_config.plone_pack_at|default(plone_pack_at) }}"
   plone_keep_days: "{{ plone_config.plone_keep_days|default(plone_keep_days) }}"
