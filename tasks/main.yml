@@ -164,7 +164,7 @@
   when: not instance_config.plone_buildout_git_repo
   template:
     src=buildout.cfg.j2
-    dest={{ plone_instance_home }}/{{ plone_buildout_cfg }}
+    dest={{ plone_instance_home }}/{{ instance_config.plone_buildout_cfg }}
     owner={{ instance_config.plone_buildout_user }}
     group={{ instance_config.plone_group }}
     backup=yes
@@ -246,7 +246,7 @@
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
         (instance_status.changed or extra_dir_copy_result.changed or not buildout_status.stat.exists)
-  shell: "bin/buildout -c {{ plone_buildout_cfg }} > buildout.log 2>&1"
+  shell: "bin/buildout -c {{ instance_config.plone_buildout_cfg }} > buildout.log 2>&1"
   args:
     chdir: "{{ plone_instance_home }}"
   become_user: "{{ instance_config.plone_buildout_user }}"
@@ -373,7 +373,7 @@
 # handling the default.
 
 - name: Pack cron job
-  when: plone_pack_at
+  when: instance_config.plone_pack_at
   cron:
     name="{{ instance_config.plone_instance_name }} Plone packing"
     job='cd {{ plone_instance_home }} && bin/zeopack && echo "zeopack""_success for {{ instance_config.plone_instance_name }}"'
@@ -385,7 +385,7 @@
 
 
 - name: Backup cron job
-  when: plone_backup_at
+  when: instance_config.plone_backup_at
   cron:
     name="{{ instance_config.plone_instance_name }} Plone backup"
     job='cd {{ plone_instance_home }} && bin/backup && echo "backup""_success for {{ instance_config.plone_instance_name }}"'
