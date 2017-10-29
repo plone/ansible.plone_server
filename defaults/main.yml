@@ -2,7 +2,7 @@
 
 ansible_ssh_pipelining: true
 
-plone_version: '5.0.7'
+plone_version: '5.0.8'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 

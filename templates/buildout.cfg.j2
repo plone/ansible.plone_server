@@ -21,12 +21,14 @@ prefer-final = true
 show-picked-versions = true
 versions = versions
 
+index = https://pypi.python.org/simple/
+
 find-links =
-    http://dist.plone.org
-    http://download.zope.org/ppix/
-    http://download.zope.org/distribution/
+    https://dist.plone.org
+    https://download.zope.org/ppix/
+    https://download.zope.org/distribution/
     http://effbot.org/downloads
-    http://dist.plone.org/release/{{ instance_config.plone_version }}
+    https://dist.plone.org/release/{{ instance_config.plone_version }}
 {% if instance_config.plone_extra_find_links %}
 {% for link in instance_config.plone_extra_find_links %}
     {{ link }}

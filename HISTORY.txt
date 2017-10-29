@@ -1,4 +1,7 @@
-1.2.19 unreleased
+1.2.19 2017-10-29
+
+- Specify an index that will work with PyPI https.
+  [smcmahon]
 
 - Add missing instance_config for multi instance use (plone_pack_at & plone_backup_at & plone_buildout_cfg)
 [gomez]
