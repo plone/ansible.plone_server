@@ -1,3 +1,9 @@
+1.2.20 unreleased
+
+- Make sure we're actually testing add ons that will be recovered from PyPI.
+  We need to know if that breaks.
+  [smcmahon]
+
 1.2.19 2017-10-29
 
 - Specify an index that will work with PyPI https.
@@ -55,7 +61,7 @@
   [smcmahon]
 
 - Add plone_buildout_cfg variable to generate buildoutfiles other than
-  buildout.cfg on the server. Alos change the default to live.cfg,
+  buildout.cfg on the server. Also change the default to live.cfg,
   to avoid conflicts with local buildout.cfg files.
   [MrTango]
 

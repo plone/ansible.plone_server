@@ -31,6 +31,8 @@
 
         plone_initial_password: admin
         plone_zeo_port: 4100
+        plone_additional_eggs:
+          - collective.recaptcha
         plone_client_base_port: 4080
         plone_sources:
         plone_extra_parts:
@@ -47,6 +49,9 @@
           - "plone4.csrffixes = 1.0.9"
           - "cssselect = 0.9.1"
           - "Products.PloneHotfix20160419 = 1.0"
+          - "collective.recaptcha = 2.0"
+          - "norecaptcha = 0.3.0"
+
 
         plone_client_max_memory: 500MB
 
