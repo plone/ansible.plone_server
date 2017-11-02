@@ -4,9 +4,6 @@
   We need to know if that breaks.
   [smcmahon]
 
-- Change wv rpm URL for Centos7
-  [l00ptr]
-
 1.2.19 2017-10-29
 
 - Specify an index that will work with PyPI https.
