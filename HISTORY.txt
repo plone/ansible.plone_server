@@ -1,4 +1,4 @@
-1.2.20 unreleased
+1.2.20 2017-11-12
 
 - Make sure we're actually testing add ons that will be recovered from PyPI.
   We need to know if that breaks.
