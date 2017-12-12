@@ -73,6 +73,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     jessie.vm.provision "ansible", playbook:"test.yml"
   end
 
+  config.vm.define "stretch", autostart: false do |jessie|
+    jessie.vm.box = "debian/stretch64"
+    jessie.vm.synced_folder ".", "/vagrant", disabled: true
+    jessie.vm.provision "write_vbox_cfg", machine: "stretch"
+    jessie.vm.provision "ansible", playbook:"test.yml"
+  end
+
   config.vm.define "precise", autostart: false do |precise|
     precise.vm.box = "bento/ubuntu-12.04"
     precise.vm.synced_folder ".", "/vagrant", disabled: true
