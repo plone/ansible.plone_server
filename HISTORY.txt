@@ -1,3 +1,11 @@
+1.2.21 2017-12-03
+
+- Update default Plone to 5.0.9.
+  [smcmahon]
+
+- Update and clean up hotfixes.
+  [smcmahon]
+
 1.2.20 2017-11-12
 
 - Make sure we're actually testing add ons that will be recovered from PyPI.
@@ -12,8 +20,8 @@
 - Specify an index that will work with PyPI https.
   [smcmahon]
 
-- Add missing instance_config for multi instance use (plone_pack_at & plone_backup_at & plone_buildout_cfg)
-[gomez]
+- Add missing instance_config for multi-instance use (plone_pack_at & plone_backup_at & plone_buildout_cfg)
+  [gomez]
 
 1.2.18 2017-06-25
 
