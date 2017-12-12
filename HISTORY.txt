@@ -1,4 +1,4 @@
-1.2.22 unreleased
+1.2.22 2017-12-12
 
 - Remove download.zope.org links in find-links.
   [smcmahon]
