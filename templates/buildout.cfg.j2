@@ -172,6 +172,7 @@ pid-file  = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section
 lock-file = ${buildout:var-dir}/${:_buildout_section_name_}/${:_buildout_section_name_}.lock
 
 zodb-cache-size = {{ instance_config.plone_zodb_cache_size }}
+zodb-cache-size-bytes = {{ instance_config.plone_zodb_cache_size_bytes }}
 zserver-threads = {{ instance_config.plone_zserver_threads }}
 
 {% if instance_config.plone_client_extras %}

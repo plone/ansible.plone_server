@@ -25,6 +25,7 @@
         plone_client_max_memory: 600MB
         plone_backup_post_command: |
           touch ${buildout:backups-dir}/backups/done
+        plone_zodb_cache_size: 10000
 
       - plone_instance_name: p4
         plone_version: '4.3.14'
@@ -51,6 +52,8 @@
           - "Products.PloneHotfix20160419 = 1.0"
           - "collective.recaptcha = 2.0"
           - "norecaptcha = 0.3.0"
+
+        plone_zodb_cache_size_bytes: "512 MB"
 
 
         plone_client_max_memory: 500MB

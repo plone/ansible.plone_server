@@ -37,6 +37,8 @@ plone_client_count: 2
 
 plone_zodb_cache_size: 30000
 
+plone_zodb_cache_size_bytes: 0
+
 plone_zserver_threads: 1
 
 plone_client_max_memory: 0
@@ -164,6 +166,7 @@ instance_config:
   plone_initial_password: "{{ plone_config.plone_initial_password|default(plone_initial_password) }}"
   plone_client_count: "{{ plone_config.plone_client_count|default(plone_client_count) }}"
   plone_zodb_cache_size: "{{ plone_config.plone_zodb_cache_size|default(plone_zodb_cache_size) }}"
+  plone_zodb_cache_size_bytes:  "{{ plone_config.plone_zodb_cache_size_bytes|default(plone_zodb_cache_size_bytes) }}"
   plone_zserver_threads: "{{ plone_config.plone_zserver_threads|default(plone_zserver_threads) }}"
   plone_client_max_memory: "{{ plone_config.plone_client_max_memory|default(plone_client_max_memory) }}"
   plone_additional_eggs: "{{ plone_config.plone_additional_eggs|default(plone_additional_eggs) }}"

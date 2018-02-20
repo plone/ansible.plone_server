@@ -1,7 +1,7 @@
 plone_server
 ============
 
-This Ansible role provisions a [Plone](https://plone.org) server with options to control client count and memory profile. It uses either a built-in buildout.cfg or one picked up via git.
+This Ansible role provisions a [Plone](https://plone.org) server with options to control client count and memory profile. It uses either a built-in buildout .cfg file (live.cfg by default) or one picked up via git.
 
 This role takes care of:
 
@@ -160,6 +160,17 @@ How many objects do you wish to keep in the ZODB cache.
 Defaults to `30000`
 
 > The default configuration is *very* conservative to allow Plone to run in a minimal memory server. You will want to increase this is you have more than minimal memory.
+
+
+### plone_zodb_cache_size_bytes
+
+    plone_zodb_cache_size_bytes: 512 MB
+
+Target size for the ZODB cache.
+
+Defaults to `0` -- which is unlimited. The object-count limit is then the only constraint.
+
+> Note that ZODB documentation indicates this feature is *experimental*.
 
 
 ### plone_zserver_threads

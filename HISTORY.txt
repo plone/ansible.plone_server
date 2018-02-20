@@ -1,3 +1,8 @@
+1.2.23 unreleased
+
+- Add plone_zodb_cache_size_bytes setting.
+  [smcmahon]
+
 1.2.22 2017-12-12
 
 - Remove download.zope.org links in find-links.
