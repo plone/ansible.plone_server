@@ -60,6 +60,7 @@
   pip:
     name={{ item }}
     state=latest
+    extra_args='--index-url=https://pypi.python.org/simple/'
   with_items:
     - setuptools
     - pip

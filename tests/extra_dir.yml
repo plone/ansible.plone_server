@@ -22,7 +22,7 @@
     # make sure plone daemons have had time to come up
     - pause: minutes=1
 
-    - pip: name=httplib2
+    - pip: name=httplib2 extra_args='--index-url=https://pypi.python.org/simple/'
 
     - name: Check to see if Plone is running
       uri:
