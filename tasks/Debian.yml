@@ -23,7 +23,7 @@
     - wv
 
 - name: Ensure recent python-virtualenv
-  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin"' state=latest
+  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin" --index-url=https://pypi.python.org/simple/' state=latest
   # note that this installs to /usr/local/bin
   # which is not automatically on the path
 
