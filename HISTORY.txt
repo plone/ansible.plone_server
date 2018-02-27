@@ -1,4 +1,4 @@
-1.2.24 unreleased
+1.2.24 2018-02-27
 
 - Specify https index when we use pip. This makes it work on older platforms like wheezy.
   [smcmahon]
