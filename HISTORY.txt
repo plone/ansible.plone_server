@@ -1,3 +1,7 @@
+1.2.25 2018-03-06
+
+- Update to use Plone 5.1.0 as default.
+
 1.2.24 2018-02-27
 
 - Specify https index when we use pip. This makes it work on older platforms like wheezy.

@@ -57,15 +57,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = 1
   end
 
-  config.vm.define "wheezy", autostart: false do |wheezy|
-    wheezy.vm.box = "debian/wheezy64"
-    wheezy.vm.synced_folder ".", "/vagrant", disabled: true
-    wheezy.vm.provision "write_vbox_cfg", machine: "wheezy"
-    wheezy.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
-
   config.vm.define "jessie", autostart: false do |jessie|
     jessie.vm.box = "debian/jessie64"
     jessie.vm.synced_folder ".", "/vagrant", disabled: true
@@ -80,15 +71,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     jessie.vm.provision "ansible", playbook:"test.yml"
   end
 
-  config.vm.define "precise", autostart: false do |precise|
-    precise.vm.box = "bento/ubuntu-12.04"
-    precise.vm.synced_folder ".", "/vagrant", disabled: true
-    precise.vm.provision "write_vbox_cfg", machine: "precise"
-    precise.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
-
   config.vm.define "trusty", primary: false, autostart: false do |trusty|
     trusty.vm.box = "ubuntu/trusty64"
     trusty.vm.synced_folder ".", "/vagrant", disabled: true
@@ -98,29 +80,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "wily", autostart: false do |wily|
-    wily.vm.box = "ubuntu/wily64"
-    wily.vm.synced_folder ".", "/vagrant", disabled: true
-    wily.vm.provision "write_vbox_cfg", machine: "wily"
-    wily.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
-
   config.vm.define "xenial", primary: true, autostart: true do |myhost|
     myhost.vm.box = "ubuntu/xenial64"
     myhost.vm.provision "shell", inline: "apt-get install -y python"
     myhost.vm.provision "write_vbox_cfg", machine: "xenial"
     myhost.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
-
-  config.vm.define "centos6", primary: false, autostart: false do |centos6|
-    centos6.vm.box = "bento/centos-6.7"
-    centos6.vm.synced_folder ".", "/vagrant", disabled: true
-    centos6.vm.provision "write_vbox_cfg", machine: "centos6"
-    centos6.vm.provision "ansible" do |ansible|
       ansible.playbook = "test.yml"
     end
   end
