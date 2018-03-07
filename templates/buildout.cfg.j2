@@ -47,6 +47,9 @@ buildout-user = {{ instance_config.plone_buildout_user }}
 eggs =
     Plone
     Pillow
+{% if instance_config.plone_client_tcpcheck %}
+    five.z2monitor
+{% endif %}
 {% if instance_config.plone_version >= '5.0' %}
 {% if instance_config.plone_version | version_compare('5.0.6', '<=') %}
     Products.PloneHotfix20160830
@@ -73,6 +76,9 @@ eggs =
 {% endif %}
 
 zcml =
+{% if instance_config.plone_client_tcpcheck %}
+    five.z2monitor
+{% endif %}
 {% if instance_config.plone_zcml_slugs %}
 {% for slug in instance_config.plone_zcml_slugs %}
     {{ slug }}
@@ -187,12 +193,24 @@ http-address = 127.0.0.1:{{ instance_config.plone_client_base_port }}
 {% if instance_config.plone_client1_extras %}
 {{ instance_config.plone_client1_extras }}
 {% endif %}
+{% if instance_config.plone_client_tcpcheck %}
+zope-conf-additional =
+    <product-config five.z2monitor>
+        bind 127.0.0.1:{{ instance_config.plone_client_base_tcpcheck_port }}
+    </product-config>
+{% endif %}
 
 {% for client in range(2, instance_config.plone_client_count|int + 1) %}
 [client{{ client }}]
 <= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + loop.index) }}
+{% if instance_config.plone_client_tcpcheck %}
+zope-conf-additional =
+    <product-config five.z2monitor>
+        bind 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_tcpcheck_port|int + loop.index) }}
+    </product-config>
+{% endif %}
 {% endfor %}
 
 [client_reserved]
