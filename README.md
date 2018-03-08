@@ -296,6 +296,22 @@ Defaults to:
         z2-log-level = error
 
 Extra text to add to all the client buildout parts.
+Don't use this to add zope-conf-additional stanzas, as they may be overriden.
+
+
+### plone_zeo_extras
+
+Extra text to add to the ZEO server part of the buildout.
+
+
+### plone_zope_conf_additional
+
+    plone_zope_conf_additional: |
+        <product-config foobar>
+            spam eggs
+        </product-config>
+
+Use this directive to add a zope-conf-additional section to client zope configurations.
 
 
 ### plone_client1_extras
@@ -415,6 +431,24 @@ List additional Plone profiles which should be activated in the new Plone site. 
     plone_default_language: es
 
 If we're creating a Plone site, what should be the default language? Defaults to 'en'.
+
+
+### plone_client_tcpcheck
+
+    plone_client_tcpcheck: off
+
+As of plone server role version 1.3.0, we use five.z2monitor to set up monitor threads for each Plone ZEO client.
+You may use this directive to turn this off.
+
+
+### plone_client_base_tcpcheck_port
+
+    plone_client_base_tcpcheck_port: 7200
+
+If plone_client_tcpcheck, monitor threads will be configured for each Plone ZEO client.
+This directive allows you to control the base port.
+There will be as many ports used as there are Plone ZEO clients.
+The default is "{{ plone_client_base_port + 100 }}".
 
 
 ### Cron jobs

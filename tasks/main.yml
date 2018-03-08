@@ -160,6 +160,12 @@
     group={{ instance_config.plone_group }}
     mode=0700
 
+# Protect users who may have put zope-conf-additional in plone_client_extras,
+# which conflicts with our scheme for handling z2monitor setup.
+- name: Check plone_client_extras for problems
+  when: "'zope-conf-additional' in instance_config.plone_client_extras"
+  fail: msg="zope-conf-additional is not permitted in plone_client_extras. Use plone_zope_conf_additional instead."
+
 - name: Copy buildout template
   when: not instance_config.plone_buildout_git_repo
   template:
