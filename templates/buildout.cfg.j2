@@ -137,6 +137,9 @@ blob-storage = ${buildout:var-dir}/blobstorage
 zeo-log     = ${buildout:var-dir}/zeoserver/zeoserver.log
 pid-file    = ${buildout:var-dir}/zeoserver/zeoserver.pid
 socket-name = ${buildout:var-dir}/zeoserver/zeo.zdsock
+{% if instance_config.plone_zeo_extras %}
+{{ instance_config.plone_zeo_extras }}
+{% endif %}
 {% endif %}
 
 
@@ -193,11 +196,16 @@ http-address = 127.0.0.1:{{ instance_config.plone_client_base_port }}
 {% if instance_config.plone_client1_extras %}
 {{ instance_config.plone_client1_extras }}
 {% endif %}
-{% if instance_config.plone_client_tcpcheck %}
+{% if instance_config.plone_zope_conf_additional or instance_config.plone_client_tcpcheck %}
 zope-conf-additional =
+{% if instance_config.plone_zope_conf_additional %}
+    {{ instance_config.plone_zope_conf_additional }}
+{% endif %}
+{% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
         bind 127.0.0.1:{{ instance_config.plone_client_base_tcpcheck_port }}
     </product-config>
+{% endif %}
 {% endif %}
 
 {% for client in range(2, instance_config.plone_client_count|int + 1) %}
@@ -205,12 +213,18 @@ zope-conf-additional =
 <= client_base
 recipe = plone.recipe.zope2instance
 http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + loop.index) }}
-{% if instance_config.plone_client_tcpcheck %}
+{% if instance_config.plone_zope_conf_additional or instance_config.plone_client_tcpcheck %}
 zope-conf-additional =
+{% if instance_config.plone_zope_conf_additional %}
+    {{ instance_config.plone_zope_conf_additional }}
+{% endif %}
+{% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
         bind 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_tcpcheck_port|int + loop.index) }}
     </product-config>
 {% endif %}
+{% endif %}
+
 {% endfor %}
 
 [client_reserved]

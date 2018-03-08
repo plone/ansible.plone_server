@@ -47,6 +47,8 @@ plone_additional_eggs:
 
 plone_zcml_slugs:
 
+plone_zeo_extras:
+
 plone_client_extras:
 
 plone_client1_extras:
@@ -67,6 +69,8 @@ plone_environment_vars:
   - "zope_i18n_compile_mo_files true"
 
 plone_extra_parts: {}
+
+plone_zope_conf_additional:
 
 plone_buildout_extra:
 
@@ -175,6 +179,7 @@ instance_config:
   plone_client_max_memory: "{{ plone_config.plone_client_max_memory|default(plone_client_max_memory) }}"
   plone_additional_eggs: "{{ plone_config.plone_additional_eggs|default(plone_additional_eggs) }}"
   plone_zcml_slugs: "{{ plone_config.plone_zcml_slugs|default(plone_zcml_slugs) }}"
+  plone_zeo_extras: "{{ plone_config.plone_zeo_extras|default(plone_zeo_extras) }}"
   plone_client_extras: "{{ plone_config.plone_client_extras|default(plone_client_extras) }}"
   plone_client1_extras: "{{ plone_config.plone_client1_extras|default(plone_client1_extras) }}"
   plone_additional_versions: "{{ plone_config.plone_additional_versions|default(plone_additional_versions) }}"
@@ -186,6 +191,7 @@ instance_config:
   plone_environment_vars: "{{ plone_config.plone_environment_vars|default(plone_environment_vars) }}"
   plone_extra_parts: "{{ plone_config.plone_extra_parts|default(plone_extra_parts) }}"
   plone_buildout_extra: "{{ plone_config.plone_buildout_extra|default(plone_buildout_extra) }}"
+  plone_zope_conf_additional: "{{ plone_config.plone_zope_conf_additional|default(plone_zope_conf_additional) }}"
   plone_autorun_buildout: "{{ plone_config.plone_autorun_buildout|default(plone_autorun_buildout) }}"
   plone_buildout_cache_file: "{{ plone_config.plone_buildout_cache_file|default(plone_buildout_cache_file) }}"
   plone_sources: "{{ plone_config.plone_sources|default(plone_sources) }}"
