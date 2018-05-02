@@ -16,7 +16,7 @@
     - libjpeg-dev
     - libxslt1-dev
     - poppler-utils
-    - lynx-cur
+    - lynx
     - unzip
     - supervisor
     - git
