@@ -2,7 +2,7 @@
 
 ansible_ssh_pipelining: true
 
-plone_version: '5.1.0'
+plone_version: '5.1.1'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
@@ -82,7 +82,7 @@ plone_always_run_buildout: no
 
 plone_restart_after_buildout: yes
 
-plone_buildout_cache_url: https://dist.plone.org/release/{{ plone_version }}/buildout-cache.tar.bz2
+plone_buildout_cache_url: https://launchpad.net/plone/{{ plone_major_version }}/{{ plone_version }}/+download/buildout-cache.tar.bz2
 
 plone_buildout_cache_file:
 
