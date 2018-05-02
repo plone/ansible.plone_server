@@ -80,8 +80,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "xenial", primary: true, autostart: true do |myhost|
+  config.vm.define "xenial", autostart: false do |myhost|
     myhost.vm.box = "ubuntu/xenial64"
+    myhost.vm.provision "shell", inline: "apt-get install -y python"
+    myhost.vm.provision "write_vbox_cfg", machine: "xenial"
+    myhost.vm.provision "ansible" do |ansible|
+      ansible.playbook = "test.yml"
+    end
+  end
+
+  config.vm.define "bionic", primary: true, autostart: true do |myhost|
+    myhost.vm.box = "ubuntu/bionic64"
     myhost.vm.provision "shell", inline: "apt-get install -y python"
     myhost.vm.provision "write_vbox_cfg", machine: "xenial"
     myhost.vm.provision "ansible" do |ansible|
