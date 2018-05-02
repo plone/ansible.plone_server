@@ -10,7 +10,7 @@
     plone_initial_password: admin
 
     servers:
-      - plone_version: '5.1.0'
+      - plone_version: '5.1.'
 
         plone_zeo_port: 5100
         plone_client_base_port: 5080
@@ -18,8 +18,7 @@
           - collective.recaptcha
           - pas.plugins.authomatic
         plone_sources:
-          - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git rev=tags/1.1.5"
-          - "pas.plugins.authomatic = git https://github.com/collective/pas.plugins.authomatic.git update=true depth=1"
+          - "collective.recaptcha = git https://github.com/collective/collective.recaptcha.git rev=tags/2.1.0"
         # plone_buildout_cache_file: /home/steve/ssd/nui5.0/packages/buildout-cache.tar.bz2
         plone_buildout_extra_dir: ./meta/
         plone_client_max_memory: 600MB
@@ -52,6 +51,10 @@
           - "Products.PloneHotfix20160419 = 1.0"
           - "collective.recaptcha = 2.0"
           - "norecaptcha = 0.3.0"
+          - "five.z2monitor = 0.2"
+          - "zc.z3monitor = 0.8.0"
+          - "zc.monitor = 0.3.1"
+          - "zc.ngi = 2.1.0"
 
         plone_zodb_cache_size_bytes: "512 MB"
 
@@ -101,7 +104,7 @@
       tags:
         - plone1
 
-    - stat: path=/usr/local/plone-5.0/zeoserver/main.yml
+    - stat: path=/usr/local/plone-5.1/zeoserver/main.yml
       register: st
     - fail: msg="copy of extra dir failed"
       when: not st.stat.exists
@@ -109,17 +112,17 @@
         - plone1
 
     - name: Check to see if we copied the extra buildout file
-      command: "ls /usr/local/plone-5.0/zeoserver/main.yml"
+      command: "ls /usr/local/plone-5.1/zeoserver/main.yml"
       tags:
         - plone1
 
     - name: Attempt a backup for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/backup"
+      command: "/usr/local/plone-5.1/zeoserver/bin/backup"
       become_user: plone_daemon
       tags:
         - plone1
 
-    - stat: path=/var/local/plone-5.0/zeoserver/backups/done
+    - stat: path=/var/local/plone-5.1/zeoserver/backups/done
       register: st
       tags:
         - plone1
@@ -129,13 +132,13 @@
         - plone1
 
     - name: Attempt a restore for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/restore -n"
+      command: "/usr/local/plone-5.1/zeoserver/bin/restore -n"
       become_user: plone_daemon
       tags:
         - plone1
 
     - name: Attempt a pack for the P5 install
-      command: "/usr/local/plone-5.0/zeoserver/bin/zeopack"
+      command: "/usr/local/plone-5.1/zeoserver/bin/zeopack"
       become_user: plone_daemon
       tags:
         - plone1
@@ -191,7 +194,7 @@
         - plone2
 
     - name: Attempt a backup for the client-less install
-      command: "/usr/local/plone-5.0/no_clients_custom_backup/bin/backup"
+      command: "/usr/local/plone-5.1/no_clients_custom_backup/bin/backup"
       become_user: plone_daemon
       tags:
         - plone3
@@ -206,7 +209,7 @@
         - plone3
 
     - name: Attempt a restore for the client-less install
-      command: "/usr/local/plone-5.0/no_clients_custom_backup/bin/restore -n"
+      command: "/usr/local/plone-5.1/no_clients_custom_backup/bin/restore -n"
       become_user: plone_daemon
       tags:
         - plone3
