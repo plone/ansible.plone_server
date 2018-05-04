@@ -53,8 +53,8 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 1024
-    v.cpus = 1
+    v.memory = 4096
+    v.cpus = 4
   end
 
   config.vm.define "jessie", autostart: false do |jessie|

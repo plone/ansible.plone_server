@@ -1,3 +1,13 @@
+1.3.1 2018-05-01
+
+- Use lynx rather than lynx-curr package on debian. lynx-curr has disappeared on bionic.
+  Use bionic64 as first test vagrant box.
+  We are now working on bionic.
+
+- Update to Plone 5.1.1 as default.
+
+- Switch to using launchpad.net for buildout-cache tarball downloads. Avoid timeouts from dist.plone.org.
+
 1.3.0 2018-03-10
 
     **Before you update***: If you're using version 1.2.x, you should note that version 1.3.0+ sets up client monitors for each ZEO client.

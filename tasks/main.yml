@@ -312,13 +312,13 @@
 - name: Supervisor task list is updated and we have a memmon
   when: instance_config.plone_use_supervisor and
         instance_config.plone_client_max_memory != "0" and
-        supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
+        supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
   shell: 'supervisorctl stop {{ supervisor_instance_discriminator }}memmon; supervisorctl remove {{ supervisor_instance_discriminator }}memmon'
   register: stop_remove
 
 - name: Supervisor task list is updated
   when: instance_config.plone_use_supervisor and
-        supervisor_task_conf_debian|changed or supervisor_task_conf_redhat|changed
+        supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
   shell: 'supervisorctl update'
 
 - name: Supervisor zeoserver task is present
