@@ -1,8 +1,8 @@
 ---
 
-- name: Fail if Ansible is ancient
-  fail: msg="We need bug fixes in Ansible 2. Please update your kit. 'pip install -U Ansible'"
-  when: ansible_version.major < 2
+- name: Fail if Ansible is old
+  fail: msg="We need updates in Ansible 2.5.0. Please update your kit. 'pip install -U Ansible'"
+  when: ansible_version is version('2.5.0', 'lt')
 
 - name: Fail if no plone initial password set
   fail: msg="You must set the plone_initial_password variable."
