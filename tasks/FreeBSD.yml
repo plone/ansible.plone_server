@@ -1,0 +1,18 @@
+---
+
+# FreeBSD-family dependencies
+
+- name: Ensure required packages
+  pkgng: name={{ item }} state=present
+  with_items:
+    - py27-pip
+    - py27-setuptools
+    - libxml2
+    - libxslt
+    - unzip
+    - jpeg-turbo
+    - lynx
+    - py27-supervisor
+    - git
+    - wv
+

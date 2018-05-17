@@ -107,4 +107,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  config.vm.define "freebsd11", primary: false, autostart: false do |freebsd11|
+    freebsd11.vm.box = "freebsd/FreeBSD-11.1-RELEASE"
+    freebsd11.vm.guest = :freebsd
+    freebsd11.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    freebsd11.ssh.shell = "sh"
+    freebsd11.vm.base_mac = "080027D14C66"
+    config.vm.provider :virtualbox do |freebsd11|
+      freebsd11.customize ["modifyvm", :id, "--hwvirtex", "on"]
+      freebsd11.customize ["modifyvm", :id, "--audio", "none"]
+      freebsd11.customize ["modifyvm", :id, "--nictype1", "virtio"]
+      freebsd11.customize ["modifyvm", :id, "--nictype2", "virtio"]
+    end
+
+    freebsd11.vm.provision "shell", inline: "pkg install --yes python27"
+    freebsd11.vm.provision "shell", inline: "ln -F -s /usr/local/bin/python2.7 /usr/bin/python"
+
+    freebsd11.vm.provision "write_vbox_cfg", machine: "freebsd11"
+    freebsd11.vm.provision "ansible" do |ansible|
+      ansible.playbook = "test.yml"
+    end
+  end
+
 end
