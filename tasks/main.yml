@@ -279,12 +279,10 @@
   pip: name=superlance version=0.11 extra_args='--index-url=https://pypi.python.org/simple/'
 
 - name: Supervisor process control setup
-  when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
+  when: instance_config.plone_use_supervisor and ansible_os_family != 'Redhat'
   template:
     src=supervisor_task.j2
     dest='{{ instance_config.supervisor_config_dir }}/{{ supervisor_instance_discriminator }}zeo.conf'
-    owner=root
-    group=root
     mode=644
   register: supervisor_task_conf_debian
 
@@ -303,7 +301,7 @@
   service: name=supervisor state=started
 
 - name: Ensure supervisord is running
-  when: instance_config.plone_use_supervisor and ansible_os_family == 'RedHat'
+  when: instance_config.plone_use_supervisor and ansible_os_family != 'Debian'
   service: name=supervisord state=started
 
 # memmon processes have a special problem: the memory setting may have changed in the config file

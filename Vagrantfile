@@ -122,6 +122,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     freebsd11.vm.provision "shell", inline: "pkg install --yes python27"
     freebsd11.vm.provision "shell", inline: "ln -F -s /usr/local/bin/python2.7 /usr/bin/python"
+    freebsd11.vm.provision "shell", inline: "ln -F -s /usr/local/bin/python2.7 /usr/bin/python2.7"
 
     freebsd11.vm.provision "write_vbox_cfg", machine: "freebsd11"
     freebsd11.vm.provision "ansible" do |ansible|
