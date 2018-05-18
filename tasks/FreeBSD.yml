@@ -2,9 +2,13 @@
 
 # FreeBSD-family dependencies
 
+# Packages note: Ansible needs gtar for unpacking downloads. Bash is
+# just for convenience.
 - name: Ensure required packages
   pkgng: name={{ item }} state=present
   with_items:
+    - bash
+    - gtar
     - py27-pip
     - py27-setuptools
     - libxml2
@@ -15,6 +19,7 @@
     - py27-supervisor
     - git
     - wv
+    - poppler
 
 - name: Ensure recent python-virtualenv
   pip: name=virtualenv extra_args='--index-url=https://pypi.python.org/simple/' state=latest
@@ -47,6 +52,10 @@
 - name: Supervisor config dir fact
   set_fact:
     supervisor_config_dir: "/usr/local/etc/supervisord.d/"
+
+- name: Set supervisor service name
+  set_fact:
+    supervisor_service_name: supervisord
 
 - name: Ensure supervisor is started
   when: instance_config.plone_use_supervisor

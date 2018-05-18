@@ -297,12 +297,8 @@
   register: supervisor_task_conf_redhat
 
 - name: Ensure supervisord is running
-  when: instance_config.plone_use_supervisor and ansible_os_family == 'Debian'
-  service: name=supervisor state=started
-
-- name: Ensure supervisord is running
-  when: instance_config.plone_use_supervisor and ansible_os_family != 'Debian'
-  service: name=supervisord state=started
+  when: instance_config.plone_use_supervisor
+  service: name={{ supervisor_service_name }} state=started
 
 # memmon processes have a special problem: the memory setting may have changed in the config file
 # without the addition/deletion of a part. 'reread' and 'restart' don't update the memory configuration.
