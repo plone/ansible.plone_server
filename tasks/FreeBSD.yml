@@ -1,0 +1,63 @@
+---
+
+# FreeBSD-family dependencies
+
+# Packages note: Ansible needs gtar for unpacking downloads. Bash is
+# just for convenience.
+- name: Ensure required packages
+  pkgng: name={{ item }} state=present
+  with_items:
+    - bash
+    - gtar
+    - py27-pip
+    - py27-setuptools
+    - libxml2
+    - libxslt
+    - unzip
+    - jpeg-turbo
+    - lynx
+    - py27-supervisor
+    - git
+    - wv
+    - poppler
+
+- name: Ensure recent python-virtualenv
+  pip: name=virtualenv extra_args='--index-url=https://pypi.python.org/simple/' state=latest
+  # note that this installs to /usr/local/bin
+  # which is not automatically on the path
+
+- name: Set virtualenv path
+  set_fact: virtualenv_path=/usr/local/bin/
+
+### Supervisor setup
+#   We need to have a configuration directory for supervisor -- not just a single file
+
+- name: Supervisor conf dir setup
+  file:
+    path: /usr/local/etc/supervisord.d
+    state: directory
+    mode: 0755
+
+- name: Supervisor conf dir setup 2
+  lineinfile:
+    path: /usr/local/etc/supervisord.conf
+    line: "[include]"
+
+- name: Supervisor conf dir setup 3
+  lineinfile:
+    path: /usr/local/etc/supervisord.conf
+    line: "files = /usr/local/etc/supervisord.d/*.conf"
+    insertafter: "[include]"
+
+- name: Supervisor config dir fact
+  set_fact:
+    supervisor_config_dir: "/usr/local/etc/supervisord.d/"
+
+- name: Set supervisor service name
+  set_fact:
+    supervisor_service_name: supervisord
+
+- name: Ensure supervisor is started
+  when: instance_config.plone_use_supervisor
+  service: name=supervisord state=started enabled=yes
+

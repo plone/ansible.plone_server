@@ -78,3 +78,7 @@
   service:
     name=supervisord
     enabled=yes
+
+- name: Set supervisor service name
+  set_fact:
+    supervisor_service_name: supervisord
