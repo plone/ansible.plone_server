@@ -1,4 +1,4 @@
-1.3.2 unreleased
+1.3.2 2018-05-21
 
 - Add FreeBSD support, targetting 11.
   Generalize supervisor setup to make this a bit easier.
