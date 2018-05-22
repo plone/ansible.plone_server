@@ -55,6 +55,7 @@
     - libselinux-python
     - supervisor
     - git
+    - netcat
 
 - name: Update setuptools/pip/python-virtualenv
   pip:

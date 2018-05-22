@@ -21,6 +21,7 @@
     - supervisor
     - git
     - wv
+    - netcat
 
 - name: Ensure recent python-virtualenv
   pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin" --index-url=https://pypi.python.org/simple/' state=latest

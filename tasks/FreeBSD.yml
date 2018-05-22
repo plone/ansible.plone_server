@@ -20,6 +20,7 @@
     - git
     - wv
     - poppler
+    - socat
 
 - name: Ensure recent python-virtualenv
   pip: name=virtualenv extra_args='--index-url=https://pypi.python.org/simple/' state=latest

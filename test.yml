@@ -144,8 +144,8 @@
         - plone1
 
     - name: Check that we're using superlance in the p5 install (Debian)
-      shell: "grep eventlistener /etc/supervisor/conf.d/zeoserver_zeo.conf"
-      when: ansible_os_family == 'Debian'
+      shell: "grep eventlistener {{ supervisor_config_dir }}/zeoserver_zeo.conf"
+      when: ansible_os_family != 'Redhat'
       tags:
         - plone1
 
@@ -183,7 +183,7 @@
 
     - name: Check that we're not using superlance in the p4 install (Debian)
       shell: "[ ! `grep eventlistener /etc/supervisor/conf.d/p4_zeo.conf` ]"
-      when: ansible_os_family == 'Debian'
+      when: ansible_os_family != 'Redhat'
       tags:
         - plone2
 
@@ -213,3 +213,6 @@
       become_user: plone_daemon
       tags:
         - plone3
+
+    - name: Test tcpcheck
+      command: "echo quit | netcat 127.0.0.1 8181"
