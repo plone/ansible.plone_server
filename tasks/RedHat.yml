@@ -55,17 +55,20 @@
     - libselinux-python
     - supervisor
     - git
-    - netcat
+    - socat
 
-- name: Update setuptools/pip/python-virtualenv
-  pip:
-    name={{ item }}
-    state=latest
-    extra_args='--index-url=https://pypi.python.org/simple/'
-  with_items:
-    - setuptools
-    - pip
-    - virtualenv
+# - name: Update setuptools/pip/python-virtualenv
+#   pip:
+#     name={{ item }}
+#     state=latest
+#     extra_args='--index-url=https://pypi.python.org/simple/'
+#   with_items:
+#     - setuptools
+#     - pip
+#     - virtualenv
+
+- name: Set virtualenv path
+  set_fact: virtualenv_path=/usr/bin/
 
 - name: "CentOS 7: install wv from EPEL6"
   yum: pkg=https://dl.fedoraproject.org/pub/epel/6/x86_64/Packages/w/wv-1.2.7-2.el6.x86_64.rpm state=present

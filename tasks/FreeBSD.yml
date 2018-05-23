@@ -11,6 +11,7 @@
     - gtar
     - py27-pip
     - py27-setuptools
+    - py27-virtualenv
     - libxml2
     - libxslt
     - unzip
@@ -22,10 +23,10 @@
     - poppler
     - socat
 
-- name: Ensure recent python-virtualenv
-  pip: name=virtualenv extra_args='--index-url=https://pypi.python.org/simple/' state=latest
-  # note that this installs to /usr/local/bin
-  # which is not automatically on the path
+# - name: Ensure recent python-virtualenv
+#   pip: name=virtualenv extra_args='--index-url=https://pypi.python.org/simple/' state=latest
+#   # note that this installs to /usr/local/bin
+#   # which is not automatically on the path
 
 - name: Set virtualenv path
   set_fact: virtualenv_path=/usr/local/bin/

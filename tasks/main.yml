@@ -176,6 +176,16 @@
     backup=yes
   register: instance_status
 
+- name: Copy requirements file
+  when: not instance_config.plone_buildout_git_repo
+  template:
+    src=requirements.txt.j2
+    dest={{ plone_instance_home }}/requirements.txt
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+    backup=yes
+  register: instance_status
+
 - name: Instance bin directory
   file:
     path={{ plone_instance_home }}/bin
@@ -194,13 +204,8 @@
     command: "{{ virtualenv_path | default() }}virtualenv --python={{ plone_python_path }} {{ instance_config.plone_target_path }}/python{{ plone_python_version }} \
       creates={{ instance_config.plone_target_path }}/python{{ plone_python_version }}"
 
-  - name: Fix setuptools version (Plone < 5)
-    command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
-
-  - name: pip install zc.buildout (Plone < 5)
-    command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
-    args:
-      creates: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/buildout"
+  - name: Python requirements for this virtualenv
+    command: "{{ instance_config.plone_target_path }}/python{{ plone_python_version }}/bin/pip install -r {{ plone_instance_home }}/requirements.txt"
 
   - name: symlink Python buildout to bin/buildout (Plone < 5)
     file:
@@ -218,14 +223,8 @@
       creates: "{{ plone_instance_home }}/bin/python"
     become_user: "{{ instance_config.plone_buildout_user }}"
 
-  - name: Fix setuptools version (Plone >= 5)
-    command: "{{ plone_instance_home }}/bin/pip install -U setuptools=={{ instance_config.plone_setuptools_version }}"
-    become_user: "{{ instance_config.plone_buildout_user }}"
-
-  - name: pip install zc.buildout (Plone >= 5)
-    command: "{{ plone_instance_home }}/bin/pip install zc.buildout=={{ instance_config.plone_zc_buildout_version }}"
-    args:
-      creates: "{{ plone_instance_home }}/bin/buildout"
+  - name: Python requirements for this virtualenv
+    command: "{{ plone_instance_home }}/bin/pip install -r {{ plone_instance_home }}/requirements.txt"
     become_user: "{{ instance_config.plone_buildout_user }}"
   when: instance_config.plone_version >= '5.0' and bin_buildout.stat.exists == False
 

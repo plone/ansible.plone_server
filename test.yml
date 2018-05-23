@@ -215,4 +215,4 @@
         - plone3
 
     - name: Test tcpcheck
-      command: "echo quit | netcat 127.0.0.1 8181"
+      command: "echo quit | socat TCP:127.0.0.1:8181"

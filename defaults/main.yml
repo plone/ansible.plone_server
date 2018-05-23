@@ -12,6 +12,8 @@ plone_setuptools_version: '26.1.1'
 
 plone_zc_buildout_version: '2.5.3'
 
+plone_pip_version: '10.0.1'
+
 plone_python_path: "/usr/bin/python{{ plone_python_version }}"
 
 plone_target_path: "/usr/local/plone-{{ plone_major_version }}"

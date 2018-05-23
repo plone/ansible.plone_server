@@ -10,6 +10,7 @@
     - curl
     - python-setuptools
     - python-pip
+    - python-virtualenv
     - python-dev
     - libz-dev
     - libssl-dev
@@ -21,15 +22,15 @@
     - supervisor
     - git
     - wv
-    - netcat
+    - socat
 
-- name: Ensure recent python-virtualenv
-  pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin" --index-url=https://pypi.python.org/simple/' state=latest
-  # note that this installs to /usr/local/bin
-  # which is not automatically on the path
+# - name: Ensure recent python-virtualenv
+#   pip: name=virtualenv extra_args='--install-option="--install-scripts=/usr/local/bin" --index-url=https://pypi.python.org/simple/' state=latest
+#   # note that this installs to /usr/local/bin
+#   # which is not automatically on the path
 
 - name: Set virtualenv path
-  set_fact: virtualenv_path=/usr/local/bin/
+  set_fact: virtualenv_path=/usr/bin/
 
 - name: Ensure supervisor is started
   when: instance_config.plone_use_supervisor
