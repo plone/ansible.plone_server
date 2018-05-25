@@ -1,3 +1,14 @@
+1.3.3 2018-08-24
+
+- Switch to using platform virtualenv whenever available.
+  Then, use requirements.txt method for updating pip, setuptools, zc.buildout.
+  [smcmahon]
+
+- Drop Trusty and CentOS7 from tested environments. i
+  They no longer have Pythons current enough for Plone 5.1.x.
+  (They're still fine for earlier versions of Plone.)
+  [smcmahon]
+
 1.3.2 2018-05-21
 
 - Add FreeBSD support, targetting 11.

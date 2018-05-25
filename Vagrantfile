@@ -71,14 +71,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     jessie.vm.provision "ansible", playbook:"test.yml"
   end
 
-  config.vm.define "trusty", primary: false, autostart: false do |trusty|
-    trusty.vm.box = "ubuntu/trusty64"
-    trusty.vm.synced_folder ".", "/vagrant", disabled: true
-    trusty.vm.provision "write_vbox_cfg", machine: "trusty"
-    trusty.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
+#   config.vm.define "trusty", primary: false, autostart: false do |trusty|
+#     trusty.vm.box = "ubuntu/trusty64"
+#     trusty.vm.synced_folder ".", "/vagrant", disabled: true
+#     trusty.vm.provision "write_vbox_cfg", machine: "trusty"
+#     trusty.vm.provision "ansible" do |ansible|
+#       ansible.playbook = "test.yml"
+#     end
+#   end
 
   config.vm.define "xenial", autostart: false do |myhost|
     myhost.vm.box = "ubuntu/xenial64"
@@ -98,14 +98,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "centos7", primary: false, autostart: false do |centos7|
-    centos7.vm.box = "centos/7"
-    centos7.vm.synced_folder ".", "/vagrant", disabled: true
-    centos7.vm.provision "write_vbox_cfg", machine: "centos7"
-    centos7.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
-  end
+#   config.vm.define "centos7", primary: false, autostart: false do |centos7|
+#     centos7.vm.box = "centos/7"
+#     centos7.vm.synced_folder ".", "/vagrant", disabled: true
+#     centos7.vm.provision "write_vbox_cfg", machine: "centos7"
+#     centos7.vm.provision "ansible" do |ansible|
+#       ansible.playbook = "test.yml"
+#     end
+#   end
 
   config.vm.define "freebsd11", primary: false, autostart: false do |freebsd11|
     freebsd11.vm.box = "freebsd/FreeBSD-11.1-RELEASE"
