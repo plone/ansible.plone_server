@@ -19,6 +19,8 @@
 - Automated configuration of the tcp check port wasn't working for multiple plones.
   Deliberately specified ports on a plone-by-plone level was working.
   Fixed.
+
+- Switch to platform virtualenv broke use of memmon in some environments. Fixed.
   [smcmahon]
 
 1.3.3 2018-08-24
