@@ -449,6 +449,7 @@ If plone_client_tcpcheck, monitor threads will be configured for each Plone ZEO 
 This directive allows you to control the base port.
 There will be as many ports used as there are Plone ZEO clients.
 The default is "{{ plone_client_base_port + 100 }}".
+This is not a global variable; it may only be overridden in the plone_config argument when the role is called.
 
 
 ### Cron jobs
