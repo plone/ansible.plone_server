@@ -1,5 +1,9 @@
 1.3.4 unreleased
 
+- superlance was needlessly installed even if plone_hot_monitor was set to 'cron'.
+  Harmless, but untidy.
+  [smcmahon]
+
 - Automated configuration of the tcp check port wasn't working for multiple plones.
   Deliberately specified ports on a plone-by-plone level was working.
   Fixed.
