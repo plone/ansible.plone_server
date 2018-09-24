@@ -1,4 +1,4 @@
-1.3.4 unreleased
+1.3.4 2018-09-24
 
 - Fix tcpchecks in test.yml.
 

@@ -155,6 +155,11 @@
       tags:
         - plone1
 
+    - name: Test tcpcheck
+      shell: "echo quit | socat -T 1 TCP:127.0.0.1:5181 stdio"
+      tags:
+        - plone1
+
     - name: Check to see if Plone 4.3.x is running
       uri:
         url: http://127.0.0.1:4081/Plone
@@ -193,6 +198,11 @@
       tags:
         - plone2
 
+    - name: Test tcpcheck
+      shell: "echo quit | socat -T 1 TCP:127.0.0.1:4181 stdio"
+      tags:
+        - plone2
+
     - name: Attempt a backup for the client-less install
       command: "/usr/local/plone-5.1/no_clients_custom_backup/bin/backup"
       become_user: plone_daemon
@@ -213,6 +223,3 @@
       become_user: plone_daemon
       tags:
         - plone3
-
-    - name: Test tcpcheck
-      command: "echo quit | socat TCP:127.0.0.1:8181"
