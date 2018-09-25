@@ -1,6 +1,13 @@
+1.3.5 unreleased
+
+- 1.3.4's fix for configuration of tcpcheck port broke if client count wasn't specified in the individual config.
+  Fixed.
+  [smcmahon]
+
 1.3.4 2018-09-24
 
 - Fix tcpchecks in test.yml.
+  [smcmahon]
 
 - superlance was needlessly installed even if plone_hot_monitor was set to 'cron'.
   Harmless, but untidy.
