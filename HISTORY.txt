@@ -1,5 +1,8 @@
 1.3.5 unreleased
 
+- memmon's supervisor configuration failed if memmon wasn't on a particular path. Fixed.
+  [smcmahon]
+
 - 1.3.4's fix for configuration of tcpcheck port broke if client count wasn't specified in the individual config.
   Fixed.
   [smcmahon]
