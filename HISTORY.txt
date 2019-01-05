@@ -1,3 +1,8 @@
+1.3.6 unreleased
+
+- Update use of "apt" for Debian to avoid with_items, which has been deprecated for package handling.
+  [smcmahon]
+
 1.3.5 2018-09-25
 
 - memmon's supervisor configuration failed if memmon wasn't on a particular path. Fixed.

@@ -31,6 +31,26 @@ plone_buildout_git_repo:
 
 plone_buildout_git_version: master
 
+plone_debian_packages:
+  - build-essential
+  - cron
+  - curl
+  - python-setuptools
+  - python-pip
+  - python-virtualenv
+  - python-dev
+  - libz-dev
+  - libssl-dev
+  - libjpeg-dev
+  - libxslt1-dev
+  - poppler-utils
+  - lynx
+  - unzip
+  - supervisor
+  - git
+  - wv
+  - socat
+
 plone_initial_password:
 
 plone_install_zeoserver: yes
