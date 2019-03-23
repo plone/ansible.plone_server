@@ -69,23 +69,32 @@
         plone_client_count: 0
         plone_backup_path: /var/local/custom_backup_path
 
+      - plone_version: '5.2rc2-pending'
+
+        plone_zeo_port: 7100
+        plone_client_base_port: 7080
 
   roles:
 
-    - role: ansible.plone_server
-      plone_config: "{{ servers[0] }}"
-      tags:
-        - plone1
+    # - role: ansible.plone_server
+    #   plone_config: "{{ servers[0] }}"
+    #   tags:
+    #     - plone1
+
+    # - role: ansible.plone_server
+    #   plone_config: "{{ servers[1] }}"
+    #   tags:
+    #     - plone2
+
+    # - role: ansible.plone_server
+    #   plone_config: "{{ servers[2] }}"
+    #   plone_backup_post_command: |
+    #     touch ${buildout:backups-dir}/backups/done
+    #   tags:
+    #     - plone3
 
     - role: ansible.plone_server
-      plone_config: "{{ servers[1] }}"
-      tags:
-        - plone2
-
-    - role: ansible.plone_server
-      plone_config: "{{ servers[2] }}"
-      plone_backup_post_command: |
-        touch ${buildout:backups-dir}/backups/done
+      plone_config: "{{ servers[3] }}"
       tags:
         - plone3
 

@@ -2,11 +2,15 @@
 
 ansible_ssh_pipelining: true
 
-plone_version: '5.1.2'
+plone_version: '5.1.4'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
 plone_python_version: '2.7'
+
+plone_download_requirements_txt: yes
+
+# If plone_download_requirements_txt is false, we'll use the version #s below
 
 plone_setuptools_version: '26.1.1'
 
@@ -185,6 +189,8 @@ instance_config:
   plone_buildout_cache_url: "{% if plone_config.plone_buildout_cache_url is defined %}{{ plone_config.plone_buildout_cache_url }}{% elif plone_config.plone_version is defined %}https://dist.plone.org/release/{{ work_version }}/buildout-cache.tar.bz2{% else %}{{ plone_buildout_cache_url }}{% endif %}"
 
   plone_python_version: "{{ plone_config.plone_python_version|default(plone_python_version) }}"
+  plone_download_requirements_txt:  "{{ plone_config.plone_download_requirements_txt|default(plone_download_requirements_txt) }}"
+  plone_pip_version: "{{ plone_config.plone_pip_version|default(plone_pip_version) }}"
   plone_setuptools_version: "{{ plone_config.plone_setuptools_version|default(plone_setuptools_version) }}"
   plone_zc_buildout_version: "{{ plone_config.plone_zc_buildout_version|default(plone_zc_buildout_version) }}"
   plone_backup_path: "{{ plone_config.plone_backup_path|default(plone_backup_path) }}"
