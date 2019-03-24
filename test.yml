@@ -70,33 +70,34 @@
         plone_backup_path: /var/local/custom_backup_path
 
       - plone_version: '5.2rc2-pending'
+        plone_instance_name: p52
 
         plone_zeo_port: 7100
         plone_client_base_port: 7080
 
   roles:
 
-    # - role: ansible.plone_server
-    #   plone_config: "{{ servers[0] }}"
-    #   tags:
-    #     - plone1
+    - role: ansible.plone_server
+      plone_config: "{{ servers[0] }}"
+      tags:
+        - plone1
 
-    # - role: ansible.plone_server
-    #   plone_config: "{{ servers[1] }}"
-    #   tags:
-    #     - plone2
+    - role: ansible.plone_server
+      plone_config: "{{ servers[1] }}"
+      tags:
+        - plone2
 
-    # - role: ansible.plone_server
-    #   plone_config: "{{ servers[2] }}"
-    #   plone_backup_post_command: |
-    #     touch ${buildout:backups-dir}/backups/done
-    #   tags:
-    #     - plone3
+    - role: ansible.plone_server
+      plone_config: "{{ servers[2] }}"
+      plone_backup_post_command: |
+        touch ${buildout:backups-dir}/backups/done
+      tags:
+        - plone3
 
     - role: ansible.plone_server
       plone_config: "{{ servers[3] }}"
       tags:
-        - plone3
+        - plone4
 
   tasks:
 
@@ -232,3 +233,12 @@
       become_user: plone_daemon
       tags:
         - plone3
+
+    - name: Check to see if Plone 5.2 is running
+      uri:
+        url: http://127.0.0.1:7081/Plone
+        method: GET
+        status_code: 200
+      tags:
+        - plone4
+

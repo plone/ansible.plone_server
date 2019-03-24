@@ -179,8 +179,28 @@
     backup=yes
   register: instance_status
 
-- name: Copy requirements file
-  when: not (instance_config.plone_download_requirements_txt or instance_config.plone_buildout_git_repo)
+- name: Determine if we have a requirements.txt file
+  stat:
+    path: "{{ plone_instance_home }}/requirements.txt"
+  register: requirements_txt
+
+- name: Download requirements file if requested and not already present
+  when: instance_config.plone_download_requirements_txt and not requirements_txt.stat.exists
+  get_url:
+    url=https://dist.plone.org/release/{{ instance_config.plone_version }}/requirements.txt
+    dest={{ plone_instance_home }}/requirements.txt
+    owner={{ instance_config.plone_buildout_user }}
+    group={{ instance_config.plone_group }}
+    mode=0444
+  ignore_errors: yes
+
+- name: Determine if we have a requirements.txt file
+  stat:
+    path: "{{ plone_instance_home }}/requirements.txt"
+  register: requirements_txt
+
+- name: Copy requirements file from template
+  when: not requirements_txt.stat.exists
   template:
     src=requirements.txt.j2
     dest={{ plone_instance_home }}/requirements.txt
@@ -188,15 +208,6 @@
     group={{ instance_config.plone_group }}
     backup=yes
   register: instance_status
-
-- name: Download requirements file
-  when: instance_config.plone_download_requirements_txt and not instance_config.plone_buildout_git_repo
-  get_url:
-    url=https://dist.plone.org/release/{{ instance_config.plone_version }}/requirements.txt
-    dest={{ plone_instance_home }}/requirements.txt
-    owner={{ instance_config.plone_buildout_user }}
-    group={{ instance_config.plone_group }}
-    mode=0444
 
 - name: Instance bin directory
   file:

@@ -163,7 +163,9 @@ eggs =
 
 zcml = ${buildout:zcml}
 
+{% if instance_config.plone_version is version('5.1.99', '<') %}
 products = ${buildout:directory}/products
+{% endif %}
 
 environment-vars = ${buildout:environment-vars}
 
@@ -273,8 +275,9 @@ scripts = zopepy
 recipe = plone.recipe.precompiler
 eggs = ${buildout:eggs}
 compile-mo-files = true
+{% if instance_config.plone_version is version('5.1.99', '<') %}
 extra-paths = ${buildout:directory}/products
-
+{% endif %}
 
 {% for key, value in instance_config.plone_extra_parts.items() %}
 [{{ key }}]
