@@ -1,5 +1,21 @@
 1.3.6 unreleased
 
+- Add Plone 5.2 to test suite.
+  It's working with Python 2.7 for RC2-pending.
+  [smcmahon]
+
+- Do not specify the products folder in buildout config for Plone 5.2+.
+  It's no longer supported.
+  [smcmahon]
+
+- By default, try to download a requirements.txt from dist.plone.org.
+  If that doesn't work (e.g., for older Plone versions), fall back to our previous strategy of creating one from an included template.
+  The requirements.txt is used via pip to prime the virtualenv prior to running buildout.
+  [smcmahon]
+
+- Default Plone version -> 5.1.4.
+  [smcmahon]
+
 - Update use of "apt" for Debian to avoid with_items, which has been deprecated for package handling.
   [smcmahon]
 
