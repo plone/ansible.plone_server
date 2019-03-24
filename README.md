@@ -411,6 +411,21 @@ Allows you to add to the list of locations to search for distributions.
 Should we create a Plone site in the ZODB when it's first initialized? Defaults to 'yes'.
 
 
+### plone_download_requirements_txt
+
+
+    plone_download_requirements_txt: yes
+    
+Should we download a requirements.txt file from dist.plone.org for the matching version of Plone?
+If you set this to `no`, or if dist.plone.org does not have a requirements file for the target version, we'll create one from a template.
+If we create from template, the following settings are used, all of which may be overriden:
+
+    plone_setuptools_version: '26.1.1'
+    plone_zc_buildout_version: '2.5.3'
+    plone_pip_version: '10.0.1'
+
+However the requirements.txt file is created, it will be used via pip to prime our virtualenv.
+
 ### plone_site_id
 
     plone_site_id: client55
