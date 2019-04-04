@@ -15,6 +15,7 @@
     plone_instance_backup_path: "{{ instance_config.plone_backup_path|default(instance_config.plone_var_path, true) }}/{{ instance_config.plone_instance_name }}"
     supervisor_instance_discriminator: "{{ '%s_' % instance_config.plone_instance_name }}"
     plone_python_version: "{{ instance_config.plone_python_version }}"
+    plone_python_major_version: "{{ instance_config.plone_python_version.split('.')[0] }}"
     plone_pip_version: "{{ instance_config.plone_pip_version }}"
     plone_setuptools_version: "{{ instance_config.plone_setuptools_version }}"
     plone_zc_buildout_version: "{{ instance_config.plone_zc_buildout_version }}"

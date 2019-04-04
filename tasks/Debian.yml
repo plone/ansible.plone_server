@@ -5,6 +5,14 @@
 - name: Update packages via apt
   apt: upgrade=dist update_cache=yes
 
+- name: Ensure required python2 packages
+  when: plone_python_major_version == '2'
+  apt: pkg={{ plone_debian_python2_packages }} state=present
+
+- name: Ensure required python3 packages
+  when: plone_python_major_version == '3'
+  apt: pkg={{ plone_debian_python3_packages }} state=present
+
 - name: Ensure required packages
   apt: pkg={{ plone_debian_packages }} state=present
 
