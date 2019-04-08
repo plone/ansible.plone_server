@@ -35,25 +35,33 @@ plone_buildout_git_repo:
 
 plone_buildout_git_version: master
 
+plone_debian_python2_packages:
+  - python-dev
+  - python-setuptools
+  - python-pip
+
+plone_debian_python3_packages:
+  - python3-dev
+  - python3-setuptools
+  - python3-pip
+
 plone_debian_packages:
   - build-essential
   - cron
   - curl
-  - python-setuptools
-  - python-pip
-  - python-virtualenv
-  - python-dev
-  - libz-dev
-  - libssl-dev
-  - libjpeg-dev
-  - libxslt1-dev
-  - poppler-utils
-  - lynx
-  - unzip
-  - supervisor
   - git
-  - wv
+  - libjpeg-dev
+  - libssl-dev
+  - libxslt1-dev
+  - libz-dev
+  - lynx
+  - poppler-utils
+  - python-pip-whl
   - socat
+  - supervisor
+  - virtualenv
+  - unzip
+  - wv
 
 plone_initial_password:
 
@@ -189,6 +197,7 @@ instance_config:
   plone_buildout_cache_url: "{% if plone_config.plone_buildout_cache_url is defined %}{{ plone_config.plone_buildout_cache_url }}{% elif plone_config.plone_version is defined %}https://dist.plone.org/release/{{ work_version }}/buildout-cache.tar.bz2{% else %}{{ plone_buildout_cache_url }}{% endif %}"
 
   plone_python_version: "{{ plone_config.plone_python_version|default(plone_python_version) }}"
+  plone_python_path: "{{ plone_config.plone_python_path|default('/usr/bin/python' + plone_config.plone_python_version|default(plone_python_version)) }}"
   plone_download_requirements_txt:  "{{ plone_config.plone_download_requirements_txt|default(plone_download_requirements_txt) }}"
   plone_pip_version: "{{ plone_config.plone_pip_version|default(plone_pip_version) }}"
   plone_setuptools_version: "{{ plone_config.plone_setuptools_version|default(plone_setuptools_version) }}"

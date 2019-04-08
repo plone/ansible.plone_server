@@ -10,6 +10,7 @@
     plone_initial_password: admin
 
     servers:
+
       - plone_version: '5.1.2'
 
         plone_zeo_port: 5100
@@ -55,9 +56,11 @@
           - "zc.z3monitor = 0.8.0"
           - "zc.monitor = 0.3.1"
           - "zc.ngi = 2.1.0"
+          - "collective.recipe.backup = 4.0.1"
+          - "plone.recipe.precompiler = 0.6"
+          - "plone.recipe.command = 1.1"
 
         plone_zodb_cache_size_bytes: "512 MB"
-
 
         plone_client_max_memory: 500MB
 
@@ -70,10 +73,20 @@
         plone_backup_path: /var/local/custom_backup_path
 
       - plone_version: '5.2rc2-pending'
-        plone_instance_name: p52
+        plone_instance_name: p52py27
+
+        plone_zeo_port: 3100
+        plone_client_base_port: 3080
+
+      - plone_version: '5.2rc2-pending'
+        plone_instance_name: p52py3
+        plone_python_version: '3'
 
         plone_zeo_port: 7100
         plone_client_base_port: 7080
+
+        # Not working with python3
+        plone_client_tcpcheck: no
 
   roles:
 
@@ -99,6 +112,11 @@
       tags:
         - plone4
 
+    - role: ansible.plone_server
+      plone_config: "{{ servers[4] }}"
+      tags:
+        - plone5
+
   tasks:
 
     # make sure plone daemons have had time to come up
@@ -116,6 +134,9 @@
 
     - stat: path=/usr/local/plone-5.1/zeoserver/main.yml
       register: st
+      tags:
+        - plone1
+
     - fail: msg="copy of extra dir failed"
       when: not st.stat.exists
       tags:
@@ -234,11 +255,19 @@
       tags:
         - plone3
 
-    - name: Check to see if Plone 5.2 is running
+    - name: Check to see if Python 2.7 / Plone 5.2 is running
+      uri:
+        url: http://127.0.0.1:3081/Plone
+        method: GET
+        status_code: 200
+      tags:
+        - plone4
+
+    - name: Check to see if Python 3 / Plone 5.2 is running
       uri:
         url: http://127.0.0.1:7081/Plone
         method: GET
         status_code: 200
       tags:
-        - plone4
+        - plone5
 

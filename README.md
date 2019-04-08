@@ -129,6 +129,14 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 Which Plone version do you wish to install? This defaults to the current stable version at the time you copy or clone the playbook. Make sure plone_major_version and plone_version are string variables or they won't compare correctly.
 
 
+### plone_python_version
+
+    plone_python_version: '2.7'
+
+For Plone 5.2+, you may specify '2.7' or '3'.
+Earlier Plones must use '2.7'.
+
+
 ### plone_initial_password
 
     plone_initial_password: alnv%r(ybs83nt
@@ -415,7 +423,7 @@ Should we create a Plone site in the ZODB when it's first initialized? Defaults 
 
 
     plone_download_requirements_txt: yes
-    
+
 Should we download a requirements.txt file from dist.plone.org for the matching version of Plone?
 If you set this to `no`, or if dist.plone.org does not have a requirements file for the target version, we'll create one from a template.
 If we create from template, the following settings are used, all of which may be overriden:
@@ -454,6 +462,9 @@ If we're creating a Plone site, what should be the default language? Defaults to
 
 As of plone server role version 1.3.0, we use five.z2monitor to set up monitor threads for each Plone ZEO client.
 You may use this directive to turn this off.
+
+If you are using Python 3+, you'll want to check to see if five.z2monitor has a compatible update.
+Otherwise, turn this off.
 
 
 ### plone_client_base_tcpcheck_port
