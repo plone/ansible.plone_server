@@ -113,7 +113,7 @@
         - plone4
 
     - role: ansible.plone_server
-      plone_config: "{{ servers[3] }}"
+      plone_config: "{{ servers[4] }}"
       tags:
         - plone5
 
