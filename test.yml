@@ -72,13 +72,13 @@
         plone_client_count: 0
         plone_backup_path: /var/local/custom_backup_path
 
-      - plone_version: '5.2rc2-pending'
+      - plone_version: '5.2.0'
         plone_instance_name: p52py27
 
         plone_zeo_port: 3100
         plone_client_base_port: 3080
 
-      - plone_version: '5.2rc2-pending'
+      - plone_version: '5.2.0'
         plone_instance_name: p52py3
         plone_python_version: '3'
 
