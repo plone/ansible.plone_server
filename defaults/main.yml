@@ -50,6 +50,7 @@ plone_debian_packages:
   - cron
   - curl
   - git
+  - libffi-dev
   - libjpeg-dev
   - libssl-dev
   - libxslt1-dev
