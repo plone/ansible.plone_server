@@ -299,7 +299,7 @@
 
 - name: Superlance installed
   when: instance_config.plone_use_supervisor and instance_config.plone_hot_monitor == 'superlance' and instance_config.plone_client_max_memory != "0"
-  pip: name=superlance version=0.11 extra_args='--index-url=https://pypi.python.org/simple/'
+  pip: name=superlance version=1.0 extra_args='--index-url=https://pypi.python.org/simple/'
 
 - name: Supervisor process control setup
   when: instance_config.plone_use_supervisor and ansible_os_family != 'Redhat'
