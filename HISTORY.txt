@@ -1,5 +1,8 @@
 Unreleased
 
+- Bump superlance to v1.0 to support Python 3
+  [stevepiercy]
+
 - Buildout would not be re-run even when the buildout template had changed.  Fixed.
   [fulv]
 
