@@ -3,7 +3,9 @@
 # Debian-family dependencies
 
 - name: Update packages via apt
-  apt: upgrade=yes update_cache=yes
+  apt: upgrade=dist update_cache=yes
+  tags:
+    - upgrade_dist
 
 - name: Ensure required python2 packages
   when: plone_python_major_version == '2'
