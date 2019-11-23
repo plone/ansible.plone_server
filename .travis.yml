@@ -2,7 +2,7 @@
 language: python
 python: "2.7"
 sudo: required
-dist: trusty
+dist: bionic
 
 env:
   - SITE=test.yml
@@ -21,4 +21,4 @@ script:
   - "ansible-playbook -i inventory $SITE --syntax-check"
 
   # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i inventory $SITE --connection=local --sudo"
+  - "ansible-playbook -i inventory $SITE --connection=local --become"
