@@ -1,5 +1,9 @@
 1.3.8 (unreleased)
 
+- Fix broken travis ci by changing "--sudo" to "--become" in ansible-playbook CL.
+  This is an adjustment required by Ansible's dropping support for the --sudo argument.
+  [smcmahon]
+
 - Earlier buildout fix in this release introduced a typo that broke buildout operation under some conditions. Fixed.
   [smcmahon]
 
