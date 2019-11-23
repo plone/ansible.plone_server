@@ -1,4 +1,7 @@
-Unreleased
+1.3.8 (unreleased)
+
+- Earlier buildout fix in this release introduced a typo that broke buildout operation under some conditions. Fixed.
+  [smcmahon]
 
 - Bump superlance to v1.0 to support Python 3
   [stevepiercy]

@@ -274,8 +274,8 @@
 - name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
-        (instance_status.changed or requirements_status.changed or extra_dir_copy_result.changed or not 
-        .stat.exists)
+        (instance_status.changed or requirements_status.changed or extra_dir_copy_result.changed or not
+        buildout_status.stat.exists)
   shell: "bin/buildout -c {{ instance_config.plone_buildout_cfg }} > buildout.log 2>&1"
   args:
     chdir: "{{ plone_instance_home }}"
