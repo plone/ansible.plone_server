@@ -1,5 +1,8 @@
 1.3.8 (unreleased)
 
+- Fix CI by updating .travis to use bionic and --become rather than --sudo.
+  [smcmahon]
+
 - Earlier buildout fix in this release introduced a typo that broke buildout operation under some conditions. Fixed.
   [smcmahon]
 
