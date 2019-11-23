@@ -88,6 +88,9 @@
         # Not working with python3
         plone_client_tcpcheck: no
 
+        # Make sure p3 version works with superlance
+        plone_hot_monitor: superlance
+
   roles:
 
     - role: ansible.plone_server
