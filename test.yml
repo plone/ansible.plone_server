@@ -122,7 +122,7 @@
     # make sure plone daemons have had time to come up
     - pause: minutes=1
 
-    - pip: name=httplib2 extra_args='--index-url=https://pypi.python.org/simple/' {{ 'executable=' ~ virtualenv_path ~ 'pip3' if plone_python_version == '3' }}
+    - pip: name=httplib2 extra_args='--index-url=https://pypi.python.org/simple/'
 
     - name: Check to see if Plone 5 is running
       uri:
