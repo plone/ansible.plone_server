@@ -61,14 +61,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     jessie.vm.box = "debian/jessie64"
     jessie.vm.synced_folder ".", "/vagrant", disabled: true
     jessie.vm.provision "write_vbox_cfg", machine: "jessie"
-    jessie.vm.provision "ansible", playbook:"test.yml"
+    # jessie.vm.provision "ansible", playbook:"test.yml"
   end
 
-  config.vm.define "stretch", autostart: false do |jessie|
-    jessie.vm.box = "debian/stretch64"
-    jessie.vm.synced_folder ".", "/vagrant", disabled: true
-    jessie.vm.provision "write_vbox_cfg", machine: "stretch"
-    jessie.vm.provision "ansible", playbook:"test.yml"
+  config.vm.define "stretch", autostart: false do |stretch|
+    stretch.vm.box = "debian/stretch64"
+    stretch.vm.synced_folder ".", "/vagrant", disabled: true
+    stretch.vm.provision "write_vbox_cfg", machine: "stretch"
+    # stretch.vm.provision "ansible", playbook:"test.yml"
   end
 
 #   config.vm.define "trusty", primary: false, autostart: false do |trusty|
@@ -85,9 +85,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     myhost.vm.provision "shell", inline: "apt-get update"
     myhost.vm.provision "shell", inline: "apt-get install -y python"
     myhost.vm.provision "write_vbox_cfg", machine: "xenial"
-    myhost.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
+    # myhost.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "test.yml"
+    # end
   end
 
   config.vm.define "bionic", primary: true, autostart: true do |myhost|
@@ -95,9 +95,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     myhost.vm.provision "shell", inline: "apt-get update"
     myhost.vm.provision "shell", inline: "apt-get install -y python python-pip"
     myhost.vm.provision "write_vbox_cfg", machine: "bionic"
-    myhost.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
+    # myhost.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "test.yml"
+    # end
   end
 
 #   config.vm.define "centos7", primary: false, autostart: false do |centos7|
@@ -127,9 +127,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     freebsd11.vm.provision "shell", inline: "ln -F -s /usr/local/bin/python2.7 /usr/bin/python2.7"
 
     freebsd11.vm.provision "write_vbox_cfg", machine: "freebsd11"
-    freebsd11.vm.provision "ansible" do |ansible|
-      ansible.playbook = "test.yml"
-    end
+    # freebsd11.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "test.yml"
+    # end
   end
 
 end
