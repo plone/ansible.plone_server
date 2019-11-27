@@ -29,10 +29,10 @@
 
   roles:
 
-    - role: plone_server
+    - role: ansible.plone_server
       plone_config: "{{ servers[0] }}"
 
-    - role: plone_server
+    - role: ansible.plone_server
       plone_config: "{{ servers[1] }}"
 
   tasks:
