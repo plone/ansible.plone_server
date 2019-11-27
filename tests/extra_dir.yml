@@ -10,12 +10,12 @@
   vars:
 
     plone_initial_password: admin
-    plone_buildout_extra_dir: extras/
+    plone_buildout_extra_dir: tests/extras/
 
 
   roles:
 
-    - role: plone_server
+    - role: ansible.plone_server
 
   tasks:
 
@@ -30,7 +30,7 @@
         method: GET
         status_code: 200
 
-    - stat: path=/usr/local/plone-5.0/zeoserver/something.txt
+    - stat: path="{{ plone_target_path }}/zeoserver/something.txt"
       register: st
     - fail: msg="copy of extra dir failed"
       when: not st.stat.exists
