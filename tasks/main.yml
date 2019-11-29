@@ -298,9 +298,16 @@
 ###################################
 # Supervisor setup
 
-- name: Superlance installed
+- block:
+    - name: Superlance installed
+      when: plone_python_major_version != '3'
+      pip: name=superlance version=1.0 extra_args='--index-url=https://pypi.python.org/simple/'
+    
+    - name: Superlance installed
+      when: plone_python_major_version == '3'
+      pip: name=superlance version=1.0 extra_args='--index-url=https://pypi.python.org/simple/' executable=pip3
   when: instance_config.plone_use_supervisor and instance_config.plone_hot_monitor == 'superlance' and instance_config.plone_client_max_memory != "0"
-  pip: name=superlance version=1.0 extra_args='--index-url=https://pypi.python.org/simple/'
+
 
 - name: Supervisor process control setup
   when: instance_config.plone_use_supervisor and ansible_os_family != 'Redhat'

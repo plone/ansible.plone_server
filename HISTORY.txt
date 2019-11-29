@@ -13,6 +13,10 @@
 - Earlier buildout fix in this release introduced a typo that broke buildout operation under some conditions. Fixed.
   [smcmahon]
 
+- If plone_python_version == '3', then append an argument to install
+  superlance that specifies the path to pip3.
+  [stevepiercy]
+
 - Bump superlance to v1.0 to support Python 3
   [stevepiercy]
 

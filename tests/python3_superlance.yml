@@ -1,0 +1,41 @@
+---
+
+# Test that superlance is being used with Python 3 when appropriate
+
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+
+  vars:
+
+    plone_initial_password: admin
+    plone_version: 5.2.0
+    plone_python_version: "3.6"
+    plone_hot_monitor: superlance
+    plone_client_max_memory: 8500MB
+    plone_client_tcpcheck: no
+
+
+  roles:
+
+    - role: ansible.plone_server
+
+  tasks:
+
+    # make sure plone daemons have had time to come up
+    - pause: minutes=1
+
+    - pip: name=httplib2 extra_args='--index-url=https://pypi.python.org/simple/'
+
+    - name: Check to see if Zope is running
+      uri:
+        url: http://127.0.0.1:8081/
+        method: GET
+        status_code: 200
+
+    - name: Make sure memmon is using python3
+      shell: 'head --lines=1 /usr/local/bin/memmon | egrep "^#!.+/python3$"'
+
+# we also need a test to make sure it actually runs
+
