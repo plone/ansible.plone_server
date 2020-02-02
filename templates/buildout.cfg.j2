@@ -50,24 +50,50 @@ eggs =
 {% if instance_config.plone_client_tcpcheck %}
     five.z2monitor
 {% endif %}
-{% if instance_config.plone_version >= '5.0' %}
-{% if instance_config.plone_version is version('5.0.6', '<=') %}
-    Products.PloneHotfix20160830
+{% if instance_config.plone_version is version('5.0', '<') %}
+{% if instance_config.plone_version is version('4.3.7', '<=') %}
+    plone4.csrffixes
 {% endif %}
-{% if instance_config.plone_version is version('5.0.5', '<=') %}
+{% if instance_config.plone_version is version('4.3.9', '<=') %}
     Products.PloneHotfix20160419
 {% endif %}
-{% endif %}
-{% if instance_config.plone_version < '5.0' %}
 {% if instance_config.plone_version is version('4.3.11', '<=') %}
     Products.PloneHotfix20160830
+    Products.PloneHotfix20161129
+    Products.PloneHotfix20170117
 {% endif %}
-{% if instance_config.plone_version is version('4.3.10', '<=') %}
+{% if instance_config.plone_version is version('4.3.15', '<=') %}
+    Products.PloneHotfix20171128
+{% endif %}
+{% if instance_config.plone_version is version('4.3.19', '<=') %}
+    Products.PloneHotfix20200121
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version is version('5.0', '>=') and instance_config.plone_version is version('5.1', '<') %}
+{% if instance_config.plone_version is version('5.0.4', '<=') %}
     Products.PloneHotfix20160419
 {% endif %}
+{% if instance_config.plone_version is version('5.0.6', '<=') %}
+    Products.PloneHotfix20160830
+    Products.PloneHotfix20161129
+    Products.PloneHotfix20170117
 {% endif %}
-{% if instance_config.plone_version is version('4.3.8', '<') %}
-    plone4.csrffixes
+{% if instance_config.plone_version is version('5.0.9', '<=') %}
+    Products.PloneHotfix20171128
+{% endif %}
+{% if instance_config.plone_version is version('5.0.10', '<=') %}
+    Products.PloneHotfix20200121
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version is version('5.1', '>=') and instance_config.plone_version is version('5.2', '<') %}
+{% if instance_config.plone_version is version('5.1.6', '<=') %}
+    Products.PloneHotfix20200121
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version is version('5.2', '>=') %}
+{% if instance_config.plone_version is version('5.2.1', '<=') %}
+    Products.PloneHotfix20200121
+{% endif %}
 {% endif %}
 {% if instance_config.plone_additional_eggs %}
 {% for egg in instance_config.plone_additional_eggs %}
@@ -291,37 +317,53 @@ extra-paths = ${buildout:directory}/products
 
 [versions]
 buildout.sanitycheck = 1.0.2
-{% if instance_config.plone_version < '5.0' %}
+{% if instance_config.plone_version is version('5.0', '<') %}
 setuptools = 7.0
-{% if instance_config.plone_version is version('4.3.8', '<') %}
+{% if instance_config.plone_version is version('4.3.7', '<=') %}
 plone4.csrffixes = 1.0.8
 plone.protect = 3.0.17
 plone.keyring = 3.0.1
 plone.locking = 2.0.9
 {% endif %}
-{% if instance_config.plone_version is version('4.3.10', '<') %}
+{% if instance_config.plone_version is version('4.3.9', '<=') %}
 Products.PloneHotfix20160419 = 1.0
 {% endif %}
-{% if instance_config.plone_version is version('4.3.12', '<') %}
+{% if instance_config.plone_version is version('4.3.11', '<=') %}
 Products.PloneHotfix20160830 = 1.3
 Products.PloneHotfix20161129 = 1.2
 Products.PloneHotfix20170117 = 1.0
 {% endif %}
-{% if instance_config.plone_version is version('4.3.16', '<') %}
+{% if instance_config.plone_version is version('4.3.15', '<=') %}
 Products.PloneHotfix20171128 = 1.0
 {% endif %}
+{% if instance_config.plone_version is version('4.3.19', '<=') %}
+Products.PloneHotfix20200121 = 1.0
 {% endif %}
-{% if instance_config.plone_version >= '5.0' %}
-{% if instance_config.plone_version is version('5.0.5', '<') %}
+{% endif %}
+{% if instance_config.plone_version is version('5.0', '>=') and instance_config.plone_version is version('5.1', '<') %}
+{% if instance_config.plone_version is version('5.0.4', '<=') %}
 Products.PloneHotfix20160419 = 1.0
 {% endif %}
-{% if instance_config.plone_version is version('5.0.7', '<') %}
+{% if instance_config.plone_version is version('5.0.6', '<=') %}
 Products.PloneHotfix20160830 = 1.3
 Products.PloneHotfix20161129 = 1.2
 Products.PloneHotfix20170117 = 1.0
 {% endif %}
-{% if instance_config.plone_version is version('5.0.10', '<') %}
+{% if instance_config.plone_version is version('5.0.9', '<=') %}
 Products.PloneHotfix20171128 = 1.0
+{% endif %}
+{% if instance_config.plone_version is version('5.0.10', '<=') %}
+Products.PloneHotfix20200121 = 1.0
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version is version('5.1', '>=') and instance_config.plone_version is version('5.2', '<') %}
+{% if instance_config.plone_version is version('5.1.6', '<=') %}
+Products.PloneHotfix20200121 = 1.0
+{% endif %}
+{% endif %}
+{% if instance_config.plone_version is version('5.2', '>=') %}
+{% if instance_config.plone_version is version('5.2.1', '<=') %}
+Products.PloneHotfix20200121 = 1.0
 {% endif %}
 {% endif %}
 {% if instance_config.plone_additional_versions %}
