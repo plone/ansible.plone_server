@@ -1,5 +1,8 @@
 1.3.8 (unreleased)
 
+- Bump PloneHotfix20200121 to v1.1.
+  [stevepiercy]
+
 - Add PloneHotfix20200121. Normalize and sort hotfixes across eggs and
   versions sections.
   [stevepiercy]
