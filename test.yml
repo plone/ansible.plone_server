@@ -72,13 +72,13 @@
         plone_client_count: 0
         plone_backup_path: /var/local/custom_backup_path
 
-      - plone_version: '5.2.0'
+      - plone_version: '5.2.1'
         plone_instance_name: p52py27
 
         plone_zeo_port: 3100
         plone_client_base_port: 3080
 
-      - plone_version: '5.2.0'
+      - plone_version: '5.2.1'
         plone_instance_name: p52py3
         plone_python_version: '3'
 
@@ -235,7 +235,7 @@
         - plone2
 
     - name: Attempt a backup for the client-less install
-      command: "/usr/local/plone-5.1/no_clients_custom_backup/bin/backup"
+      command: "/usr/local/plone-5.2/no_clients_custom_backup/bin/backup"
       become_user: plone_daemon
       tags:
         - plone3
@@ -250,7 +250,7 @@
         - plone3
 
     - name: Attempt a restore for the client-less install
-      command: "/usr/local/plone-5.1/no_clients_custom_backup/bin/restore -n"
+      command: "/usr/local/plone-5.2/no_clients_custom_backup/bin/restore -n"
       become_user: plone_daemon
       tags:
         - plone3

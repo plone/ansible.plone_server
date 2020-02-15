@@ -1,5 +1,8 @@
 1.3.8 (unreleased)
 
+- Make 5.2.1 the default.
+  [smcmahon]
+
 - Add PloneHotfix20200121. Normalize and sort hotfixes across eggs and
   versions sections.
   [stevepiercy]
