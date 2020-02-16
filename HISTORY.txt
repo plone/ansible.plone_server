@@ -1,3 +1,8 @@
+1.3.9 unreleased
+
+- When copying buildout extra directory, preserve file modes.
+  [smcmahon]
+
 1.3.8 2020-02-15
 
 - Make 5.2.1 the default.
