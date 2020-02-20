@@ -231,7 +231,7 @@ http-address = 127.0.0.1:{{ instance_config.plone_client_base_port }}
 {% if instance_config.plone_zope_conf_additional or instance_config.plone_client_tcpcheck %}
 zope-conf-additional =
 {% if instance_config.plone_zope_conf_additional %}
-    {{ instance_config.plone_zope_conf_additional }}
+    {{ instance_config.plone_zope_conf_additional | indent(4) }}
 {% endif %}
 {% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
@@ -248,7 +248,7 @@ http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int +
 {% if instance_config.plone_zope_conf_additional or instance_config.plone_client_tcpcheck %}
 zope-conf-additional =
 {% if instance_config.plone_zope_conf_additional %}
-    {{ instance_config.plone_zope_conf_additional }}
+    {{ instance_config.plone_zope_conf_additional | indent(4)  }}
 {% endif %}
 {% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
