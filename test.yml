@@ -85,9 +85,6 @@
         plone_zeo_port: 7100
         plone_client_base_port: 7080
 
-        # Not working with python3
-        plone_client_tcpcheck: no
-
   roles:
 
     - role: ansible.plone_server

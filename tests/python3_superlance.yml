@@ -14,7 +14,6 @@
     plone_python_version: "3.6"
     plone_hot_monitor: superlance
     plone_client_max_memory: 8500MB
-    plone_client_tcpcheck: no
 
 
   roles:
