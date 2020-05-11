@@ -7,6 +7,7 @@
   [fulv]
 
 - Disable plone_client_tcpcheck for py3.
+  See discussion in https://github.com/plone/ansible-playbook/issues/138
   [fulv]
 
 1.3.8 2020-02-15
