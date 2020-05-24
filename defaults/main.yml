@@ -6,7 +6,7 @@ plone_version: '5.2.1'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
-plone_python_version: '3.7'
+plone_python_version: '3'
 
 plone_download_requirements_txt: yes
 
