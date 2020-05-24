@@ -6,7 +6,7 @@ plone_version: '5.2.1'
 
 plone_major_version: "{{ '.'.join(plone_version.split('.')[0:2]) }}"
 
-plone_python_version: '2.7'
+plone_python_version: '3.7'
 
 plone_download_requirements_txt: yes
 
@@ -96,7 +96,7 @@ plone_zeo_port: 8100
 
 plone_client_base_port: 8081
 
-plone_client_tcpcheck: yes
+plone_client_tcpcheck: no
 
 plone_environment_vars:
   - "zope_i18n_compile_mo_files true"
