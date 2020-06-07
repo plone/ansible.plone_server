@@ -301,7 +301,7 @@ Defaults to:
 ### plone_client_extras
 
     plone_client_extras: |
-        z2-log-level = error
+        z2-log-level = ERROR
 
 Extra text to add to all the client buildout parts.
 Don't use this to add zope-conf-additional stanzas, as they may be overriden.
