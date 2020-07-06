@@ -20,6 +20,13 @@
     plone_setuptools_version: "{{ instance_config.plone_setuptools_version }}"
     plone_zc_buildout_version: "{{ instance_config.plone_zc_buildout_version }}"
 
+# The following set_fact can be removed if five.z2monitor becomes py3-compatible
+# Also, it depends on plone_python_major_version, which is set just above.
+# So it needs its own separate set_fact
+- name: Disable plone_client_tcpcheck if python 3
+  set_fact:
+    plone_client_tcpcheck: "{{ {'2': instance_config.plone_client_tcpcheck, '3': 'no'}[ plone_python_major_version ] }}"
+
 
 ###################################
 # Prerequisites
