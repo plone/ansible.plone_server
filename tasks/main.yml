@@ -344,6 +344,7 @@
 # Stopping, removing the part and updating does the trick.
 - name: Supervisor task list is updated and we have a memmon
   when: instance_config.plone_use_supervisor and
+        instance_config.plone_hot_monitor == 'superlance' and
         instance_config.plone_client_max_memory != "0" and
         supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
   shell: 'supervisorctl stop {{ supervisor_instance_discriminator }}memmon; supervisorctl remove {{ supervisor_instance_discriminator }}memmon'

@@ -1,5 +1,8 @@
 1.3.9 unreleased
 
+- Don't try to restart memmon unless it's actually in use.
+  [smcmahon]
+
 - When copying buildout extra directory, preserve file modes.
   [smcmahon]
 
