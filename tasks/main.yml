@@ -339,6 +339,13 @@
   when: instance_config.plone_use_supervisor
   service: name={{ supervisor_service_name }} state=started
 
+- name: Supervisor task list is updated
+  when: supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
+  shell: 'supervisorctl update'
+
+# - debug:
+#     var: (instance_config.plone_use_supervisor, instance_config.plone_hot_monitor, instance_config.plone_client_max_memory)
+
 # memmon processes have a special problem: the memory setting may have changed in the config file
 # without the addition/deletion of a part. 'reread' and 'restart' don't update the memory configuration.
 # Stopping, removing the part and updating does the trick.
