@@ -93,7 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "bionic", primary: true, autostart: true do |myhost|
     myhost.vm.box = "ubuntu/bionic64"
     myhost.vm.provision "shell", inline: "apt-get update"
-    myhost.vm.provision "shell", inline: "apt-get install -y python python-pip"
+    # myhost.vm.provision "shell", inline: "apt-get install -y python python-pip"
     myhost.vm.provision "write_vbox_cfg", machine: "bionic"
     # myhost.vm.provision "ansible" do |ansible|
     #   ansible.playbook = "test.yml"

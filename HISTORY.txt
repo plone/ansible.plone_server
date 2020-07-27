@@ -1,5 +1,14 @@
 1.3.9 unreleased
 
+- Catch cases where supervisor needs an update after a config change.
+  [smcmahon]
+
+- Use python-pip-whl for focal compatability.
+  [smcmahon]
+
+- Don't try to restart memmon unless it's actually in use.
+  [smcmahon]
+
 - When copying buildout extra directory, preserve file modes.
   [smcmahon]
 

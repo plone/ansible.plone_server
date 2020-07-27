@@ -38,7 +38,7 @@ plone_buildout_git_version: master
 plone_debian_python2_packages:
   - python-dev
   - python-setuptools
-  - python-pip
+  - python-pip-whl
 
 plone_debian_python3_packages:
   - python3-dev
