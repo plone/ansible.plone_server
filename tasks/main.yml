@@ -279,16 +279,25 @@
   register: extra_dir_copy_result
   when: instance_config.plone_buildout_extra_dir
 
-- name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
+- block:
+  - name: "Run buildout - output goes to {{ plone_instance_home }}/buildout.log"
+    shell: "bin/buildout -c {{ instance_config.plone_buildout_cfg }} > buildout.log 2>&1"
+    args:
+      chdir: "{{ plone_instance_home }}"
+    become_user: "{{ instance_config.plone_buildout_user }}"
+    register: ran_buildout
   when: instance_config.plone_always_run_buildout or
         instance_config.plone_autorun_buildout and
         (instance_status.changed or requirements_status.changed or extra_dir_copy_result.changed or not
         buildout_status.stat.exists)
-  shell: "bin/buildout -c {{ instance_config.plone_buildout_cfg }} > buildout.log 2>&1"
-  args:
-    chdir: "{{ plone_instance_home }}"
-  become_user: "{{ instance_config.plone_buildout_user }}"
-  register: ran_buildout
+  rescue:
+    - name: Capture buildout error
+      shell: "cat {{ plone_instance_home }}/buildout.log"
+      register: buildout_error
+    - name: Show buildout error
+      debug: var=buildout_error.stdout_lines
+    - name: Buildout failed - stopping
+      command: /bin/false
 
 - name: Everything in buildout cache is group-readable
   file:
