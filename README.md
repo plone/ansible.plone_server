@@ -14,7 +14,7 @@ This role takes care of:
 
 If you'd like to use this role as part of a full-stack configuration kit, see the [Plone Ansible Playbook](https://github.com/plone/ansible-playbook).
 
-This role should be able to work with Plone 4.3.x or 5.0. Just set the version variables documented below.
+This role should be able to work with Plone 4.3.x or 5.x. Just set the version variables documented below.
 
 .. warning::
 
@@ -28,7 +28,7 @@ Version 1.3.2 requires Ansible 2.5+.
 
 Since this role creates and uses users and groups, it must be run as part of a playbook that sets sudo to "yes".
 
-Currently working with Debian/Ubuntu, FreeBSD11 and CentOS/Fedora environments. Please put in a pull request if you can help get it going in other ansible's os families.
+Currently working with Debian/Ubuntu, FreeBSD11 and CentOS/Fedora environments. Please put in a pull request if you can help get it going in other Ansible's os families.
 
 
 If you need to log in
@@ -124,14 +124,14 @@ Your install's backup directory will be {{ plone_backup_path }}/{{ plone_instanc
 
 ### plone_version
 
-    plone_version: '5.0'
+    plone_version: '5.2'
 
 Which Plone version do you wish to install? This defaults to the current stable version at the time you copy or clone the playbook. Make sure plone_major_version and plone_version are string variables or they won't compare correctly.
 
 
 ### plone_python_version
 
-    plone_python_version: '2.7'
+    plone_python_version: '3'
 
 For Plone 5.2+, you may specify '2.7' or '3'.
 Earlier Plones must use '2.7'.
@@ -348,7 +348,7 @@ Do you wish to run buildout even if the buildout has not changed? Mainly useful 
 
     plone_buildout_cfg: live.cfg
 
-This avoits conflicts with local buildout.cfg for development and the generated file on the server used for production/staging. Default to `live.cfg`.
+This avoids conflicts with local buildout.cfg for development and the generated file on the server used for production/staging. Default to `live.cfg`.
 
 
 ### plone_buildout_cache_url
