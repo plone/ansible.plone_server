@@ -1,5 +1,8 @@
 1.3.9 unreleased
 
+- Show buildout.log in the Ansible output when buildout errors.
+  [djowett]
+
 - Catch cases where supervisor needs an update after a config change.
   [smcmahon]
 

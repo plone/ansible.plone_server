@@ -288,7 +288,8 @@ command =
     echo ${backup:location} > /dev/null
     chmod 600 .installed.cfg
     # Make sure anything we've created in var is r/w by our group, but no-one else
-    chmod -R ug+rwX,o-rwx ${buildout:var-dir}
+    # use find as `chmod -R <var-dir>` will fail when plone_buildout doesn't own <var-dir>; max-depth 1 keeps it fast
+    find  ${buildout:var-dir} -maxdepth 1 -exec chmod -R ug+rwX,o-rwx {} \;
     chmod -R ug+rwX,o-rwx ${buildout:backups-dir}
     chmod 754 ${buildout:directory}/bin/*
 update-command = ${:command}
