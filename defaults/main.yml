@@ -173,6 +173,7 @@ webserver_virtualhosts:
 
 playbook_plones: "{{ [{'webserver_virtualhosts':webserver_virtualhosts}] }}"
 plone_config: "{{ playbook_plones[0] }}"
+additional_supervisor_tasks: []
 
 
 #########################
@@ -262,3 +263,4 @@ instance_config:
   plone_always_run_buildout: "{{ plone_config.plone_always_run_buildout|default(plone_always_run_buildout) }}"
   plone_restart_after_buildout: "{{ plone_config.plone_restart_after_buildout|default(plone_restart_after_buildout) }}"
   plone_install_zeoserver: "{{ plone_config.plone_install_zeoserver|default(plone_install_zeoserver) }}"
+  additional_supervisor_tasks: "{{ plone_config.additional_supervisor_tasks|default(additional_supervisor_tasks) }}"

@@ -29,6 +29,22 @@ environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ val
 
 {% endfor %}
 
+{% for task in instance_config.additional_supervisor_tasks %}
+[program:{{ supervisor_instance_discriminator }}{{ task.name }}]
+command={{ plone_instance_home }}/bin/{{ task.command }}
+directory={{ plone_instance_home }}
+user={{ instance_config.plone_daemon_user }}
+{% if task.params is defined %}
+{% for param in task.params %}
+{{ param }} = {{task.params[param]}}
+{% endfor %}
+{% endif %}
+{% if instance_config.plone_task_env_vars|length > 0 %}
+environment={% for name, value in task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+{% endif %}
+
+{% endfor %}
+
 {% if instance_config.plone_hot_monitor == 'superlance' and instance_config.plone_client_max_memory != '0' %}
 [eventlistener:{{ supervisor_instance_discriminator }}memmon]
 command=memmon {% for client in range(1, instance_config.plone_client_count|int + 1) %} -p {{ supervisor_instance_discriminator }}zeoclient{{ client }}={{ instance_config.plone_client_max_memory }} {% endfor %} -c -m root -n {{ supervisor_instance_discriminator }}
