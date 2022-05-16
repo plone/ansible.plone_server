@@ -224,7 +224,7 @@ zserver-threads = {{ instance_config.plone_zserver_threads }}
 [client1]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ instance_config.plone_client_base_port }}
+http-address = {{ instance_config.plone_client_address }}:{{ instance_config.plone_client_base_port }}
 {% if instance_config.plone_client1_extras %}
 {{ instance_config.plone_client1_extras }}
 {% endif %}
@@ -235,7 +235,7 @@ zope-conf-additional =
 {% endif %}
 {% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
-        bind 127.0.0.1:{{ instance_config.plone_client_base_tcpcheck_port }}
+        bind {{ instance_config.plone_client_address }}:{{ instance_config.plone_client_base_tcpcheck_port }}
     </product-config>
 {% endif %}
 {% endif %}
@@ -244,7 +244,7 @@ zope-conf-additional =
 [client{{ client }}]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + loop.index) }}
+http-address = {{ instance_config.plone_client_address }}:{{ "%s" % (instance_config.plone_client_base_port|int + loop.index) }}
 {% if instance_config.plone_zope_conf_additional or instance_config.plone_client_tcpcheck %}
 zope-conf-additional =
 {% if instance_config.plone_zope_conf_additional %}
@@ -252,7 +252,7 @@ zope-conf-additional =
 {% endif %}
 {% if instance_config.plone_client_tcpcheck %}
     <product-config five.z2monitor>
-        bind 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_tcpcheck_port|int + loop.index) }}
+        bind {{ instance_config.plone_client_address }}:{{ "%s" % (instance_config.plone_client_base_tcpcheck_port|int + loop.index) }}
     </product-config>
 {% endif %}
 {% endif %}
@@ -262,7 +262,7 @@ zope-conf-additional =
 [client_reserved]
 <= client_base
 recipe = plone.recipe.zope2instance
-http-address = 127.0.0.1:{{ "%s" % (instance_config.plone_client_base_port|int + instance_config.plone_client_count|int) }}
+http-address = {{ instance_config.plone_client_address }}:{{ "%s" % (instance_config.plone_client_base_port|int + instance_config.plone_client_count|int) }}
 
 
 [backup]
