@@ -96,6 +96,8 @@ plone_zeo_port: 8100
 
 plone_client_base_port: 8081
 
+plone_client_address: 127.0.0.1
+
 plone_client_tcpcheck: yes
 
 plone_environment_vars:
@@ -221,6 +223,7 @@ instance_config:
   plone_additional_versions: "{{ plone_config.plone_additional_versions|default(plone_additional_versions) }}"
   plone_zeo_ip: "{{ plone_config.plone_zeo_ip|default(plone_zeo_ip) }}"
   plone_zeo_port: "{{ plone_config.plone_zeo_port|default(plone_zeo_port) }}"
+  plone_client_address: "{{ plone_config.plone_client_address|default(plone_client_address) }}"
   plone_client_base_port: "{{ plone_config.plone_client_base_port|default(plone_client_base_port) }}"
   plone_client_tcpcheck: "{{ plone_config.plone_client_tcpcheck|default(plone_client_tcpcheck) }}"
   plone_client_base_tcpcheck_port: "{{ plone_config.plone_client_base_tcpcheck_port|default(plone_config.plone_client_base_port|default(plone_client_base_port) + 100) }}"
