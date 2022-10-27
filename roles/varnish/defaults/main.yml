@@ -22,3 +22,6 @@ nonanonymous_cookies: __ac(|_(name|password|persistent))
 proxy_cache_vcl_extra:
 
 proxy_cache_block_basic_auth: on
+
+proxy_cache_grace: 30s
+proxy_cache_anon_ttl: 60s
