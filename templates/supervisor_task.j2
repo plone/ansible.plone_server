@@ -9,7 +9,7 @@ user={{ instance_config.plone_daemon_user }}
 startsecs={{ instance_config.plone_startsecs }}
 stopwaitsecs={{ instance_config.plone_stopwaitsecs }}
 {% if instance_config.plone_task_env_vars|length > 0 %}
-environment={% for name, value in instance_config.plone_task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+environment={% for name, value in instance_config.plone_task_env_vars.items() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
 {% endif %}
 {% endif %}
 
@@ -25,7 +25,7 @@ user={{ instance_config.plone_daemon_user }}
 startsecs={{ instance_config.plone_startsecs }}
 stopwaitsecs={{ instance_config.plone_stopwaitsecs }}
 {% if instance_config.plone_task_env_vars|length > 0 %}
-environment={% for name, value in instance_config.plone_task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+environment={% for name, value in instance_config.plone_task_env_vars.items() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
 {% endif %}
 
 
@@ -43,7 +43,7 @@ user={{ instance_config.plone_daemon_user }}
 {% endfor %}
 {% endif %}
 {% if instance_config.plone_task_env_vars|length > 0 %}
-environment={% for name, value in instance_config.plone_task_env_vars.iteritems() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
+environment={% for name, value in instance_config.plone_task_env_vars.items() %}{{ name }}="{{ value }}"{% if not loop.last %},{% endif %}{% endfor %}
 {% endif %}
 
 {% endfor %}
