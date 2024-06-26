@@ -164,6 +164,7 @@ plone_stopwaitsecs: 10
 plone_autostart: "true"
 plone_task_env_vars: {}
 plone_hot_monitor: superlance
+plone_skip_supervisor_update: off # Enable to run a `reread` instead of an `update` when supervisor processes are changed
 
 webserver_virtualhosts:
   - hostname: "{{ inventory_hostname }}"

@@ -349,8 +349,12 @@
   service: name={{ supervisor_service_name }} state=started
 
 - name: Supervisor task list is updated
-  when: supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
+  when: not plone_skip_supervisor_update and (supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed)
   shell: 'supervisorctl update'
+
+- name: Supervisor task list is updated (re-read)
+  when: plone_skip_supervisor_update and (supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed)
+  shell: 'supervisorctl reread'
 
 # - debug:
 #     var: (instance_config.plone_use_supervisor, instance_config.plone_hot_monitor, instance_config.plone_client_max_memory)
@@ -368,9 +372,14 @@
   register: stop_remove
 
 - name: Supervisor task list is updated
-  when: instance_config.plone_use_supervisor and
-        supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed
+  when: not plone_skip_supervisor_update and instance_config.plone_use_supervisor and
+        (supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed)
   shell: 'supervisorctl update'
+
+- name: Supervisor task list is updated (re-read)
+  when: plone_skip_supervisor_update and instance_config.plone_use_supervisor and
+        (supervisor_task_conf_debian is changed or supervisor_task_conf_redhat is changed)
+  shell: 'supervisorctl reread'
 
 - name: Supervisor zeoserver task is present
   when: instance_config.plone_use_supervisor and instance_config.plone_install_zeoserver
