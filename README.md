@@ -204,6 +204,48 @@ If you want to set plone_client_max_memory to a non-zero value, but do not wish 
 This option was added to allow use of an alternative memory check mechanism in the Plone Playbook.
 
 
+### plone_oom_score_adj
+
+    plone_oom_score_adj: 0
+
+Sets the Linux [OOM killer](https://www.kernel.org/doc/html/latest/admin-guide/mm/oom_killer.html) score adjustment for all supervisor-managed plone instances. When set, each process is launched via `choom -n <value>`, which adjusts how likely the OOM killer is to terminate that process under memory pressure.
+
+The value must be an integer in the range `-1000` to `1000`, where higher values make the process more likely to be killed first under memory pressure.
+
+Defaults to unset (empty), in which case no `choom` wrapping is applied and processes inherit the OOM score of their parent.
+
+
+### plone_zeoserver_oom_score_adj
+
+    plone_zeoserver_oom_score_adj: -500
+
+Sets the OOM killer score adjustment specifically for the zeoserver process. Because all Plone clients depend on zeoserver, it is typically desirable to give it a negative value so the OOM killer prefers to kill clients first.
+
+See [`plone_oom_score_adj`](#plone_oom_score_adj) for value range and behaviour. Defaults to unset (empty).
+
+
+### additional_supervisor_tasks
+
+    additional_supervisor_tasks:
+      - name: celery
+        command: "celery worker"
+        oom_score_adj: 500
+        params:
+          stopwaitsecs: 60
+          autorestart: "true"
+
+A list of extra programs to register with supervisor beyond the standard zeoserver and zeoclients. Each task is run from `plone_instance_home/bin/` under the same user as the Plone clients.
+
+Each item supports the following keys:
+
+- `name` *(required)* — the supervisor program name
+- `command` *(required)* — the executable, relative to `{{ plone_instance_home }}/bin/`
+- `oom_score_adj` *(optional)* — OOM killer score adjustment for this specific task, overriding `plone_oom_score_adj`. See [`plone_oom_score_adj`](#plone_oom_score_adj) for details.
+- `params` *(optional)* — a dict of any additional [supervisor program configuration](http://supervisord.org/configuration.html#program-x-section-values) options (e.g. `stopwaitsecs`, `autorestart`)
+
+Defaults to an empty list.
+
+
 ### plone_additional_eggs
 
     plone_additional_eggs:

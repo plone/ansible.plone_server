@@ -78,6 +78,10 @@ plone_zserver_threads: 1
 
 plone_client_max_memory: 0
 
+plone_oom_score_adj:
+
+plone_zeoserver_oom_score_adj:
+
 plone_additional_eggs:
 
 plone_zcml_slugs:
@@ -215,6 +219,8 @@ instance_config:
   plone_zodb_cache_size_bytes:  "{{ plone_config.plone_zodb_cache_size_bytes|default(plone_zodb_cache_size_bytes) }}"
   plone_zserver_threads: "{{ plone_config.plone_zserver_threads|default(plone_zserver_threads) }}"
   plone_client_max_memory: "{{ plone_config.plone_client_max_memory|default(plone_client_max_memory) }}"
+  plone_oom_score_adj: "{{ plone_config.plone_oom_score_adj|default(plone_oom_score_adj) }}"
+  plone_zeoserver_oom_score_adj: "{{ plone_config.plone_zeoserver_oom_score_adj|default(plone_zeoserver_oom_score_adj) }}"
   plone_additional_eggs: "{{ plone_config.plone_additional_eggs|default(plone_additional_eggs) }}"
   plone_zcml_slugs: "{{ plone_config.plone_zcml_slugs|default(plone_zcml_slugs) }}"
   plone_zeo_extras: "{{ plone_config.plone_zeo_extras|default(plone_zeo_extras) }}"
