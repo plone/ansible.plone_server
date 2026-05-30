@@ -82,6 +82,9 @@ plone_oom_score_adj:
 
 plone_zeoserver_oom_score_adj:
 
+# Full path to choom (util-linux); verified to exist when an OOM adjustment is set.
+plone_choom_path: /usr/bin/choom
+
 plone_additional_eggs:
 
 plone_zcml_slugs:

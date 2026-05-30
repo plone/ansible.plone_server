@@ -224,6 +224,13 @@ Sets the OOM killer score adjustment specifically for the zeoserver process. Bec
 See [`plone_oom_score_adj`](#plone_oom_score_adj) for value range and behaviour. Defaults to unset (empty).
 
 
+### plone_choom_path
+
+    plone_choom_path: /usr/bin/choom
+
+Full path to the `choom` executable (from util-linux) used to apply the OOM score adjustments above. Whenever any OOM adjustment is configured, the playbook verifies this path exists and fails early if it does not. Defaults to `/usr/bin/choom`.
+
+
 ### additional_supervisor_tasks
 
     additional_supervisor_tasks:

@@ -325,6 +325,19 @@
       pip: name=superlance version=1.0 extra_args='--index-url=https://pypi.python.org/simple/' executable=pip3
   when: instance_config.plone_use_supervisor and instance_config.plone_hot_monitor == 'superlance' and instance_config.plone_client_max_memory != "0"
 
+- name: Determine whether any OOM score adjustment is configured
+  set_fact:
+    plone_oom_configured: "{{ (instance_config.plone_oom_score_adj | default(none)) not in [none, '']
+      or (instance_config.plone_zeoserver_oom_score_adj | default(none)) not in [none, '']
+      or (instance_config.additional_supervisor_tasks | default([]) | selectattr('oom_score_adj', 'defined') | list | length > 0) }}"
+
+- name: Verify choom is available (required for OOM score adjustment)
+  stat:
+    path: "{{ plone_choom_path }}"
+  register: choom_stat
+  failed_when: not choom_stat.stat.exists
+  when: instance_config.plone_use_supervisor and plone_oom_configured | bool
+
 - name: Supervisor process control setup
   when: instance_config.plone_use_supervisor and ansible_os_family != 'Redhat'
   template:
