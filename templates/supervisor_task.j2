@@ -1,6 +1,6 @@
 {%if instance_config.plone_install_zeoserver %}
 [program:{{ supervisor_instance_discriminator }}zeoserver]
-command={% if instance_config.plone_zeoserver_oom_score_adj | default(none) is not none %}choom -n {{ instance_config.plone_zeoserver_oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/zeoserver fg
+command={% if instance_config.plone_zeoserver_oom_score_adj | default(none) not in [none, ''] %}choom -n {{ instance_config.plone_zeoserver_oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/zeoserver fg
 directory={{ plone_instance_home }}
 redirect_stderr={{ instance_config.plone_redirect_stderr }}
 autostart={{ instance_config.plone_autostart }}
@@ -16,7 +16,7 @@ environment={% for name, value in instance_config.plone_task_env_vars.items() %}
 {% for client in range(1, instance_config.plone_client_count|int + 1) %}
 
 [program:{{ supervisor_instance_discriminator }}zeoclient{{ client }}]
-command={% if instance_config.plone_oom_score_adj | default(none) is not none %}choom -n {{ instance_config.plone_oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/client{{ client }} console
+command={% if instance_config.plone_oom_score_adj | default(none) not in [none, ''] %}choom -n {{ instance_config.plone_oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/client{{ client }} console
 directory={{ plone_instance_home }}
 redirect_stderr={{ instance_config.plone_redirect_stderr }}
 autostart={{ instance_config.plone_autostart }}
@@ -34,7 +34,7 @@ environment={% for name, value in instance_config.plone_task_env_vars.items() %}
 {% for task in instance_config.additional_supervisor_tasks %}
 
 [program:{{ supervisor_instance_discriminator }}{{ task.name }}]
-command={% if task.oom_score_adj | default(none) is not none %}choom -n {{ task.oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/{{ task.command }}
+command={% if task.oom_score_adj | default(none) not in [none, ''] %}choom -n {{ task.oom_score_adj }} -- {% endif %}{{ plone_instance_home }}/bin/{{ task.command }}
 directory={{ plone_instance_home }}
 user={{ instance_config.plone_daemon_user }}
 {% if task.params is defined %}
